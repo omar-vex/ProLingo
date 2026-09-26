@@ -44,19 +44,6 @@
     <button class="btn-primary" onclick="LessonRunner.hideQuitModal()">Keep Learning</button>
     <button class="btn-sheet" onclick="LessonRunner.close()">Quit Lesson</button>
   </div>
-  
-  <!-- Google Sign-In Modal DOM Mock -->
-  <div id="google-signin-modal" class="modal-overlay hidden">
-    <div id="google-saved-accounts-section" class="hidden">
-      <div id="google-saved-accounts-list"></div>
-    </div>
-    <form id="google-auth-form">
-      <input type="email" id="google-input-email">
-      <input type="text" id="google-input-name">
-      <div id="google-avatar-preview"></div>
-    </form>
-  </div>
-
   <div id="app-toast" class="app-toast hidden"></div>
   <div id="main-content-view">
     <div id="view-learn" class="view-panel">
@@ -171,43 +158,6 @@
         }
 
         assert(ProLingoState.data.stats.hearts >= 1, 'Hearts recovered to at least 1 after practice');
-
-        // 6. Test Personal Google Sign-In with User-Entered Credentials
-        const testEmail = 'developer.test@gmail.com';
-        const testName = 'Dev Learner';
-        document.getElementById('google-input-email').value = testEmail;
-        document.getElementById('google-input-name').value = testName;
-        App.submitGoogleSignIn();
-
-        assert(ProLingoState.data.profile.email === testEmail, 'User email updated to entered Google account');
-        assert(ProLingoState.data.profile.name === testName, 'User name updated to entered name');
-        assert(ProLingoState.data.profile.isGoogle === true, 'Profile is marked as Google account');
-
-        // Give this user 25 XP and check state
-        ProLingoState.data.stats.xp = 25;
-        ProLingoState.save();
-        const user1Id = ProLingoState.activeUserId;
-
-        // 7. Test Second Personal Account Creation (Isolation Verification)
-        const testEmail2 = 'another.coder@gmail.com';
-        const testName2 = 'Second Coder';
-        document.getElementById('google-input-email').value = testEmail2;
-        document.getElementById('google-input-name').value = testName2;
-        App.submitGoogleSignIn();
-
-        assert(ProLingoState.data.profile.email === testEmail2, 'Second user active with independent email');
-        assert(ProLingoState.activeUserId !== user1Id, 'Second user has unique distinct ID');
-        assert(ProLingoState.data.stats.xp === 0, 'New user starts with 0 XP (isolated state)');
-
-        // 8. Test Dynamic Saved Accounts Rendering & Switching Back
-        App.renderGoogleSavedAccounts();
-        const savedList = document.getElementById('google-saved-accounts-list');
-        assert(savedList.children.length >= 2, 'Saved accounts list displays multiple personal accounts');
-
-        // Switch back to user 1
-        App.loginWithPresetAccount(user1Id);
-        assert(ProLingoState.activeUserId === user1Id, 'Switched back to user 1');
-        assert(ProLingoState.data.stats.xp === 25, 'User 1 XP (25) preserved accurately without data collision');
 
         if (errors.length > 0) {
           throw new Error('ERRORS DETECTED: ' + errors.join('; '));

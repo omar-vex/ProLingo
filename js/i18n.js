@@ -199,20 +199,6 @@ const I18N = {
         resetConfirm: 'Are you sure you want to reset all your progress, XP, and streak? This cannot be undone!',
         exportData: 'Export Progress JSON',
         importData: 'Import Progress JSON'
-      },
-      auth: {
-        googleTitle: 'Sign in with Google',
-        continueApp: 'to continue to ProLingo',
-        chooseAccount: 'Saved Accounts on this Device:',
-        orUseAnother: 'Or Sign in with Another Google Account',
-        emailLabel: 'Google Email:',
-        nameLabel: 'Your Display Name:',
-        photoLabel: 'Profile Picture (Optional):',
-        choosePhoto: '📁 Choose Photo',
-        submitGoogle: 'Continue with Google Account',
-        activePill: 'ACTIVE',
-        removeAccount: 'Remove',
-        privacyNote: 'Your personal coding progress, streak, XP, and hearts are securely saved to your personal account.'
       }
     },
 
@@ -408,20 +394,6 @@ const I18N = {
         resetConfirm: 'هل أنت متأكد من تصفير تقدمك وسلسلة حماستك ونقاطك؟ لا يمكن التراجع عن هذا الإجراء!',
         exportData: 'تصدير البيانات بصيغة JSON',
         importData: 'استيراد البيانات'
-      },
-      auth: {
-        googleTitle: 'تسجيل الدخول باستخدام Google',
-        continueApp: 'للمتابعة في ProLingo',
-        chooseAccount: 'الحسابات المحفوظة على هذا الجهاز:',
-        orUseAnother: 'أو تسجيل الدخول بحساب Google آخر',
-        emailLabel: 'البريد الإلكتروني لـ Google:',
-        nameLabel: 'اسم العرض:',
-        photoLabel: 'صورة الملف الشخصي (اختياري):',
-        choosePhoto: '📁 اختيار صورة',
-        submitGoogle: 'تسجيل الدخول بحساب Google',
-        activePill: 'الحساب النشط',
-        removeAccount: 'إزالة',
-        privacyNote: 'يتم حفظ تقدمك البرمجي وسلسلة حماستك ونقاطك وقلوبك بأمان في حسابك الشخصي.'
       }
     }
   },

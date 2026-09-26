@@ -68,62 +68,17 @@
   -webkit-tap-highlight-color: transparent;
 }
 
-html {
-  overflow-x: hidden !important;
-  width: 100%;
-  max-width: 100%;
-  scrollbar-width: thin;
-  scrollbar-color: rgba(142, 157, 165, 0.35) transparent;
-  scroll-behavior: smooth;
-}
-
 body {
   font-family: var(--font-family);
   background-color: var(--bg-primary);
   color: var(--text-main);
   min-height: 100vh;
   display: flex;
-  overflow-x: hidden !important;
-  width: 100%;
-  max-width: 100%;
+  overflow-x: hidden;
   transition: background-color 0.25s, color 0.25s;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
-}
-
-/* ==================================================
-   SLEEK MODERN SCROLLBAR ENGINE (Duolingo Minimalist)
-   ================================================== */
-::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
-}
-
-::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-::-webkit-scrollbar-thumb {
-  background-color: rgba(142, 157, 165, 0.32);
-  border-radius: 999px;
-  border: 1px solid transparent;
-  background-clip: padding-box;
-  transition: background-color 0.2s ease;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background-color: var(--green);
-}
-
-[data-theme="dark"] ::-webkit-scrollbar-thumb,
-body.theme-dark ::-webkit-scrollbar-thumb {
-  background-color: rgba(255, 255, 255, 0.2);
-}
-
-[data-theme="dark"] ::-webkit-scrollbar-thumb:hover,
-body.theme-dark ::-webkit-scrollbar-thumb:hover {
-  background-color: rgba(88, 204, 2, 0.7);
 }
 
 button, input, select, textarea {
@@ -2532,99 +2487,6 @@ body.rtl .quest-action-col {
   border: 1px solid #4285F4;
 }
 
-.google-account-card.active {
-  border-color: #4285F4;
-  background-color: rgba(66, 133, 244, 0.08);
-}
-
-.google-acc-badge.badge-active {
-  background-color: #4285F4;
-  color: #ffffff;
-}
-
-.btn-remove-acc {
-  background: transparent;
-  border: none;
-  color: var(--text-muted);
-  font-size: 14px;
-  font-weight: 800;
-  padding: 4px 8px;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: color 0.15s, background-color 0.15s;
-  margin-left: 6px;
-}
-
-.btn-remove-acc:hover {
-  color: var(--danger-color, #ff4b4b);
-  background: rgba(255, 75, 75, 0.12);
-}
-
-body.rtl .btn-remove-acc {
-  margin-left: 0;
-  margin-right: 6px;
-}
-
-.btn-google-submit {
-  background-color: #1a73e8 !important;
-  box-shadow: 0 4px 0 #1557b0 !important;
-  border: none !important;
-  color: #ffffff !important;
-  font-size: 15px !important;
-  font-weight: 800 !important;
-  display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  gap: 10px !important;
-  min-height: 48px !important;
-  border-radius: 16px !important;
-  cursor: pointer !important;
-  transition: transform 0.1s, box-shadow 0.1s !important;
-}
-
-.btn-google-submit:active {
-  transform: translateY(3px) !important;
-  box-shadow: 0 1px 0 #1557b0 !important;
-}
-
-.input-with-icon {
-  position: relative;
-  display: flex;
-  align-items: center;
-  width: 100%;
-}
-
-.input-prefix-icon {
-  position: absolute;
-  left: 14px;
-  font-size: 16px;
-  pointer-events: none;
-  user-select: none;
-}
-
-body.rtl .input-prefix-icon {
-  left: auto;
-  right: 14px;
-}
-
-.input-with-icon .modal-input {
-  padding-left: 42px !important;
-  width: 100% !important;
-}
-
-body.rtl .input-with-icon .modal-input {
-  padding-left: 14px !important;
-  padding-right: 42px !important;
-}
-
-.google-section-subtitle {
-  font-size: 13px;
-  font-weight: 800;
-  color: var(--text-muted);
-  margin-bottom: 10px;
-  letter-spacing: 0.2px;
-}
-
 .google-privacy-footer {
   display: flex;
   align-items: flex-start;
@@ -3349,9 +3211,8 @@ body.rtl .modal-form-group {
 
   #app-main-content {
     margin-left: 230px;
-    max-width: calc(100% - 230px);
-    width: calc(100% - 230px);
-    overflow-x: hidden;
+    max-width: calc(100vw - 230px);
+    width: calc(100vw - 230px);
   }
 
   body.rtl #app-main-content {
@@ -3466,24 +3327,22 @@ body.rtl .modal-form-group {
     left: 0 !important;
     right: 0 !important;
     width: 100% !important;
-    height: calc(62px + env(safe-area-inset-bottom, 0px)) !important;
+    height: calc(64px + env(safe-area-inset-bottom, 0px)) !important;
     top: auto !important;
     border-right: none !important;
-    border-left: none !important;
-    border-top: 2px solid var(--border-color) !important;
-    background-color: var(--bg-primary) !important;
+    border-top: 2px solid var(--sidebar-border) !important;
+    background-color: var(--sidebar-bg) !important;
     flex-direction: row !important;
     padding: 0 4px env(safe-area-inset-bottom, 4px) !important;
     justify-content: space-around !important;
     align-items: center !important;
     z-index: 1000 !important;
-    box-shadow: 0 -4px 16px rgba(0, 0, 0, 0.25) !important;
+    box-shadow: 0 -2px 12px rgba(0, 0, 0, 0.12);
   }
 
   body.rtl #app-sidebar {
     border-left: none !important;
-    border-right: none !important;
-    border-top: 2px solid var(--border-color) !important;
+    border-top: 2px solid var(--sidebar-border) !important;
   }
 
   .sidebar-logo, .sidebar-footer-user {
@@ -3554,106 +3413,64 @@ body.rtl .modal-form-group {
     width: 100% !important;
   }
 
-  /* 3. COMPACT STICKY TOP HEADER (Duolingo Mobile Header) */
+  /* 3. COMPACT STICKY TOP HEADER */
   #app-top-header {
     position: sticky !important;
     top: 0 !important;
-    height: 52px !important;
-    padding: 0 8px !important;
+    height: 50px !important;
+    padding: 0 10px !important;
     background-color: var(--bg-primary) !important;
     border-bottom: 2px solid var(--border-color) !important;
     z-index: 900 !important;
     display: flex !important;
     justify-content: space-between !important;
     align-items: center !important;
-    width: 100% !important;
-    max-width: 100% !important;
-    box-sizing: border-box !important;
   }
 
-  .header-left {
-    display: flex !important;
-    align-items: center !important;
-    gap: 4px !important;
-  }
-
-  .header-right {
-    display: flex !important;
-    align-items: center !important;
-    gap: 4px !important;
-  }
-
-  .course-selector-btn {
-    padding: 4px 8px !important;
-    font-size: 13px !important;
+  .header-course-badge {
+    padding: 6px 8px !important;
+    font-size: 12px !important;
     border-radius: 12px !important;
-    gap: 4px !important;
-    min-height: 32px !important;
   }
 
   .course-name, .course-units-badge, .course-chevron {
     display: none !important;
   }
 
+  .header-stats {
+    gap: 6px !important;
+  }
+
   .stat-pill {
-    padding: 3px 6px !important;
-    font-size: 12px !important;
+    padding: 5px 7px !important;
+    font-size: 13px !important;
     gap: 3px !important;
-    border-radius: 10px !important;
-    min-height: 30px !important;
+    border-radius: 12px !important;
   }
 
-  .stat-pill .stat-icon-wrap {
-    transform: scale(0.9);
-  }
-
-  .user-header-wrapper {
-    display: inline-flex !important;
-    align-items: center !important;
-    position: relative !important;
-  }
-
-  .user-pill-btn {
-    padding: 2px !important;
-    gap: 0 !important;
-    border-radius: 50% !important;
-    min-height: 32px !important;
-    height: 32px !important;
-    width: 32px !important;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
+  .header-user-btn {
+    padding: 3px !important;
   }
 
   .user-name-small, .user-chevron {
     display: none !important;
   }
 
-  .user-avatar-badge {
-    width: 28px !important;
-    height: 28px !important;
-    border-radius: 50% !important;
+  .user-avatar-small {
+    width: 32px !important;
+    height: 32px !important;
   }
 
-  #btn-toggle-lang, #btn-toggle-theme {
-    padding: 3px 6px !important;
-    font-size: 11px !important;
-    min-height: 30px !important;
-  }
-
-  /* 4. DUOLINGO S-CURVE WINDING PATH ON PHONE (Clean, No Overlaps) */
+  /* 4. DUOLINGO WINDING PATH ON PHONE */
   .learn-view-layout {
-    display: flex !important;
-    flex-direction: column !important;
+    display: block !important;
     width: 100% !important;
-    max-width: 100% !important;
-    padding: 8px 10px 48px !important;
-    box-sizing: border-box !important;
   }
 
-  .learn-path-column {
-    width: 100% !important;
+  .learn-main-column {
     max-width: 100% !important;
+    padding: 0 10px !important;
+    margin: 0 auto !important;
   }
 
   .learn-sidebar-column {
@@ -3661,11 +3478,9 @@ body.rtl .modal-form-group {
   }
 
   .sections-nav-wrapper {
-    margin: 8px 0 0 !important;
+    margin: 10px 0 0 !important;
     padding: 8px 10px !important;
     border-radius: 16px !important;
-    width: 100% !important;
-    box-sizing: border-box !important;
   }
 
   .sections-header-meta {
@@ -3680,95 +3495,35 @@ body.rtl .modal-form-group {
     border-radius: 12px !important;
   }
 
-  .unit-section {
-    border-radius: 20px !important;
-    margin-bottom: 24px !important;
-    width: 100% !important;
-    box-sizing: border-box !important;
-  }
-
-  .unit-banner {
-    padding: 14px 14px !important;
+  .unit-section-card {
     border-radius: 18px !important;
-    flex-direction: column !important;
-    gap: 12px !important;
-    align-items: flex-start !important;
+    margin-bottom: 24px !important;
   }
 
-  .unit-banner-info {
-    width: 100% !important;
+  .unit-card-header {
+    padding: 14px 16px !important;
+    border-radius: 16px 16px 0 0 !important;
   }
 
-  .unit-title {
+  .unit-card-title {
     font-size: 17px !important;
-    line-height: 1.3 !important;
   }
 
-  .unit-desc {
-    font-size: 13px !important;
-    line-height: 1.4 !important;
-  }
-
-  .btn-guidebook {
-    align-self: flex-start !important;
-    padding: 7px 14px !important;
+  .unit-card-desc {
     font-size: 13px !important;
   }
 
-  .unit-outcomes-card {
-    padding: 12px 14px !important;
-    border-radius: 16px !important;
-    width: 100% !important;
-    box-sizing: border-box !important;
+  .unit-path-container {
+    padding: 24px 0 32px !important;
   }
 
-  .unit-path-stones {
-    padding: 24px 0 28px !important;
-    gap: 24px !important;
-    width: 100% !important;
-    overflow: hidden !important;
+  .lesson-node-btn {
+    width: 66px !important;
+    height: 66px !important;
   }
 
-  .stepping-stone-row {
-    width: 100% !important;
-    box-sizing: border-box !important;
-  }
-
-  .stepping-stone-row.pos-left {
-    padding-left: 8% !important;
-    padding-right: 0 !important;
-  }
-
-  .stepping-stone-row.pos-right {
-    padding-right: 8% !important;
-    padding-left: 0 !important;
-  }
-
-  body.rtl .stepping-stone-row.pos-left {
-    padding-right: 8% !important;
-    padding-left: 0 !important;
-  }
-
-  body.rtl .stepping-stone-row.pos-right {
-    padding-left: 8% !important;
-    padding-right: 0 !important;
-  }
-
-  .stone-circle {
-    width: 68px !important;
-    height: 68px !important;
-  }
-
-  .stone-label {
-    font-size: 13px !important;
-    max-width: 130px !important;
-  }
-
-  .speech-bubble-start {
-    top: -42px !important;
-    font-size: 12px !important;
-    padding: 4px 10px !important;
-    white-space: nowrap !important;
+  .lesson-node-icon {
+    font-size: 26px !important;
   }
 
   /* 5. FULLSCREEN PHONE LESSON VIEW */

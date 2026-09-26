@@ -1456,93 +1456,50 @@ window.App = {
   },
 
   openGoogleSignInModal() {
-    this.renderGoogleSavedAccounts();
-    const modal = document.getElementById('google-signin-modal');
-    if (modal) modal.classList.remove('hidden');
-  },
-
-  renderGoogleSavedAccounts() {
-    const list = document.getElementById('google-saved-accounts-list');
-    const section = document.getElementById('google-saved-accounts-section');
-    if (!list || !section) return;
-
-    const registry = ProLingoState.getUsersRegistry();
-    const activeId = ProLingoState.activeUserId;
-    const isAr = I18N.isRTL();
-
-    // Show registered accounts that have an ID
-    const validAccounts = registry.filter(u => u && u.id);
-
-    if (validAccounts.length === 0) {
-      section.classList.add('hidden');
-      return;
-    }
-
-    section.classList.remove('hidden');
-    let html = '';
-    validAccounts.forEach(user => {
-      const isCurrent = (user.id === activeId);
-      const avatarHtml = user.avatarImage
-        ? `<img src="${user.avatarImage}" class="avatar-round-image mini" alt="Avatar">`
-        : `<span class="avatar-emoji">${this.getAvatarIcon(user.avatar || 'classic')}</span>`;
-      
-      const emailDisplay = user.email || (isAr ? 'حساب محلي' : 'Local Account');
-      const badgeText = isCurrent ? (isAr ? 'الحساب النشط' : 'Active') : `${user.xp || 0} XP`;
-
-      html += `
-        <div class="google-account-card official-style ${isCurrent ? 'active' : ''}" onclick="App.loginWithPresetAccount('${user.id}')">
-          <div class="google-acc-avatar">${avatarHtml}</div>
-          <div class="google-acc-meta">
-            <strong>${user.name || (isAr ? 'مستخدم' : 'Learner')}</strong>
-            <span>${emailDisplay}</span>
-          </div>
-          <span class="google-acc-badge ${isCurrent ? 'badge-active' : ''}">${badgeText}</span>
-          ${!isCurrent ? `<button type="button" class="btn-remove-acc" onclick="event.stopPropagation(); App.removeSavedAccount('${user.id}')" title="${isAr ? 'حذف الحساب' : 'Remove account'}">✕</button>` : ''}
-        </div>
-      `;
-    });
-    list.innerHTML = html;
-  },
-
-  loginWithPresetAccount(userId) {
-    ProLingoState.switchAccount(userId);
-    const modal = document.getElementById('google-signin-modal');
-    if (modal) modal.classList.add('hidden');
-    const isAr = I18N.isRTL();
-    const uName = ProLingoState.data.profile.name;
-    this.showToast(isAr ? `مرحباً بك مجدداً يا ${uName}! 🚀` : `Welcome back, ${uName}! 🚀`);
-  },
-
-  removeSavedAccount(userId) {
-    if (userId === ProLingoState.activeUserId) {
-      const isAr = I18N.isRTL();
-      this.showToast(isAr ? 'لا يمكنك إزالة الحساب النشط حالياً.' : 'Cannot remove currently active account.');
-      return;
-    }
-    const registry = ProLingoState.getUsersRegistry().filter(u => u.id !== userId);
-    ProLingoState.saveUsersRegistry(registry);
-    try {
-      localStorage.removeItem('prolingo_state_user_' + userId);
-    } catch (e) {}
-    this.renderGoogleSavedAccounts();
-    const isAr = I18N.isRTL();
-    this.showToast(isAr ? 'تمت إزالة الحساب من هذا الجهاز.' : 'Account removed from this device.');
+    document.getElementById('google-signin-modal').classList.remove('hidden');
+    this.renderOfficialGoogleButton();
   },
 
   initGoogleIdentityServices() {
-    // Graceful Google Identity Services listener:
-    // If a legitimate credential response is provided or configured in future, handle it cleanly.
-    // Notice: we do NOT auto-render the unconfigured client_id button to prevent Google's 401 invalid_client error page.
+    const setupGIS = () => {
+      if (window.google && window.google.accounts && window.google.accounts.id) {
+        try {
+          window.google.accounts.id.initialize({
+            client_id: '1064297072044-prolingo.apps.googleusercontent.com',
+            callback: (res) => this.handleGoogleCredentialResponse(res),
+            auto_select: false,
+            cancel_on_tap_outside: true
+          });
+          this.renderOfficialGoogleButton();
+        } catch (err) {
+          console.warn('Google Identity Services notice:', err);
+        }
+      }
+    };
+
+    if (window.google && window.google.accounts && window.google.accounts.id) {
+      setupGIS();
+    } else {
+      window.addEventListener('load', () => setTimeout(setupGIS, 600));
+    }
+  },
+
+  renderOfficialGoogleButton() {
+    const slot = document.getElementById('official-google-btn-slot');
+    if (!slot || slot.children.length > 0) return;
     if (window.google && window.google.accounts && window.google.accounts.id) {
       try {
-        window.google.accounts.id.initialize({
-          client_id: 'prolingo-web-local',
-          callback: (res) => this.handleGoogleCredentialResponse(res),
-          auto_select: false,
-          cancel_on_tap_outside: true
+        window.google.accounts.id.renderButton(slot, {
+          theme: 'outline',
+          size: 'large',
+          type: 'standard',
+          shape: 'pill',
+          text: 'signin_with',
+          logo_alignment: 'left',
+          width: 320
         });
-      } catch (err) {
-        // Quiet fallback
+      } catch (e) {
+        console.warn('GIS renderButton error:', e);
       }
     }
   },
@@ -1565,7 +1522,7 @@ window.App = {
 
       const modal = document.getElementById('google-signin-modal');
       if (modal) modal.classList.add('hidden');
-      this.showToast(`Welcome, ${profile.name}! Signed in with Google. 🚀`);
+      this.showToast(`Official Google Sign-In: Welcome, ${profile.name}! 🚀`);
     } catch (e) {
       console.error('Error parsing Google credential JWT:', e);
       this.showToast('Signed in with Google Account.');
@@ -1578,8 +1535,7 @@ window.App = {
       email: email,
       avatarImage: null
     });
-    const modal = document.getElementById('google-signin-modal');
-    if (modal) modal.classList.add('hidden');
+    document.getElementById('google-signin-modal').classList.add('hidden');
     this.showToast(`Welcome, ${name}! Signed in with Google. 🚀`);
   },
 
@@ -1603,25 +1559,12 @@ window.App = {
   },
 
   submitGoogleSignIn() {
-    const emailInput = document.getElementById('google-input-email');
     const nameInput = document.getElementById('google-input-name');
+    const emailInput = document.getElementById('google-input-email');
     const preview = document.getElementById('google-avatar-preview');
-    const isAr = I18N.isRTL();
 
-    const email = (emailInput && emailInput.value.trim()) || '';
-    let name = (nameInput && nameInput.value.trim()) || '';
-
-    if (!email) {
-      this.showToast(isAr ? 'يرجى إدخال البريد الإلكتروني لحساب Google الخاص بك' : 'Please enter your Google account email');
-      if (emailInput) emailInput.focus();
-      return;
-    }
-
-    if (!name) {
-      name = email.split('@')[0];
-      name = name.charAt(0).toUpperCase() + name.slice(1);
-    }
-
+    const name = (nameInput && nameInput.value.trim()) || 'Google Coder';
+    const email = (emailInput && emailInput.value.trim()) || 'coder@gmail.com';
     const avatarImage = (preview && preview.dataset.avatarImage) || null;
 
     ProLingoState.loginWithGoogle({
@@ -1630,15 +1573,8 @@ window.App = {
       avatarImage: avatarImage
     });
 
-    const modal = document.getElementById('google-signin-modal');
-    if (modal) modal.classList.add('hidden');
-
-    if (emailInput) emailInput.value = '';
-    if (nameInput) nameInput.value = '';
-
-    this.showToast(isAr 
-      ? `تم تسجيل الدخول بنجاح بحساب Google: ${name} 🎉` 
-      : `Signed in successfully with Google account: ${name} 🎉`);
+    document.getElementById('google-signin-modal').classList.add('hidden');
+    this.showToast(`Signed in successfully as ${name}! 🎉`);
   },
 
   openEditProfileModal() {
