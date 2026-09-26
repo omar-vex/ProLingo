@@ -199,41 +199,6 @@ const I18N = {
         resetConfirm: 'Are you sure you want to reset all your progress, XP, and streak? This cannot be undone!',
         exportData: 'Export Progress JSON',
         importData: 'Import Progress JSON'
-      },
-      onboarding: {
-        welcomeTitle: 'Welcome to ProLingo! 🚀',
-        welcomeSub: 'The fun, interactive platform to master programming languages from zero to hero.',
-        feat1Title: 'Bite-sized micro lessons',
-        feat1Sub: 'Learn syntax, data structures & algorithms step by step',
-        feat2Title: 'Interactive coding & bug hunts',
-        feat2Sub: 'Predict outputs, fix bugs, and assemble code blocks',
-        feat3Title: 'Streaks & competitive leagues',
-        feat3Sub: 'Stay consistent, earn XP & climb from Bronze to Diamond',
-        getStarted: 'GET STARTED 🚀',
-        alreadyHaveAccount: 'I ALREADY HAVE AN ACCOUNT',
-        chooseTrackTitle: 'What do you want to learn?',
-        chooseTrackSub: 'Select your primary path. You can switch or learn multiple tracks anytime!',
-        dailyGoalTitle: 'What is your daily learning goal?',
-        dailyGoalSub: 'Consistency is key! Daily practice keeps your streak flame alive.',
-        goalCasual: 'Casual (5 mins / day)',
-        goalRegular: 'Regular (10 mins / day)',
-        goalSerious: 'Serious (15 mins / day)',
-        goalIntense: 'Intense (20 mins / day)',
-        expTitle: 'How much coding do you know?',
-        expSub: 'We will adapt your starting journey accordingly.',
-        expBeginner: 'New to coding',
-        expBeginnerSub: 'I am starting from scratch. Guide me step by step!',
-        expIntermediate: 'I know some basics',
-        expIntermediateSub: 'I understand variables and loops. Ready for challenges!',
-        profileTitle: 'Create Your Learner Profile',
-        profileSub: 'Save your progress, protect your streak, and climb the leaderboard!',
-        startLearningBtn: 'LET\'S START CODING! 🚀'
-      },
-      auth: {
-        continueWithGoogle: 'Continue with Google',
-        signInTitle: 'Sign in with Google',
-        enterEmail: 'Enter your Google email',
-        enterName: 'Your Name'
       }
     },
 
@@ -429,41 +394,6 @@ const I18N = {
         resetConfirm: 'هل أنت متأكد من تصفير تقدمك وسلسلة حماستك ونقاطك؟ لا يمكن التراجع عن هذا الإجراء!',
         exportData: 'تصدير البيانات بصيغة JSON',
         importData: 'استيراد البيانات'
-      },
-      onboarding: {
-        welcomeTitle: 'مرحباً بك في برو لينجو! 🚀',
-        welcomeSub: 'المنصة التفاعلية الممتعة لاحتراف لغات البرمجة من البداية وحتى الاحتراف.',
-        feat1Title: 'دروس تفاعلية سريعة وممتعة',
-        feat1Sub: 'تعلم قواعد البرمجة، هياكل البيانات، والخوارزميات خطوة بخطوة',
-        feat2Title: 'تمارين برمجية وصيد الأخطاء',
-        feat2Sub: 'توقع المخرجات، واكتشف الثغرات، ورتب الأسطر البرمجية',
-        feat3Title: 'حماسة يومية ودوريات منافسة',
-        feat3Sub: 'حافظ على شعلة الحماس، واكسب النقاط وتصدر دوري الأبطال',
-        getStarted: 'ابدأ الآن مجاناً 🚀',
-        alreadyHaveAccount: 'لدي حساب بالفعل',
-        chooseTrackTitle: 'ماذا تود أن تتعلم أولاً؟',
-        chooseTrackSub: 'اختر لغة البداية، ويمكنك التبديل بين اللغات في أي وقت!',
-        dailyGoalTitle: 'ما هو هدفك اليومي في التعلم؟',
-        dailyGoalSub: 'الاستمرارية هي سر الإتقان! التدريب اليومي يحافظ على شعلتك مشتعلة.',
-        goalCasual: 'خفيف (5 دقائق / يومياً)',
-        goalRegular: 'عادي (10 دقائق / يومياً)',
-        goalSerious: 'جاد (15 دقيقة / يومياً)',
-        goalIntense: 'مكثف (20 دقيقة / يومياً)',
-        expTitle: 'ما هو مستواك الحالي في البرمجة؟',
-        expSub: 'سنقوم بتخصيص مسارك وفقاً لخبرتك.',
-        expBeginner: 'مبتدئ تماماً في البرمجة',
-        expBeginnerSub: 'أبدأ من الصفر بدون أي خلفية سابقة. ابدأ معي خطوة بخطوة!',
-        expIntermediate: 'أعرف بعض الأساسيات البرمجية',
-        expIntermediateSub: 'أفهم المتغيرات والشروط والحلقات، ومستعد للتمارين العملية!',
-        profileTitle: 'أنشئ ملفك البرمجي',
-        profileSub: 'احفظ تقدمك وسلسلة حماستك وتنافس في الدوريات الأسبوعية!',
-        startLearningBtn: 'انطلق في رحلة البرمجة! 🚀'
-      },
-      auth: {
-        continueWithGoogle: 'المتابعة بحساب جوجل',
-        signInTitle: 'تسجيل الدخول بحساب جوجل',
-        enterEmail: 'أدخل بريد جوجل الإلكتروني',
-        enterName: 'اسمك / لقبك البرمجي'
       }
     }
   },

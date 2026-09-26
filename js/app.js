@@ -308,14 +308,6 @@ window.App = {
     this.switchView('learn');
     this.startHeartTicker();
 
-    // 7. Check if user needs Welcome Onboarding Tour
-    setTimeout(() => {
-      const onboardingDone = localStorage.getItem('prolingo_onboarding_completed_v1');
-      if (!onboardingDone) {
-        this.startOnboarding();
-      }
-    }, 250);
-
     // Close user dropdown when clicking outside
     document.addEventListener('click', (e) => {
       const container = document.getElementById('user-header-container');
@@ -1482,26 +1474,16 @@ window.App = {
   },
 
   openGoogleSignInModal() {
-    const modal = document.getElementById('google-signin-modal');
-    if (modal) modal.classList.remove('hidden');
-    const nameInput = document.getElementById('google-input-name');
-    const emailInput = document.getElementById('google-input-email');
-    if (nameInput && !nameInput.value) nameInput.value = 'Omar';
-    if (emailInput && !emailInput.value) emailInput.value = 'omarahmedelnaggarx2@gmail.com';
+    document.getElementById('google-signin-modal').classList.remove('hidden');
     this.renderOfficialGoogleButton();
   },
 
   initGoogleIdentityServices() {
-    const customClientId = localStorage.getItem('prolingo_google_client_id');
-    // Only attempt GIS initialization if a real custom client ID was provided
-    if (!customClientId) {
-      return;
-    }
     const setupGIS = () => {
       if (window.google && window.google.accounts && window.google.accounts.id) {
         try {
           window.google.accounts.id.initialize({
-            client_id: customClientId,
+            client_id: '1064297072044-prolingo.apps.googleusercontent.com',
             callback: (res) => this.handleGoogleCredentialResponse(res),
             auto_select: false,
             cancel_on_tap_outside: true
@@ -1521,12 +1503,10 @@ window.App = {
   },
 
   renderOfficialGoogleButton() {
-    const customClientId = localStorage.getItem('prolingo_google_client_id');
     const slot = document.getElementById('official-google-btn-slot');
-    if (!slot || !customClientId) return;
+    if (!slot || slot.children.length > 0) return;
     if (window.google && window.google.accounts && window.google.accounts.id) {
       try {
-        slot.innerHTML = '';
         window.google.accounts.id.renderButton(slot, {
           theme: 'outline',
           size: 'large',
@@ -1539,24 +1519,6 @@ window.App = {
       } catch (e) {
         console.warn('GIS renderButton error:', e);
       }
-    }
-  },
-
-  quickGoogleContinue() {
-    const nameInput = document.getElementById('google-input-name');
-    const emailInput = document.getElementById('google-input-email');
-    const name = (nameInput && nameInput.value.trim()) || 'Omar';
-    const email = (emailInput && emailInput.value.trim()) || 'omarahmedelnaggarx2@gmail.com';
-    this.loginWithPreset(name, email);
-  },
-
-  setCustomGoogleClientId(id) {
-    if (id && id.trim()) {
-      localStorage.setItem('prolingo_google_client_id', id.trim());
-      this.initGoogleIdentityServices();
-      this.showToast('Google Client ID connected successfully! 🚀');
-    } else {
-      localStorage.removeItem('prolingo_google_client_id');
     }
   },
 
@@ -1578,9 +1540,6 @@ window.App = {
 
       const modal = document.getElementById('google-signin-modal');
       if (modal) modal.classList.add('hidden');
-      if (this.onboardingActive) {
-        this.completeOnboarding(true);
-      }
       this.showToast(`Official Google Sign-In: Welcome, ${profile.name}! 🚀`);
     } catch (e) {
       console.error('Error parsing Google credential JWT:', e);
@@ -1594,124 +1553,8 @@ window.App = {
       email: email,
       avatarImage: null
     });
-    const modal = document.getElementById('google-signin-modal');
-    if (modal) modal.classList.add('hidden');
-    if (this.onboardingActive) {
-      this.completeOnboarding(true);
-    }
+    document.getElementById('google-signin-modal').classList.add('hidden');
     this.showToast(`Welcome, ${name}! Signed in with Google. 🚀`);
-  },
-
-  /* ==================================================
-     ONBOARDING / WELCOME FLOW CONTROLLER
-     ================================================== */
-  onboardingSelectedTrack: 'python',
-  onboardingSelectedGoal: 20,
-  onboardingSelectedExp: 'beginner',
-  onboardingActive: false,
-
-  startOnboarding() {
-    this.onboardingActive = true;
-    const modal = document.getElementById('onboarding-modal');
-    if (!modal) return;
-    this.showOnboardingStep(1);
-    modal.classList.remove('hidden');
-    if (typeof Icons !== 'undefined' && Icons.hydrate) {
-      Icons.hydrate();
-    }
-  },
-
-  showOnboardingStep(stepNum) {
-    for (let i = 1; i <= 5; i++) {
-      const step = document.getElementById(`onboarding-step-${i}`);
-      if (step) {
-        if (i === stepNum) step.classList.remove('hidden');
-        else step.classList.add('hidden');
-      }
-    }
-    if (typeof Icons !== 'undefined' && Icons.hydrate) {
-      Icons.hydrate();
-    }
-  },
-
-  nextOnboardingStep(stepNum) {
-    if (typeof SoundEngine !== 'undefined') SoundEngine.playTap();
-    this.showOnboardingStep(stepNum);
-  },
-
-  prevOnboardingStep(stepNum) {
-    if (typeof SoundEngine !== 'undefined') SoundEngine.playTap();
-    this.showOnboardingStep(stepNum);
-  },
-
-  selectOnboardingTrack(elem, track) {
-    if (typeof SoundEngine !== 'undefined') SoundEngine.playTap();
-    this.onboardingSelectedTrack = track;
-    document.querySelectorAll('#onboarding-step-2 .onboarding-choice-card').forEach(c => c.classList.remove('selected'));
-    if (elem) elem.classList.add('selected');
-  },
-
-  selectOnboardingGoal(elem, xpGoal) {
-    if (typeof SoundEngine !== 'undefined') SoundEngine.playTap();
-    this.onboardingSelectedGoal = xpGoal;
-    document.querySelectorAll('#onboarding-step-3 .onboarding-choice-card').forEach(c => c.classList.remove('selected'));
-    if (elem) elem.classList.add('selected');
-  },
-
-  selectOnboardingExp(elem, exp) {
-    if (typeof SoundEngine !== 'undefined') SoundEngine.playTap();
-    this.onboardingSelectedExp = exp;
-    document.querySelectorAll('#onboarding-step-4 .onboarding-choice-card').forEach(c => c.classList.remove('selected'));
-    if (elem) elem.classList.add('selected');
-  },
-
-  openGoogleSignInFromOnboarding() {
-    const modal = document.getElementById('onboarding-modal');
-    if (modal) modal.classList.add('hidden');
-    this.openGoogleSignInModal();
-  },
-
-  skipOnboardingAndSignIn() {
-    const modal = document.getElementById('onboarding-modal');
-    if (modal) modal.classList.add('hidden');
-    this.openGoogleSignInModal();
-  },
-
-  completeOnboarding(isGoogle = false) {
-    const nameInput = document.getElementById('onboarding-input-name');
-    const enteredName = (nameInput && nameInput.value.trim()) || (isGoogle ? 'Omar' : 'Learner');
-    
-    // Save profile attributes
-    if (!isGoogle && ProLingoState.data.profile) {
-      ProLingoState.data.profile.name = enteredName;
-    }
-
-    // Set course to chosen track
-    if (this.onboardingSelectedTrack) {
-      ProLingoState.data.currentCourse = this.onboardingSelectedTrack;
-    }
-
-    // Mark onboarding complete
-    localStorage.setItem('prolingo_onboarding_completed_v1', 'true');
-    this.onboardingActive = false;
-
-    // Close modal
-    const modal = document.getElementById('onboarding-modal');
-    if (modal) modal.classList.add('hidden');
-
-    // Grant 50 Welcome Gems bonus
-    ProLingoState.addGems(50);
-    ProLingoState.save();
-
-    // Celebration
-    if (typeof SoundEngine !== 'undefined') SoundEngine.playVictory();
-    if (window.LessonRunner && LessonRunner.triggerConfetti) {
-      LessonRunner.triggerConfetti();
-    }
-
-    this.renderHeaderStats();
-    this.switchView('learn');
-    this.showToast(`🎉 Welcome, ${enteredName}! Enjoy +50 Welcome Gems 💎 and happy coding!`);
   },
 
   handleAvatarFileSelect(input, previewElementId) {
