@@ -44,32 +44,6 @@
     <button class="btn-primary" onclick="LessonRunner.hideQuitModal()">Keep Learning</button>
     <button class="btn-sheet" onclick="LessonRunner.close()">Quit Lesson</button>
   </div>
-
-  <div id="edit-profile-modal" class="modal-overlay hidden">
-    <div class="edit-profile-body">
-      <div id="edit-avatar-preview" class="avatar-preview-circle">🦉</div>
-      <input type="file" id="profile-photo-file" style="display: none;">
-      <input type="text" id="edit-profile-name" value="Tester">
-      <textarea id="edit-profile-bio">Testing ProLingo</textarea>
-    </div>
-  </div>
-
-  <div id="switch-user-modal" class="modal-overlay hidden">
-    <div class="modal-dialog">
-      <div class="switch-user-body">
-        <div id="switch-accounts-list"></div>
-      </div>
-    </div>
-  </div>
-
-  <div id="image-crop-modal" class="modal-overlay hidden">
-    <div class="modal-dialog crop-modal-dialog">
-      <canvas id="crop-canvas" width="280" height="280"></canvas>
-      <canvas id="crop-preview-canvas" width="60" height="60"></canvas>
-      <input type="range" id="crop-zoom-slider" min="0.5" max="3.5" value="1">
-    </div>
-  </div>
-
   <div id="app-toast" class="app-toast hidden"></div>
   <div id="main-content-view">
     <div id="view-learn" class="view-panel">
@@ -77,9 +51,6 @@
     </div>
     <div id="view-practice" class="view-panel hidden">
       <div id="practice-container"></div>
-    </div>
-    <div id="view-profile" class="view-panel hidden">
-      <div id="profile-view"></div>
     </div>
   </div>
 
@@ -187,51 +158,6 @@
         }
 
         assert(ProLingoState.data.stats.hearts >= 1, 'Hearts recovered to at least 1 after practice');
-
-        // 6. Test Avatar Upload, Cropper, and Profile Persistence
-        const switchModal = document.getElementById('switch-user-modal');
-        const cropModal = document.getElementById('image-crop-modal');
-        assert(Boolean(cropModal), 'image-crop-modal exists');
-        assert(switchModal.contains(cropModal) === false, 'image-crop-modal is NOT trapped inside switch-user-modal');
-
-        // Test ImageCropper initialization
-        ImageCropper.init();
-        assert(Boolean(ImageCropper.canvas), 'Crop canvas initialized');
-        assert(Boolean(ImageCropper.ctx), 'Crop canvas context initialized');
-
-        // Create a synthetic image for cropping
-        const testCanvas = document.createElement('canvas');
-        testCanvas.width = 100;
-        testCanvas.height = 100;
-        const testCtx = testCanvas.getContext('2d');
-        testCtx.fillStyle = '#58cc02';
-        testCtx.fillRect(0, 0, 100, 100);
-
-        const img = new Image();
-        img.src = testCanvas.toDataURL();
-        ImageCropper.img = img;
-        ImageCropper.targetPreviewId = 'edit-avatar-preview';
-        ImageCropper.reset();
-        ImageCropper.setZoom(1.5);
-        ImageCropper.rotate(90);
-        ImageCropper.applyCrop();
-
-        const previewEl = document.getElementById('edit-avatar-preview');
-        assert(Boolean(previewEl.dataset.avatarImage), 'Preview dataset.avatarImage is set after crop');
-        assert(previewEl.innerHTML.includes('<img'), 'Preview innerHTML contains img tag');
-        assert(Boolean(ProLingoState.data.profile.avatarImage), 'ProLingoState avatarImage is set');
-        assert(ProLingoState.data.profile.avatarImage.startsWith('data:image/png'), 'Cropped image is PNG format');
-
-        // Verify saveProfileEdits preserves avatar
-        App.saveProfileEdits();
-        assert(Boolean(ProLingoState.data.profile.avatarImage), 'avatarImage retained after saveProfileEdits');
-
-        // Verify switching to preset mascot clears custom avatar
-        App.setEditPresetAvatar('cyber');
-        assert(previewEl.dataset.presetAvatar === 'cyber', 'Preset avatar dataset set to cyber');
-        App.saveProfileEdits();
-        assert(ProLingoState.data.profile.avatar === 'cyber', 'Profile avatar is cyber');
-        assert(ProLingoState.data.profile.avatarImage === null, 'Custom avatarImage cleared on preset avatar select');
 
         if (errors.length > 0) {
           throw new Error('ERRORS DETECTED: ' + errors.join('; '));

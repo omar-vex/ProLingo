@@ -2095,12 +2095,6 @@ body.rtl .quest-action-col {
 
 .profile-avatar-wrap {
   flex-shrink: 0;
-  cursor: pointer;
-  transition: transform 0.15s ease;
-}
-
-.profile-avatar-wrap:hover {
-  transform: scale(1.05);
 }
 
 .profile-avatar-large-img {
@@ -2578,14 +2572,6 @@ body.rtl .modal-form-group {
   display: block;
 }
 
-.avatar-preview-img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  border-radius: 50%;
-  display: block;
-}
-
 .avatar-round-image.mini {
   width: 32px;
   height: 32px;
@@ -2846,10 +2832,6 @@ body.rtl .modal-form-group {
   display: flex;
   align-items: center;
   justify-content: center;
-}
-
-#image-crop-modal {
-  z-index: 300;
 }
 
 .crop-modal-dialog {

@@ -420,7 +420,7 @@
             <div id="google-avatar-preview" class="avatar-preview-box">🦉</div>
             <div class="avatar-upload-actions">
               <input type="file" id="google-file-upload" accept="image/*" style="display: none;" onchange="App.handleAvatarFileSelect(this, 'google-avatar-preview')">
-              <button type="button" class="btn-3d btn-secondary btn-sm" onclick="const f = document.getElementById('google-file-upload'); if (f) { f.value = ''; f.click(); }">📁 Choose Photo</button>
+              <button type="button" class="btn-3d btn-secondary btn-sm" onclick="document.getElementById('google-file-upload').click()">📁 Choose Photo</button>
               <span class="upload-note">PNG, JPG, or SVG</span>
             </div>
           </div>
@@ -452,9 +452,9 @@
       <div class="edit-profile-body">
         <!-- Circular Avatar Upload Preview -->
         <div class="edit-avatar-section">
-          <div id="edit-avatar-preview" class="avatar-preview-circle clickable-avatar" title="Click to upload & crop photo" onclick="const f = document.getElementById('profile-photo-file'); if (f) { f.value = ''; f.click(); }">🦉</div>
+          <div id="edit-avatar-preview" class="avatar-preview-circle clickable-avatar" title="Click to upload & crop photo" onclick="document.getElementById('profile-photo-file').click()">🦉</div>
           <input type="file" id="profile-photo-file" accept="image/*" style="display: none;" onchange="App.handleAvatarFileSelect(this, 'edit-avatar-preview')">
-          <button type="button" class="btn-3d btn-secondary btn-sm mt-2" onclick="const f = document.getElementById('profile-photo-file'); if (f) { f.value = ''; f.click(); }">📷 Upload & Crop Photo</button>
+          <button type="button" class="btn-3d btn-secondary btn-sm mt-2" onclick="document.getElementById('profile-photo-file').click()">📷 Upload & Crop Photo</button>
         </div>
 
         <!-- Preset Avatar Selector -->
@@ -507,8 +507,6 @@
         </button>
       </div>
     </div>
-  </div>
-
   <!-- 7. Interactive Profile Photo Cropper Modal (Duolingo Style) -->
   <div id="image-crop-modal" class="modal-overlay hidden" onclick="if(event.target === this) ImageCropper.close()">
     <div class="modal-dialog crop-modal-dialog">

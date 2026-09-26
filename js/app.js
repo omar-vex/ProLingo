@@ -108,19 +108,7 @@ window.ImageCropper = {
         if (modal) modal.classList.remove('hidden');
         this.render();
       };
-      img.onerror = () => {
-        if (window.App && window.App.showToast) {
-          const isAr = (window.I18N && I18N.isRTL && I18N.isRTL());
-          window.App.showToast(isAr ? 'فشل تحميل الصورة! تأكد من أنها بصيغة صالحة.' : 'Failed to load image. Please select a valid photo.');
-        }
-      };
       img.src = e.target.result;
-    };
-    reader.onerror = () => {
-      if (window.App && window.App.showToast) {
-        const isAr = (window.I18N && I18N.isRTL && I18N.isRTL());
-        window.App.showToast(isAr ? 'فشل قراءة ملف الصورة!' : 'Failed to read image file.');
-      }
     };
     reader.readAsDataURL(file);
   },
@@ -232,8 +220,7 @@ window.ImageCropper = {
     outCtx.drawImage(this.img, -this.img.width / 2, -this.img.height / 2);
     outCtx.restore();
 
-    // Export as high-quality PNG with clean circle transparency
-    const dataUrl = outputCanvas.toDataURL('image/png');
+    const dataUrl = outputCanvas.toDataURL('image/jpeg', 0.92);
 
     // Apply to target preview element in DOM
     if (this.targetPreviewId) {
@@ -241,25 +228,22 @@ window.ImageCropper = {
       if (preview) {
         preview.innerHTML = `<img src="${dataUrl}" class="avatar-preview-img" alt="Avatar">`;
         preview.dataset.avatarImage = dataUrl;
-        delete preview.dataset.presetAvatar;
       }
     }
 
-    // Persist immediately if updating user's profile
-    if (this.targetPreviewId === 'edit-avatar-preview') {
-      if (window.ProLingoState && ProLingoState.data && ProLingoState.data.profile) {
-        ProLingoState.data.profile.avatarImage = dataUrl;
-        ProLingoState.save();
-        if (window.App && window.App.renderHeaderStats) {
-          window.App.renderHeaderStats();
-          window.App.renderCurrentView();
-        }
+    // Persist immediately to active user state
+    if (window.ProLingoState && ProLingoState.data && ProLingoState.data.profile) {
+      ProLingoState.data.profile.avatarImage = dataUrl;
+      ProLingoState.save();
+      if (window.App && window.App.renderHeaderStats) {
+        window.App.renderHeaderStats();
+        window.App.renderCurrentView();
       }
     }
 
     if (window.SoundEngine) SoundEngine.playVictory();
     if (window.App && window.App.showToast) {
-      const isAr = (window.I18N && I18N.isRTL && I18N.isRTL());
+      const isAr = I18N.isRTL();
       window.App.showToast(isAr ? 'تم اقتصاص وتحديث صورة البروفايل بنجاح! 📸' : 'Profile picture cropped & updated! 📸');
     }
 
@@ -271,8 +255,6 @@ window.ImageCropper = {
     if (modal) modal.classList.add('hidden');
     const fileInput = document.getElementById('profile-photo-file');
     if (fileInput) fileInput.value = '';
-    const googleInput = document.getElementById('google-file-upload');
-    if (googleInput) googleInput.value = '';
   }
 };
 
@@ -1216,7 +1198,7 @@ window.App = {
 
     container.innerHTML = `
       <div class="profile-header-card">
-        <div class="profile-avatar-wrap clickable-avatar" onclick="App.openEditProfileModal()" title="Click to edit profile & avatar">
+        <div class="profile-avatar-wrap">
           ${avatarDisplay}
         </div>
         <div class="profile-user-info">
@@ -1570,17 +1552,6 @@ window.App = {
         if (preview) {
           preview.innerHTML = `<img src="${dataUrl}" class="avatar-preview-img" alt="Preview">`;
           preview.dataset.avatarImage = dataUrl;
-          delete preview.dataset.presetAvatar;
-        }
-        if (previewElementId === 'edit-avatar-preview') {
-          if (window.ProLingoState && ProLingoState.data && ProLingoState.data.profile) {
-            ProLingoState.data.profile.avatarImage = dataUrl;
-            ProLingoState.save();
-            if (window.App && window.App.renderHeaderStats) {
-              window.App.renderHeaderStats();
-              window.App.renderCurrentView();
-            }
-          }
         }
       };
       reader.readAsDataURL(file);
@@ -1615,7 +1586,6 @@ window.App = {
     if (nameInput) nameInput.value = prof.name;
     if (bioInput) bioInput.value = prof.bio;
     if (preview) {
-      delete preview.dataset.presetAvatar;
       if (prof.avatarImage) {
         preview.innerHTML = `<img src="${prof.avatarImage}" class="avatar-preview-img" alt="Profile">`;
         preview.dataset.avatarImage = prof.avatarImage;
@@ -1632,7 +1602,7 @@ window.App = {
     const preview = document.getElementById('edit-avatar-preview');
     if (preview) {
       preview.innerHTML = this.getAvatarIcon(avatarKey);
-      preview.dataset.avatarImage = '';
+      delete preview.dataset.avatarImage;
       preview.dataset.presetAvatar = avatarKey;
     }
   },
@@ -1644,26 +1614,18 @@ window.App = {
 
     const name = nameInput ? nameInput.value.trim() : '';
     const bio = bioInput ? bioInput.value.trim() : '';
+    const avatarImage = preview ? preview.dataset.avatarImage : undefined;
     const presetAvatar = preview ? preview.dataset.presetAvatar : undefined;
-    const rawAvatarImage = preview ? preview.dataset.avatarImage : undefined;
-
-    let avatarImage = undefined;
-    if (presetAvatar) {
-      avatarImage = null;
-    } else if (rawAvatarImage) {
-      avatarImage = rawAvatarImage;
-    }
 
     ProLingoState.updateProfile({
       name: name || undefined,
       bio: bio,
       avatar: presetAvatar || undefined,
-      avatarImage: avatarImage
+      avatarImage: avatarImage !== undefined ? avatarImage : undefined
     });
 
     document.getElementById('edit-profile-modal').classList.add('hidden');
-    const isAr = (window.I18N && I18N.isRTL && I18N.isRTL());
-    this.showToast(isAr ? 'تم تحديث الملف الشخصي بنجاح! ✨' : 'Profile updated successfully! ✨');
+    this.showToast('Profile updated successfully! ✨');
   },
 
   openSwitchAccountModal() {
