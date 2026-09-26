@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>ProLingo Automated Verification Suite</title>
+  <link rel="stylesheet" href="css/prolingo.css">
+</head>
+<body class="theme-dark">
+  <div id="test-results">Running tests...</div>
+
+  <!-- Standard DOM containers needed by LessonRunner and App -->
+  <div id="app-sidebar">
+    <span class="logo-owl" data-icon="owl"></span>
+    <span class="nav-tab-icon" data-icon="learn"></span>
+    <span class="nav-tab-icon" data-icon="leagues"></span>
+    <span class="nav-tab-icon" data-icon="quests"></span>
+    <span class="nav-tab-icon" data-icon="shop"></span>
+    <span class="nav-tab-icon" data-icon="profile"></span>
+    <span class="nav-tab-icon" data-icon="practice"></span>
+    <span class="nav-tab-icon" data-icon="settings"></span>
+  </div>
+  <button id="btn-course-selector"><span class="course-flag" data-icon="python"></span></button>
+  <div id="stat-streak-badge"><span class="stat-icon-wrap" data-icon="fire"></span><span id="header-streak-val">0</span></div>
+  <div id="stat-gems-badge"><span class="stat-icon-wrap" data-icon="gem"></span><span id="header-gems-val">50</span></div>
+  <div id="stat-hearts-badge"><span class="stat-icon-wrap" data-icon="heart"></span><span id="header-hearts-val">5</span></div>
+
+  <div id="view-lesson" class="hidden">
+    <div id="lesson-hearts-bar"></div>
+    <div id="lesson-progress-fill"></div>
+    <div id="lesson-question-container"></div>
+    <div id="lesson-bottom-sheet" class="bottom-sheet state-idle hidden">
+      <div id="sheet-feedback-info"></div>
+      <button id="lesson-check-btn" class="btn-3d btn-sheet disabled" disabled>CHECK</button>
+    </div>
+  </div>
+
+  <div id="hearts-refill-modal" class="modal hidden"></div>
+  <div id="app-toast" class="app-toast hidden"></div>
+
+  <!-- Scripts -->
+  <script src="js/i18n.js"></script>
+  <script src="js/sound.js"></script>
+  <script src="js/state.js"></script>
+  <script src="js/curriculum.js"></script>
+  <script src="js/icons.js"></script>
+  <script src="js/lesson.js"></script>
+  <script src="js/app.js"></script>
+
+  <script>
+    window.addEventListener('DOMContentLoaded', () => {
+      const logs = [];
+      function assert(condition, message) {
+        if (!condition) {
+          throw new Error('ASSERTION FAILED: ' + message);
+        }
+        logs.push('PASS: ' + message);
+      }
+
+      try {
+        // Test 1: Verify Icons library and hydration
+        assert(typeof Icons !== 'undefined', 'Icons object exists');
+        assert(Icons.has('heart'), 'Icons.has heart');
+        assert(Icons.has('fire'), 'Icons.has fire');
+        assert(Icons.has('gem'), 'Icons.has gem');
+        assert(Icons.has('logo'), 'Icons.has sleek tech logo');
+        assert(Icons.has('owl'), 'Icons.has owl (aliased to sleek logo)');
+        assert(Icons.has('heart_practice'), 'Icons.has heart_practice');
+        assert(Icons.has('crown'), 'Icons.has crown');
+        assert(Icons.has('star'), 'Icons.has star');
+        assert(Icons.has('lock'), 'Icons.has lock');
+        assert(Icons.has('box'), 'Icons.has box (thematic package icon)');
+        assert(Icons.has('numbers'), 'Icons.has numbers');
+        assert(Icons.has('math'), 'Icons.has math');
+        assert(Icons.has('review'), 'Icons.has review');
+
+        const boxSvg = Icons.getLevelIcon('📦', 44, 'Variables & Dynamic Typing');
+        assert(boxSvg.includes('icon-box'), 'Icons.getLevelIcon maps package emoji to 3D box SVG');
+
+        // Test 2: App initialization and state
+        ProLingoState.init();
+        App.init();
+        assert(document.querySelectorAll('.prolingo-svg-icon').length > 5, 'Icons hydrated into DOM successfully');
+
+        // Test 3: Practice mode with ZERO hearts
+        ProLingoState.data.stats.hearts = 0;
+        ProLingoState.save();
+        assert(ProLingoState.data.stats.hearts === 0, 'Hearts set to 0');
+
+        LessonRunner.startPractice();
+        assert(LessonRunner.currentLesson !== null, 'Practice lesson started');
+        assert(LessonRunner.currentLesson.isPractice === true, 'isPractice is true');
+        assert(LessonRunner.questions.length > 0, 'Practice has questions');
+
+        // Verify hearts bar shows safe practice badge
+        const heartsBar = document.getElementById('lesson-hearts-bar');
+        assert(heartsBar.innerHTML.includes('practice-hearts-safe-badge'), 'Hearts bar shows safe practice badge');
+
+        // Test 4: Incorrect answer in practice mode MUST NOT deduct hearts
+        const q1 = LessonRunner.questions[0];
+        LessonRunner.handleIncorrect(q1);
+        assert(ProLingoState.data.stats.hearts === 0, 'Hearts did not drop below 0 on mistake in practice mode');
+        assert(LessonRunner.mistakesCount === 1, 'Mistake recorded without deducting hearts');
+
+        // Test 5: Advancing to next question with 0 hearts in practice mode MUST NOT block or halt
+        assert(LessonRunner.isAnswerChecked === false, 'Answer checked flag state');
+        LessonRunner.checkAnswer(); // checks answer, isAnswerChecked becomes true
+        assert(LessonRunner.isAnswerChecked === true, 'Answer marked checked');
+
+        LessonRunner.checkAnswer(); // clicks CONTINUE, calls nextQuestion()
+        assert(LessonRunner.currentIndex === 1, 'Advanced to Question 2 without freezing on 0 hearts');
+
+        function setCorrectAnswer(runner, q) {
+          if (!q) return;
+          if (q.type === 'mcq' || q.type === 'output' || q.type === 'bug_hunter') {
+            runner.selectedAnswer = q.correctIndex;
+          } else if (q.type === 'fill_blank') {
+            runner.selectedAnswer = q.correctValue;
+          } else if (q.type === 'terminal') {
+            runner.selectedAnswer = q.expectedOutput;
+          } else if (q.type === 'reorder') {
+            runner.getReorderCurrentIndices = () => q.correctOrder;
+          } else {
+            runner.selectedAnswer = true;
+          }
+        }
+
+        // Question 2: Correct answer
+        setCorrectAnswer(LessonRunner, LessonRunner.questions[1]);
+        LessonRunner.checkAnswer();
+        assert(LessonRunner.isAnswerChecked === true, 'Question 2 checked');
+        LessonRunner.checkAnswer(); // continue to Question 3
+        assert(LessonRunner.currentIndex === 2, 'Advanced to Question 3');
+
+        // Question 3: Correct answer
+        setCorrectAnswer(LessonRunner, LessonRunner.questions[2]);
+        LessonRunner.checkAnswer();
+        logs.push('Q3 checked: isCorrect=' + LessonRunner.isCorrect + ' type=' + LessonRunner.questions[2].type);
+        LessonRunner.checkAnswer(); // Finish initial round
+        logs.push('After Q3 continue: currentIndex=' + LessonRunner.currentIndex + ' isInReviewMode=' + LessonRunner.isInReviewMode + ' unresolvedMistakes=' + LessonRunner.unresolvedMistakes.length);
+        
+        // Because Q1 was missed, LessonRunner MUST NOT finish yet! It must enter review mode!
+        assert(LessonRunner.isInReviewMode === true, 'Entered mistake review mode instead of premature exit');
+        assert(LessonRunner.questions.length === 1, 'Mistake question re-queued for mastery review');
+
+        // Review Q1: now answer it correctly!
+        setCorrectAnswer(LessonRunner, LessonRunner.questions[0]);
+        LessonRunner.checkAnswer();
+        LessonRunner.checkAnswer(); // Now finish lesson!
+
+        assert(ProLingoState.data.stats.hearts === 1, 'Hearts increased by 1 after fully mastering practice mode (+1)');
+        assert(document.querySelector('.victory-mastery-banner') !== null, 'Victory screen displays 100% mastery banner');
+
+        // Test 6: Check debounce lock
+        LessonRunner.isChecking = false;
+        LessonRunner.handleCheckButtonClick();
+        assert(LessonRunner.isChecking === true, 'Debounce lock engaged on check click');
+
+        // All passed!
+        document.getElementById('test-results').innerHTML = `
+          <div id="suite-status" style="color: #58cc02; font-size: 24px; font-weight: bold;">
+            TESTS_PASSED_SUCCESSFULLY
+          </div>
+          <pre>${logs.join('\n')}</pre>
+        `;
+      } catch (e) {
+        document.getElementById('test-results').innerHTML = `
+          <div id="suite-status" style="color: #ff4b4b; font-size: 24px; font-weight: bold;">
+            TEST_SUITE_FAILED: ${e.message}
+          </div>
+          <pre>${e.stack}</pre>
+        `;
+      }
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Comprehensive Suite</title>
+  <link rel="stylesheet" href="css/prolingo.css">
+</head>
+<body class="theme-dark">
+  <div id="test-results">Testing...</div>
+
+  <!-- Standard DOM from index.html -->
+  <div id="app-sidebar">
+    <span class="logo-owl" data-icon="owl"></span>
+    <span class="nav-tab-icon" data-icon="learn"></span>
+    <span class="nav-tab-icon" data-icon="leagues"></span>
+    <span class="nav-tab-icon" data-icon="quests"></span>
+    <span class="nav-tab-icon" data-icon="shop"></span>
+    <span class="nav-tab-icon" data-icon="profile"></span>
+    <span class="nav-tab-icon" data-icon="practice"></span>
+    <span class="nav-tab-icon" data-icon="settings"></span>
+  </div>
+  <button id="btn-course-selector"><span class="course-flag" data-icon="python"></span></button>
+  <div id="stat-streak-badge"><span class="stat-icon-wrap" data-icon="fire"></span><span id="header-streak-val">0</span></div>
+  <div id="stat-gems-badge"><span class="stat-icon-wrap" data-icon="gem"></span><span id="header-gems-val">50</span></div>
+  <div id="stat-hearts-badge"><span class="stat-icon-wrap" data-icon="heart"></span><span id="header-hearts-val">5</span></div>
+
+  <div id="view-lesson" class="hidden">
+    <div class="lesson-top-bar">
+      <button id="btn-lesson-exit" class="btn-close-lesson" title="Quit Lesson">✕</button>
+      <div class="lesson-progress-bar-track">
+        <div id="lesson-progress-fill" class="lesson-progress-bar-fill" style="width: 0%;"></div>
+      </div>
+      <div id="lesson-hearts-bar" class="lesson-hearts-bar"></div>
+    </div>
+    <div class="lesson-question-wrapper" id="lesson-question-container"></div>
+    <div id="lesson-bottom-sheet" class="bottom-sheet state-idle">
+      <div id="sheet-feedback-info" class="sheet-info-col"></div>
+      <button id="lesson-check-btn" class="btn-3d btn-sheet disabled" disabled onclick="LessonRunner.handleCheckButtonClick()">CHECK</button>
+    </div>
+  </div>
+
+  <div id="hearts-refill-modal" class="modal-overlay hidden"></div>
+  <div id="lesson-quit-modal" class="modal-overlay hidden">
+    <button class="btn-primary" onclick="LessonRunner.hideQuitModal()">Keep Learning</button>
+    <button class="btn-sheet" onclick="LessonRunner.close()">Quit Lesson</button>
+  </div>
+
+  <div id="edit-profile-modal" class="modal-overlay hidden">
+    <div class="edit-profile-body">
+      <div id="edit-avatar-preview" class="avatar-preview-circle">🦉</div>
+      <input type="file" id="profile-photo-file" style="display: none;">
+      <input type="text" id="edit-profile-name" value="Tester">
+      <textarea id="edit-profile-bio">Testing ProLingo</textarea>
+    </div>
+  </div>
+
+  <div id="switch-user-modal" class="modal-overlay hidden">
+    <div class="modal-dialog">
+      <div class="switch-user-body">
+        <div id="switch-accounts-list"></div>
+      </div>
+    </div>
+  </div>
+
+  <div id="image-crop-modal" class="modal-overlay hidden">
+    <div class="modal-dialog crop-modal-dialog">
+      <canvas id="crop-canvas" width="280" height="280"></canvas>
+      <canvas id="crop-preview-canvas" width="60" height="60"></canvas>
+      <input type="range" id="crop-zoom-slider" min="0.5" max="3.5" value="1">
+    </div>
+  </div>
+
+  <div id="app-toast" class="app-toast hidden"></div>
+  <div id="main-content-view">
+    <div id="view-learn" class="view-panel">
+      <div id="learn-path-container"></div>
+    </div>
+    <div id="view-practice" class="view-panel hidden">
+      <div id="practice-container"></div>
+    </div>
+    <div id="view-profile" class="view-panel hidden">
+      <div id="profile-view"></div>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="js/i18n.js"></script>
+  <script src="js/sound.js"></script>
+  <script src="js/state.js"></script>
+  <script src="js/curriculum.js"></script>
+  <script src="js/icons.js"></script>
+  <script src="js/lesson.js"></script>
+  <script src="js/app.js"></script>
+
+  <script>
+    const errors = [];
+    window.onerror = function(msg, url, line, col, err) {
+      errors.push('WINDOW_ERROR: ' + msg + ' at ' + line + ':' + col);
+    };
+    window.onunhandledrejection = function(e) {
+      errors.push('UNHANDLED_REJECTION: ' + (e.reason ? e.reason.message : e));
+    };
+
+    window.addEventListener('DOMContentLoaded', () => {
+      const logs = [];
+      const assert = (cond, msg) => {
+        if (!cond) throw new Error('ASSERT FAILED: ' + msg);
+        logs.push('PASS: ' + msg);
+      };
+
+      try {
+        // Init state & app
+        ProLingoState.init();
+        App.init();
+
+        // Check LessonRunner.init
+        LessonRunner.init();
+
+        // 1. Test exit button binding & quit modal
+        const exitBtn = document.getElementById('btn-lesson-exit');
+        assert(Boolean(exitBtn), 'btn-lesson-exit exists in DOM');
+        assert(typeof LessonRunner.promptExit === 'function', 'LessonRunner.promptExit is a function');
+        assert(typeof LessonRunner.close === 'function', 'LessonRunner.close is a function');
+        assert(typeof LessonRunner.showQuitModal === 'function', 'LessonRunner.showQuitModal is a function');
+
+        // Start a lesson to test exit button interaction
+        const pyCourse = CURRICULUM.getCourse('python');
+        const lesson1 = pyCourse.units[0].lessons[0];
+        LessonRunner.start(lesson1);
+        assert(!document.getElementById('view-lesson').classList.contains('hidden'), 'view-lesson is visible');
+
+        // Click exit button
+        exitBtn.click();
+        const quitModal = document.getElementById('lesson-quit-modal');
+        assert(!quitModal.classList.contains('hidden'), 'Quit modal opened on exit button click');
+
+        // Test Keep Learning button
+        LessonRunner.hideQuitModal();
+        assert(quitModal.classList.contains('hidden'), 'Quit modal hidden on Keep Learning');
+        assert(!document.getElementById('view-lesson').classList.contains('hidden'), 'Lesson still active after Keep Learning');
+
+        // 2. Test Heart Regeneration Ticker
+        LessonRunner.currentLesson = { id: 'test' };
+        App.tickHeartRegen(); // Must not throw
+        logs.push('PASS: App.tickHeartRegen() executed without throwing');
+
+        // 3. Test out-of-hearts flow
+        ProLingoState.data.stats.hearts = 1;
+        ProLingoState.save();
+        LessonRunner.start(lesson1);
+
+        // Answer wrong
+        const q0 = LessonRunner.questions[0];
+        LessonRunner.selectedAnswer = (q0.correctIndex === 0 ? 1 : 0);
+        LessonRunner.checkAnswer(); // Incorrect
+        assert(ProLingoState.data.stats.hearts === 0, 'Hearts dropped to 0');
+
+        // Advance to trigger out of hearts modal
+        LessonRunner.checkAnswer(); // calls nextQuestion() -> showOutOfHeartsModal()
+        const refillModal = document.getElementById('hearts-refill-modal');
+        assert(!refillModal.classList.contains('hidden'), 'Out of hearts modal is displayed');
+
+        // 4. Test clicking Practice to Earn Hearts from modal
+        const practiceBtn = refillModal.querySelector('.btn-secondary');
+        assert(Boolean(practiceBtn), 'Practice button exists in hearts modal');
+        practiceBtn.click();
+
+        assert(refillModal.classList.contains('hidden'), 'Hearts modal closed on practice click');
+        assert(LessonRunner.currentLesson !== null, 'Practice lesson is active');
+        assert(LessonRunner.currentLesson.isPractice === true, 'LessonRunner is in practice mode');
+        assert(LessonRunner.questions.length > 0, 'Practice lesson has questions');
+
+        // 5. Answer all 3 practice questions
+        for (let i = 0; i < 3; i++) {
+          const q = LessonRunner.questions[LessonRunner.currentIndex];
+          if (q.type === 'mcq' || q.type === 'output' || q.type === 'bug_hunter') {
+            LessonRunner.selectedAnswer = q.correctIndex;
+          } else if (q.type === 'fill_blank') {
+            LessonRunner.selectedAnswer = q.correctValue;
+          } else if (q.type === 'reorder') {
+            LessonRunner.getReorderCurrentIndices = () => q.correctOrder;
+          } else {
+            LessonRunner.selectedAnswer = true;
+          }
+          LessonRunner.checkAnswer(); // Check
+          LessonRunner.checkAnswer(); // Continue
+        }
+
+        assert(ProLingoState.data.stats.hearts >= 1, 'Hearts recovered to at least 1 after practice');
+
+        // 6. Test Avatar Upload, Cropper, and Profile Persistence
+        const switchModal = document.getElementById('switch-user-modal');
+        const cropModal = document.getElementById('image-crop-modal');
+        assert(Boolean(cropModal), 'image-crop-modal exists');
+        assert(switchModal.contains(cropModal) === false, 'image-crop-modal is NOT trapped inside switch-user-modal');
+
+        // Test ImageCropper initialization
+        ImageCropper.init();
+        assert(Boolean(ImageCropper.canvas), 'Crop canvas initialized');
+        assert(Boolean(ImageCropper.ctx), 'Crop canvas context initialized');
+
+        // Create a synthetic image for cropping
+        const testCanvas = document.createElement('canvas');
+        testCanvas.width = 100;
+        testCanvas.height = 100;
+        const testCtx = testCanvas.getContext('2d');
+        testCtx.fillStyle = '#58cc02';
+        testCtx.fillRect(0, 0, 100, 100);
+
+        const img = new Image();
+        img.src = testCanvas.toDataURL();
+        ImageCropper.img = img;
+        ImageCropper.targetPreviewId = 'edit-avatar-preview';
+        ImageCropper.reset();
+        ImageCropper.setZoom(1.5);
+        ImageCropper.rotate(90);
+        ImageCropper.applyCrop();
+
+        const previewEl = document.getElementById('edit-avatar-preview');
+        assert(Boolean(previewEl.dataset.avatarImage), 'Preview dataset.avatarImage is set after crop');
+        assert(previewEl.innerHTML.includes('<img'), 'Preview innerHTML contains img tag');
+        assert(Boolean(ProLingoState.data.profile.avatarImage), 'ProLingoState avatarImage is set');
+        assert(ProLingoState.data.profile.avatarImage.startsWith('data:image/png'), 'Cropped image is PNG format');
+
+        // Verify saveProfileEdits preserves avatar
+        App.saveProfileEdits();
+        assert(Boolean(ProLingoState.data.profile.avatarImage), 'avatarImage retained after saveProfileEdits');
+
+        // Verify switching to preset mascot clears custom avatar
+        App.setEditPresetAvatar('cyber');
+        assert(previewEl.dataset.presetAvatar === 'cyber', 'Preset avatar dataset set to cyber');
+        App.saveProfileEdits();
+        assert(ProLingoState.data.profile.avatar === 'cyber', 'Profile avatar is cyber');
+        assert(ProLingoState.data.profile.avatarImage === null, 'Custom avatarImage cleared on preset avatar select');
+
+        if (errors.length > 0) {
+          throw new Error('ERRORS DETECTED: ' + errors.join('; '));
+        }
+
+        document.getElementById('test-results').innerHTML = '<h1 style="color:green">ALL_TESTS_PASSED</h1><pre>' + logs.join('\n') + '</pre>';
+      } catch (err) {
+        document.getElementById('test-results').innerHTML = '<h1 style="color:red">TEST_FAILED: ' + err.message + '</h1><pre>' + err.stack + '\n' + logs.join('\n') + '\n' + errors.join('\n') + '</pre>';
+      }
+    });
+  </script>
+</body>
+</html>
