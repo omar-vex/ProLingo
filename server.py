@@ -60,16 +60,33 @@ class ProLingoHandler(http.server.SimpleHTTPRequestHandler):
         body = self.rfile.read(content_length).decode('utf-8')
         try:
             user_data = json.loads(body)
+            user_id = user_data.get('id', 'default')
+            users_dir = os.path.join(DATA_DIR, 'users')
+            os.makedirs(users_dir, exist_ok=True)
+            user_specific_file = os.path.join(users_dir, f"{user_id}.json")
+            with open(user_specific_file, 'w', encoding='utf-8') as f:
+                json.dump(user_data, f, indent=2, ensure_ascii=False)
             with open(USER_FILE, 'w', encoding='utf-8') as f:
                 json.dump(user_data, f, indent=2, ensure_ascii=False)
-            self.send_json_response(200, {'success': True})
+            self.send_json_response(200, {'success': True, 'id': user_id})
         except Exception as e:
             self.send_json_response(500, {'success': False, 'error': str(e)})
 
     def handle_get_user(self):
-        if os.path.exists(USER_FILE):
+        from urllib.parse import urlparse, parse_qs
+        parsed = urlparse(self.path)
+        qs = parse_qs(parsed.query)
+        user_id = qs.get('id', [None])[0]
+
+        target_file = USER_FILE
+        if user_id:
+            user_specific = os.path.join(DATA_DIR, 'users', f"{user_id}.json")
+            if os.path.exists(user_specific):
+                target_file = user_specific
+
+        if os.path.exists(target_file):
             try:
-                with open(USER_FILE, 'r', encoding='utf-8') as f:
+                with open(target_file, 'r', encoding='utf-8') as f:
                     data = json.load(f)
                 self.send_json_response(200, data)
                 return

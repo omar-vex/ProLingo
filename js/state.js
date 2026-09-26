@@ -258,23 +258,49 @@ const ProLingoState = {
   // Google Sign-In handler
   loginWithGoogle(googleProfile) {
     const { name, email, avatarImage } = googleProfile;
+    const cleanEmail = (email || '').trim();
+    const cleanName = (name || '').trim();
     const registry = this.getUsersRegistry();
     
     // Check if user with this email already exists
-    const existing = registry.find(u => u.email && u.email.toLowerCase() === email.toLowerCase());
+    const existing = cleanEmail 
+      ? registry.find(u => u.email && u.email.toLowerCase() === cleanEmail.toLowerCase())
+      : null;
     
     if (existing) {
       // Load existing account with all preserved progress!
       this.switchAccount(existing.id);
-      // Update avatar if provided
+      if (cleanName && (!this.data.profile.name || this.data.profile.name === 'Learner' || this.data.profile.name === 'Guest')) {
+        this.data.profile.name = cleanName;
+      }
       if (avatarImage) {
         this.data.profile.avatarImage = avatarImage;
       }
       this.data.profile.isGoogle = true;
       this.save();
     } else {
-      // Brand new Google user starts from zero!
-      this.createNewAccount(name || 'Google User', true, email, avatarImage);
+      // Check if current active user is an unmodified starter guest (0 XP, no completed lessons, no email)
+      const current = this.data;
+      const isStarterGuest = current && current.stats.xp === 0 &&
+        (!current.completedLessons.python || current.completedLessons.python.length === 0) &&
+        (!current.profile.email || current.profile.email === '');
+
+      if (isStarterGuest) {
+        // Upgrade current starter session to this Google Account
+        current.profile.name = cleanName || 'Google Coder';
+        current.profile.email = cleanEmail;
+        current.profile.isGoogle = true;
+        if (avatarImage) {
+          current.profile.avatarImage = avatarImage;
+        }
+        this.save();
+        this.registerUserInIndex(current);
+        window.App.renderHeaderStats();
+        window.App.renderCurrentView();
+      } else {
+        // Brand new Google user account starts from zero!
+        this.createNewAccount(cleanName || 'Google Coder', true, cleanEmail, avatarImage);
+      }
     }
 
     if (window.SoundEngine) SoundEngine.playVictory();
