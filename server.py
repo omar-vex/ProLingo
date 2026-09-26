@@ -106,9 +106,21 @@ class ProLingoHandler(http.server.SimpleHTTPRequestHandler):
 def run():
     os.chdir(DIRECTORY)
     with socketserver.TCPServer(("", PORT), ProLingoHandler) as httpd:
+        import socket
+        try:
+            s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+            s.connect(("8.8.8.8", 80))
+            local_ip = s.getsockname()[0]
+            s.close()
+        except Exception:
+            local_ip = "127.0.0.1"
+
         url = f"http://localhost:{PORT}"
+        phone_url = f"http://{local_ip}:{PORT}"
         print("=" * 60)
-        print(f"  ProLingo Platform active at: {url}")
+        print(f"  ProLingo Platform active:")
+        print(f"  • Computer (Local):  {url}")
+        print(f"  • Mobile / Phone:    {phone_url}")
         print("  Press Ctrl+C to terminate the server.")
         print("=" * 60)
         try:

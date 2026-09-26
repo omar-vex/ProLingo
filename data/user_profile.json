@@ -5,7 +5,7 @@
     "joinedDate": "September 2026",
     "bio": "Coding my way through algorithms and daily challenges! 🚀",
     "following": [
-      "alex_py",
+      "dev_py",
       "sarah_cpp",
       "tariq_js",
       "duo_bot"
@@ -73,7 +73,7 @@
       },
       {
         "id": "comp_1",
-        "name": "Alex_Py",
+        "name": "Samir_Py",
         "avatar": "cyber",
         "xp": 240,
         "isUser": false
@@ -192,7 +192,7 @@
       },
       {
         "id": "comp_16",
-        "name": "Omar_Algo",
+        "name": "Sami_Algo",
         "avatar": "classic",
         "xp": 20,
         "isUser": false
@@ -412,7 +412,7 @@
       "prompt": "Arrange the code blocks in logical execution order:",
       "prompt_ar": "رتب أجزاء الكود بالترتيب المنطقي للتشغيل:",
       "blocks": [
-        "username = \"Alex\"",
+        "username = \"Player\"",
         "greeting = f\"Hello {username}!\"",
         "print(greeting)"
       ],

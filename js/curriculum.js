@@ -5120,7 +5120,7 @@ const CURRICULUM = {
               "syntax": "# تجنب الأخطاء الشائعة في دوال معالجة النصوص"
             }
           ],
-          "code_example": "# String Methods & Immutability\nraw_input = \"   Omar_Developer@GMAIL.COM   \"\ncleaned = raw_input.strip().lower()\ndomain = cleaned.split(\"@\")[1]\nreplaced = cleaned.replace(\"developer\", \"pro\")\n\nprint(\"Cleaned:\", cleaned, \"| Domain:\", domain)",
+          "code_example": "# String Methods & Immutability\nraw_input = \"   CodeMaster_Pro@GMAIL.COM   \"\ncleaned = raw_input.strip().lower()\ndomain = cleaned.split(\"@\")[1]\nreplaced = cleaned.replace(\"pro\", \"expert\")\n\nprint(\"Cleaned:\", cleaned, \"| Domain:\", domain)",
           "pro_tip": "Because strings are immutable, chained string methods like text.strip().lower() each create a new string object.",
           "pro_tip_ar": "في المشاريع الاحترافية، أعطِ الأولوية دائماً لوضوح الكود والقابلية للصيانة بدلاً من الحلول المعقدة عند التعامل مع دوال معالجة النصوص."
         },
