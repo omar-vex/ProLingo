@@ -260,7 +260,7 @@ const CURRICULUM = {
               "syntax": "# تجنب الأخطاء الشائعة في المتغيرات والأنواع الديناميكية"
             }
           ],
-          "code_example": "# Variables & Dynamic Typing\nusername = \"Alex\"     # str: created dynamically\nlevel = 10           # int: no type declaration needed\nscore = 98.5         # float: reassignment is dynamic\nis_active = True     # bool: True/False\n\nprint(f\"{username} (Level {level}) has {score} pts. Active: {is_active}\")",
+          "code_example": "# Variables & Dynamic Typing\nusername = \"Coder\"     # str: created dynamically\nlevel = 10           # int: no type declaration needed\nscore = 98.5         # float: reassignment is dynamic\nis_active = True     # bool: True/False\n\nprint(f\"{username} (Level {level}) has {score} pts. Active: {is_active}\")",
           "pro_tip": "In Python, variables don't hold values directly; they are references (labels) pointing to objects in memory.",
           "pro_tip_ar": "في المشاريع الاحترافية، أعطِ الأولوية دائماً لوضوح الكود والقابلية للصيانة بدلاً من الحلول المعقدة عند التعامل مع المتغيرات والأنواع الديناميكية."
         },
@@ -6092,7 +6092,7 @@ const CURRICULUM = {
               "syntax": "# تجنب الأخطاء الشائعة في تنسيق النصوص بـ F-Strings"
             }
           ],
-          "code_example": "# F-Strings & Formatting Expressions\nuser = \"Sara\"\nratio = 0.87459\nruntime_ms = 42.108\n\nprint(f\"Learner {user}: Accuracy = {ratio:.1%}, Time = {runtime_ms:.2f}ms\")\nprint(f\"Debug evaluation: {2 + 3 * 4 = }\")",
+          "code_example": "# F-Strings & Formatting Expressions\nuser = \"Sara\"\nratio = 0.87459\nruntime_ms = 42.108\n\nprint(f\"Student {user}: Accuracy = {ratio:.1%}, Time = {runtime_ms:.2f}ms\")\nprint(f\"Debug evaluation: {2 + 3 * 4 = }\")",
           "pro_tip": "In Python 3.8+, use f'{variable=}' for effortless debugging: it prints both the expression name and its value!",
           "pro_tip_ar": "في المشاريع الاحترافية، أعطِ الأولوية دائماً لوضوح الكود والقابلية للصيانة بدلاً من الحلول المعقدة عند التعامل مع تنسيق النصوص بـ F-Strings."
         },
@@ -24560,7 +24560,7 @@ const CURRICULUM = {
               "syntax": "# تجنب الأخطاء الشائعة في القواميس وتراكيب المفتاح والقيمة"
             }
           ],
-          "code_example": "# Dictionaries: Key-Value Mapping\ndeveloper = {\n    \"name\": \"Alex\",\n    \"role\": \"Backend Engineer\",\n    \"language\": \"Python\",\n    \"experience_years\": 4\n}\n\nprint(f\"{developer['name']} specializes in {developer['language']}.\")",
+          "code_example": "# Dictionaries: Key-Value Mapping\ndeveloper = {\n    \"name\": \"Coder\",\n    \"role\": \"Backend Engineer\",\n    \"language\": \"Python\",\n    \"experience_years\": 4\n}\n\nprint(f\"{developer['name']} specializes in {developer['language']}.\")",
           "pro_tip": "Dictionary lookups run in O(1) average time thanks to internal hash tables. Keys must be hashable immutable types.",
           "pro_tip_ar": "في المشاريع الاحترافية، أعطِ الأولوية دائماً لوضوح الكود والقابلية للصيانة بدلاً من الحلول المعقدة عند التعامل مع القواميس وتراكيب المفتاح والقيمة."
         },
@@ -28448,7 +28448,7 @@ const CURRICULUM = {
               "syntax": "# تجنب الأخطاء الشائعة في المجموعات المتداخلة ونمذجة البيانات"
             }
           ],
-          "code_example": "# Nested Collections & Complex Data Modeling\ndatabase = {\n    \"users\": [\n        {\"id\": 1, \"name\": \"Alex\", \"skills\": [\"Python\", \"Docker\"]},\n        {\"id\": 2, \"name\": \"Sara\", \"skills\": [\"Go\", \"Kubernetes\"]}\n    ],\n    \"active_count\": 2\n}\n\nfirst_skill = database[\"users\"][0][\"skills\"][0]\nprint(\"First User First Skill:\", first_skill)",
+          "code_example": "# Nested Collections & Complex Data Modeling\ndatabase = {\n    \"users\": [\n        {\"id\": 1, \"name\": \"Coder\", \"skills\": [\"Python\", \"Docker\"]},\n        {\"id\": 2, \"name\": \"Sara\", \"skills\": [\"Go\", \"Kubernetes\"]}\n    ],\n    \"active_count\": 2\n}\n\nfirst_skill = database[\"users\"][0][\"skills\"][0]\nprint(\"First User First Skill:\", first_skill)",
           "pro_tip": "In professional Python projects, prioritize readability and explicit code over clever one-liners for Nested Collections & Data Modeling.",
           "pro_tip_ar": "في المشاريع الاحترافية، أعطِ الأولوية دائماً لوضوح الكود والقابلية للصيانة بدلاً من الحلول المعقدة عند التعامل مع المجموعات المتداخلة ونمذجة البيانات."
         },
@@ -41084,7 +41084,7 @@ const CURRICULUM = {
               "syntax": "# تجنب الأخطاء الشائعة في نطاقات المتغيرات وقاعدة LEGB"
             }
           ],
-          "code_example": "# Keyword Arguments vs Positional\ndef build_profile(first, last, role=\"Developer\"):\n    return f\"{first} {last} - {role}\"\n\n# Keyword arguments can be passed in any order\nprint(build_profile(last=\"Carter\", first=\"Alex\", role=\"Lead Engineer\"))",
+          "code_example": "# Keyword Arguments vs Positional\ndef build_profile(first, last, role=\"Developer\"):\n    return f\"{first} {last} - {role}\"\n\n# Keyword arguments can be passed in any order\nprint(build_profile(last=\"Carter\", first=\"Coder\", role=\"Lead Engineer\"))",
           "pro_tip": "In professional Python projects, prioritize readability and explicit code over clever one-liners for Scope & The LEGB Rule.",
           "pro_tip_ar": "في المشاريع الاحترافية، أعطِ الأولوية دائماً لوضوح الكود والقابلية للصيانة بدلاً من الحلول المعقدة عند التعامل مع نطاقات المتغيرات وقاعدة LEGB."
         },
@@ -48860,7 +48860,7 @@ const CURRICULUM = {
               "syntax": "# تجنب الأخطاء الشائعة في الترتيب المتقدم ومعايير المقارنة"
             }
           ],
-          "code_example": "# First-Class Functions\ndef shout(text): return text.upper() + \"!\"\ndef whisper(text): return text.lower() + \"...\"\n\ndef greet_user(formatter, name):\n    return formatter(f\"Hello {name}\")\n\nprint(greet_user(shout, \"Alex\"))\nprint(greet_user(whisper, \"Sara\"))",
+          "code_example": "# First-Class Functions\ndef shout(text): return text.upper() + \"!\"\ndef whisper(text): return text.lower() + \"...\"\n\ndef greet_user(formatter, name):\n    return formatter(f\"Hello {name}\")\n\nprint(greet_user(shout, \"Coder\"))\nprint(greet_user(whisper, \"Sara\"))",
           "pro_tip": "In professional Python projects, prioritize readability and explicit code over clever one-liners for Custom Sorting with Sort Keys.",
           "pro_tip_ar": "في المشاريع الاحترافية، أعطِ الأولوية دائماً لوضوح الكود والقابلية للصيانة بدلاً من الحلول المعقدة عند التعامل مع الترتيب المتقدم ومعايير المقارنة."
         },
@@ -69272,7 +69272,7 @@ const CURRICULUM = {
               "syntax": "# تجنب الأخطاء الشائعة في إطلاق الاستثناءات وفحص الشروط"
             }
           ],
-          "code_example": "# Decorators Accepting Arguments\ndef repeat(num_times):\n    def decorator_repeat(func):\n        def wrapper(*args, **kwargs):\n            for _ in range(num_times - 1):\n                func(*args, **kwargs)\n            return func(*args, **kwargs)\n        return wrapper\n    return decorator_repeat\n\n@repeat(num_times=3)\ndef greet(name):\n    print(f\"Hello, {name}!\")\n\ngreet(\"Alex\")",
+          "code_example": "# Decorators Accepting Arguments\ndef repeat(num_times):\n    def decorator_repeat(func):\n        def wrapper(*args, **kwargs):\n            for _ in range(num_times - 1):\n                func(*args, **kwargs)\n            return func(*args, **kwargs)\n        return wrapper\n    return decorator_repeat\n\n@repeat(num_times=3)\ndef greet(name):\n    print(f\"Hello, {name}!\")\n\ngreet(\"Coder\")",
           "pro_tip": "In professional Python projects, prioritize readability and explicit code over clever one-liners for Raising Exceptions & Assertions.",
           "pro_tip_ar": "في المشاريع الاحترافية، أعطِ الأولوية دائماً لوضوح الكود والقابلية للصيانة بدلاً من الحلول المعقدة عند التعامل مع إطلاق الاستثناءات وفحص الشروط."
         },
@@ -73160,7 +73160,7 @@ const CURRICULUM = {
               "syntax": "# تجنب الأخطاء الشائعة في البرمجة الكائنية: الكلاسات والكائنات"
             }
           ],
-          "code_example": "# OOP: Classes, Objects & Instances\nclass Developer:\n    \"\"\"Blueprint representing a software developer.\"\"\"\n    pass\n\ndev1 = Developer()\ndev1.name = \"Alex\"\nprint(f\"Created instance: {dev1.name} of {type(dev1).__name__}\")",
+          "code_example": "# OOP: Classes, Objects & Instances\nclass Developer:\n    \"\"\"Blueprint representing a software developer.\"\"\"\n    pass\n\ndev1 = Developer()\ndev1.name = \"Coder\"\nprint(f\"Created instance: {dev1.name} of {type(dev1).__name__}\")",
           "pro_tip": "In professional Python projects, prioritize readability and explicit code over clever one-liners for OOP: Classes, Objects & Instances.",
           "pro_tip_ar": "في المشاريع الاحترافية، أعطِ الأولوية دائماً لوضوح الكود والقابلية للصيانة بدلاً من الحلول المعقدة عند التعامل مع البرمجة الكائنية: الكلاسات والكائنات."
         },
@@ -74132,7 +74132,7 @@ const CURRICULUM = {
               "syntax": "# تجنب الأخطاء الشائعة في الدالة البانية __init__ و Self"
             }
           ],
-          "code_example": "# The __init__ Constructor & self\nclass UserProfile:\n    def __init__(self, username, email):\n        self.username = username\n        self.email = email\n        self.xp = 0\n\nuser = UserProfile(\"alex_py\", \"alex@prolingo.dev\")\nprint(f\"User: {user.username} | Email: {user.email}\")",
+          "code_example": "# The __init__ Constructor & self\nclass UserProfile:\n    def __init__(self, username, email):\n        self.username = username\n        self.email = email\n        self.xp = 0\n\nuser = UserProfile(\"coder_dev\", \"coder@prolingo.dev\")\nprint(f\"User: {user.username} | Email: {user.email}\")",
           "pro_tip": "In professional Python projects, prioritize readability and explicit code over clever one-liners for The __init__ Constructor & Self.",
           "pro_tip_ar": "في المشاريع الاحترافية، أعطِ الأولوية دائماً لوضوح الكود والقابلية للصيانة بدلاً من الحلول المعقدة عند التعامل مع الدالة البانية __init__ و Self."
         },
@@ -75104,7 +75104,7 @@ const CURRICULUM = {
               "syntax": "# تجنب الأخطاء الشائعة في دوال الكائنات وخصائصها"
             }
           ],
-          "code_example": "# Instance Methods vs Instance Attributes\nclass BankAccount:\n    def __init__(self, owner, balance=0.0):\n        self.owner = owner\n        self.balance = balance\n\n    def deposit(self, amount):\n        self.balance += amount\n        return self.balance\n\naccount = BankAccount(\"Alex\", 100.0)\naccount.deposit(50.0)\nprint(f\"{account.owner}'s balance: ${account.balance:.2f}\")",
+          "code_example": "# Instance Methods vs Instance Attributes\nclass BankAccount:\n    def __init__(self, owner, balance=0.0):\n        self.owner = owner\n        self.balance = balance\n\n    def deposit(self, amount):\n        self.balance += amount\n        return self.balance\n\naccount = BankAccount(\"Coder\", 100.0)\naccount.deposit(50.0)\nprint(f\"{account.owner}'s balance: ${account.balance:.2f}\")",
           "pro_tip": "In professional Python projects, prioritize readability and explicit code over clever one-liners for Instance Methods vs Instance Attributes.",
           "pro_tip_ar": "في المشاريع الاحترافية، أعطِ الأولوية دائماً لوضوح الكود والقابلية للصيانة بدلاً من الحلول المعقدة عند التعامل مع دوال الكائنات وخصائصها."
         },
@@ -87740,7 +87740,7 @@ const CURRICULUM = {
               "syntax": "# تجنب الأخطاء الشائعة في تحسين استهلاك الذاكرة بـ __slots__"
             }
           ],
-          "code_example": "# Memory Optimization with __slots__\nclass RegularUser:\n    def __init__(self, uid, name):\n        self.uid, self.name = uid, name\n\nclass SlottedUser:\n    __slots__ = (\"uid\", \"name\")  # Saves memory by removing __dict__\n    def __init__(self, uid, name):\n        self.uid, self.name = uid, name\n\nu = SlottedUser(1, \"Alex\")\nprint(\"Slotted User Attributes:\", u.__slots__)",
+          "code_example": "# Memory Optimization with __slots__\nclass RegularUser:\n    def __init__(self, uid, name):\n        self.uid, self.name = uid, name\n\nclass SlottedUser:\n    __slots__ = (\"uid\", \"name\")  # Saves memory by removing __dict__\n    def __init__(self, uid, name):\n        self.uid, self.name = uid, name\n\nu = SlottedUser(1, \"Coder\")\nprint(\"Slotted User Attributes:\", u.__slots__)",
           "pro_tip": "In professional Python projects, prioritize readability and explicit code over clever one-liners for Memory Optimization with __slots__.",
           "pro_tip_ar": "في المشاريع الاحترافية، أعطِ الأولوية دائماً لوضوح الكود والقابلية للصيانة بدلاً من الحلول المعقدة عند التعامل مع تحسين استهلاك الذاكرة بـ __slots__."
         },
@@ -91628,7 +91628,7 @@ const CURRICULUM = {
               "syntax": "# تجنب الأخطاء الشائعة في مكتبة Collections: العداد والقواميس الافتراضية"
             }
           ],
-          "code_example": "# Collections: Counter & Defaultdict\nfrom collections import Counter, defaultdict\n\n# 1. Counter counts occurrences automatically\nword_counts = Counter(\"prolingo_python\")\nprint(\"Letter 'o' count:\", word_counts[\"o\"])\n\n# 2. defaultdict eliminates KeyError\ngroups = defaultdict(list)\ngroups[\"engineers\"].append(\"Alex\")\nprint(\"Group List:\", groups[\"engineers\"])",
+          "code_example": "# Collections: Counter & Defaultdict\nfrom collections import Counter, defaultdict\n\n# 1. Counter counts occurrences automatically\nword_counts = Counter(\"prolingo_python\")\nprint(\"Letter 'o' count:\", word_counts[\"o\"])\n\n# 2. defaultdict eliminates KeyError\ngroups = defaultdict(list)\ngroups[\"engineers\"].append(\"Coder\")\nprint(\"Group List:\", groups[\"engineers\"])",
           "pro_tip": "In professional Python projects, prioritize readability and explicit code over clever one-liners for Collections Module: Counter & Defaultdict.",
           "pro_tip_ar": "في المشاريع الاحترافية، أعطِ الأولوية دائماً لوضوح الكود والقابلية للصيانة بدلاً من الحلول المعقدة عند التعامل مع مكتبة Collections: العداد والقواميس الافتراضية."
         },

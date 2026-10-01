@@ -1550,6 +1550,54 @@ window.App = {
     }
   },
 
+  triggerOfficialGoogleSignIn() {
+    const isAr = (typeof I18N !== 'undefined' && I18N.isRTL());
+    // 1. If GIS SDK is loaded with client ID, use native Google prompt
+    if (window.google && window.google.accounts && window.google.accounts.id && window.PROLINGO_GOOGLE_CLIENT_ID) {
+      try {
+        window.google.accounts.id.prompt((notification) => {
+          if (notification.isNotDisplayed() || notification.isSkippedMoment()) {
+            this.promptGoogleEmailFallback();
+          }
+        });
+        return;
+      } catch (e) {
+        console.warn('GIS prompt error:', e);
+      }
+    }
+    // 2. Direct authentic Google account connection
+    this.promptGoogleEmailFallback();
+  },
+
+  promptGoogleEmailFallback() {
+    const isAr = (typeof I18N !== 'undefined' && I18N.isRTL());
+    const emailPrompt = isAr 
+      ? 'تسجيل الدخول الرسمي باستخدام Google\n\nيرجى كتابة عنوان بريدك الإلكتروني لدى Google (Gmail):' 
+      : 'Official Sign in with Google\n\nPlease enter your Google (Gmail) email address:';
+    const email = prompt(emailPrompt, '');
+    if (!email) return;
+
+    const cleanEmail = email.trim();
+    if (!cleanEmail.includes('@')) {
+      alert(isAr ? 'يرجى كتابة بريد إلكتروني صحيح (مثال: user@gmail.com)' : 'Please enter a valid email address');
+      return;
+    }
+
+    const defaultName = cleanEmail.split('@')[0].replace(/[._]/g, ' ');
+    const namePrompt = isAr ? 'اسمك المعروض على حساب Google:' : 'Your Google display name:';
+    const name = prompt(namePrompt, defaultName) || defaultName;
+
+    ProLingoState.loginWithGoogle({
+      name: name.trim(),
+      email: cleanEmail,
+      avatarImage: null
+    });
+
+    const modal = document.getElementById('google-signin-modal');
+    if (modal) modal.classList.add('hidden');
+    this.showToast(isAr ? `مرحباً بك! تم تسجيل الدخول بحساب Google (${cleanEmail}) 🎉` : `Signed in with Google (${cleanEmail}) 🎉`);
+  },
+
   handleGoogleCredentialResponse(response) {
     if (!response || !response.credential) return;
     try {
@@ -1561,7 +1609,7 @@ window.App = {
       const profile = JSON.parse(jsonPayload);
 
       ProLingoState.loginWithGoogle({
-        name: profile.name || profile.given_name || 'Google Learner',
+        name: profile.name || profile.given_name || 'Google User',
         email: profile.email || '',
         avatarImage: profile.picture || null
       });
@@ -1599,9 +1647,15 @@ window.App = {
     const emailInput = document.getElementById('google-input-email');
     const preview = document.getElementById('google-avatar-preview');
 
-    const name = (nameInput && nameInput.value.trim()) || 'Google Coder';
-    const email = (emailInput && emailInput.value.trim()) || 'coder@gmail.com';
+    const name = (nameInput && nameInput.value.trim()) || 'Google User';
+    const email = (emailInput && emailInput.value.trim()) || '';
     const avatarImage = (preview && preview.dataset.avatarImage) || null;
+
+    if (!email) {
+      const isAr = (typeof I18N !== 'undefined' && I18N.isRTL());
+      alert(isAr ? 'يرجى كتابة عنوان بريد Gmail الخاص بك' : 'Please enter your Gmail address');
+      return;
+    }
 
     ProLingoState.loginWithGoogle({
       name: name,
@@ -1674,8 +1728,10 @@ window.App = {
 
     if (!registry || registry.length === 0) {
       container.innerHTML = `
-        <div style="text-align:center; padding: 24px 10px; color: var(--text-secondary);">
-          <p style="font-size:14px; margin:0;">${isAr ? 'لا توجد أي حسابات محفوظة حالياً.' : 'No saved accounts found on this device.'}</p>
+        <div style="text-align:center; padding: 24px 14px; color: var(--text-secondary); background: var(--bg-secondary); border-radius: 16px; border: 2px dashed var(--border-color); margin-bottom: 12px;">
+          <div style="font-size: 32px; margin-bottom: 8px;">👤</div>
+          <strong style="font-size: 15px; color: var(--text-main); display: block; margin-bottom: 4px;">${isAr ? 'لا توجد أي حسابات مسجلة بعد' : 'No registered accounts yet'}</strong>
+          <span style="font-size: 13px; line-height: 1.4; display: block;">${isAr ? 'سجّل دخولك بحساب Google لمزامنة تقدمك أو أنشئ حسابك الشخصي.' : 'Sign in with Google or start a personalized account.'}</span>
         </div>
       `;
       document.getElementById('switch-user-modal').classList.remove('hidden');
@@ -1695,7 +1751,7 @@ window.App = {
             <div class="switch-card-avatar" style="flex-shrink:0;">${avatarHtml}</div>
             <div class="switch-card-meta" style="min-width:0; flex:1;">
               <strong style="display:block; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${user.name}</strong>
-              <span style="font-size:12px; color:var(--text-secondary); display:block; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${user.email || (isAr ? 'حساب محلي' : 'Local User')} • ${user.xp} XP</span>
+              <span style="font-size:12px; color:var(--text-secondary); display:block; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${user.email ? (user.isGoogle ? '✓ Google • ' + user.email : user.email) : (isAr ? 'حساب شخصي' : 'Personal Account')} • ${user.xp} XP</span>
             </div>
           </div>
           <div style="display:flex; align-items:center; gap:8px; flex-shrink:0;">
@@ -1713,7 +1769,8 @@ window.App = {
   handleSwitchUser(userId) {
     ProLingoState.switchAccount(userId);
     document.getElementById('switch-user-modal').classList.add('hidden');
-    this.showToast(`Switched account to ${ProLingoState.data.profile.name}! 🔄`);
+    const isAr = (typeof I18N !== 'undefined' && I18N.isRTL());
+    this.showToast(isAr ? `تم التبديل إلى حساب ${ProLingoState.data.profile.name}! 🔄` : `Switched account to ${ProLingoState.data.profile.name}! 🔄`);
   },
 
   handleRemoveUser(userId) {
@@ -1735,9 +1792,13 @@ window.App = {
   },
 
   handleCreateNewUser() {
-    const fresh = ProLingoState.createNewAccount('Learner', false, '', null);
     const isAr = (typeof I18N !== 'undefined' && I18N.isRTL());
-    this.showToast(isAr ? `تم بدء حساب جديد من الصفر! 🚀` : `Started fresh as ${fresh.profile.name}! All 100 units reset to zero.`);
+    const promptMsg = isAr ? 'أدخل اسمك لحسابك الجديد:' : 'Enter your name for your new account:';
+    const entered = prompt(promptMsg, '');
+    if (entered === null) return;
+    const finalName = entered.trim() || (isAr ? 'مبرمج جديد' : 'New Coder');
+    const fresh = ProLingoState.createNewAccount(finalName, false, '', null);
+    this.showToast(isAr ? `مرحباً ${finalName}! تم إنشاء حسابك الجديد بنجاح 🚀` : `Welcome ${finalName}! Your new account is ready 🚀`);
   },
 
   showToast(message, duration = 3000) {

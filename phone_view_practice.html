@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html style="margin:0;padding:0;background:#000;">
+<head>
+<meta charset="utf-8">
+<style>
+  body { margin:0; padding:10px; display:flex; justify-content:center; align-items:center; background:#0b141a; min-height:100vh; }
+  .phone-frame {
+    width: 390px;
+    height: 844px;
+    border: 8px solid #202f36;
+    border-radius: 40px;
+    overflow: hidden;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.6);
+    background: #131f24;
+  }
+  iframe { width: 100%; height: 100%; border: none; display: block; }
+</style>
+</head>
+<body>
+<div class="phone-frame">
+  <iframe id="app-frame" src="index.html"></iframe>
+</div>
+<script>
+window.onload = () => {
+    setTimeout(() => {
+        const frame = document.getElementById('app-frame');
+        const win = frame.contentWindow;
+        win.App.switchView('practice');
+    }, 1500);
+};
+</script>
+</body>
+</html>

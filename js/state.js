@@ -11,8 +11,9 @@ const STATE_PREFIX = 'prolingo_state_user_v6_';
 function createFreshUserState(options = {}) {
   const userId = options.id || ('usr_' + Date.now().toString(36) + '_' + Math.random().toString(36).substr(2, 5));
   const isGoogle = Boolean(options.isGoogle);
-  const name = options.name || (isGoogle ? 'Google Coder' : 'Learner');
-  const email = options.email || (isGoogle ? 'coder@gmail.com' : '');
+  const isRegistered = Boolean(options.isRegistered !== undefined ? options.isRegistered : isGoogle);
+  const name = options.name || (isGoogle ? 'Google User' : 'مستخدم جديد');
+  const email = options.email || (isGoogle ? 'user@gmail.com' : '');
   const avatar = options.avatar || 'classic';
   const avatarImage = options.avatarImage || null;
 
@@ -25,6 +26,7 @@ function createFreshUserState(options = {}) {
       avatar: avatar, // classic, cyber, wizard, hacker
       avatarImage: avatarImage, // base64 Data URL for custom uploaded photos
       isGoogle: isGoogle,
+      isRegistered: isRegistered,
       joinedDate: new Date().toLocaleDateString('en-US', { month: 'long', year: 'numeric' }),
       bio: options.bio || 'Mastering Python on ProLingo! 🚀',
       following: ['sarah_cpp', 'tariq_js', 'kareem_py', 'byte_owl'],
@@ -117,6 +119,14 @@ const ProLingoState = {
           localStorage.removeItem(k);
         }
       });
+      // Purge any example or legacy accounts (Alex, Pythonista, Learner) from registry
+      const reg = this.getUsersRegistry();
+      if (reg && reg.length > 0) {
+        const cleanReg = reg.filter(u => u.name !== 'Learner' && u.name !== 'Alex' && u.name !== 'Pythonista' && u.name !== 'Omar');
+        if (cleanReg.length !== reg.length) {
+          this.saveUsersRegistry(cleanReg);
+        }
+      }
     } catch (e) {}
   },
 
@@ -139,6 +149,9 @@ const ProLingoState = {
   },
 
   registerUserInIndex(userData) {
+    if (!userData || !userData.profile || !userData.profile.isRegistered) {
+      return; // Do NOT store unauthenticated guest as a saved/example account!
+    }
     const registry = this.getUsersRegistry();
     const idx = registry.findIndex(u => u.id === userData.id);
     const summary = {
@@ -173,11 +186,10 @@ const ProLingoState = {
       if (registry.length > 0) {
         this.switchAccount(registry[0].id);
       } else {
-        const fresh = createFreshUserState({ name: 'Learner', isGoogle: false });
+        const fresh = createFreshUserState({ isRegistered: false });
         this.activeUserId = fresh.id;
         localStorage.setItem(ACTIVE_USER_ID_KEY, fresh.id);
         localStorage.setItem(STATE_PREFIX + fresh.id, JSON.stringify(fresh));
-        this.registerUserInIndex(fresh);
         this.data = fresh;
         this.save();
         window.location.reload();
@@ -204,13 +216,16 @@ const ProLingoState = {
     let currentId = localStorage.getItem(ACTIVE_USER_ID_KEY);
     const registry = this.getUsersRegistry();
 
-    if (!currentId || registry.length === 0) {
-      // First time launch: create default starter user starting from 0
-      const freshUser = createFreshUserState({ name: 'Learner', isGoogle: false });
-      currentId = freshUser.id;
-      localStorage.setItem(ACTIVE_USER_ID_KEY, currentId);
-      localStorage.setItem(STATE_PREFIX + currentId, JSON.stringify(freshUser));
-      this.registerUserInIndex(freshUser);
+    if (!currentId) {
+      if (registry.length > 0) {
+        currentId = registry[0].id;
+      } else {
+        // First time launch: local guest starting from 0, not stored in registry
+        const freshUser = createFreshUserState({ isRegistered: false });
+        currentId = freshUser.id;
+        localStorage.setItem(ACTIVE_USER_ID_KEY, currentId);
+        localStorage.setItem(STATE_PREFIX + currentId, JSON.stringify(freshUser));
+      }
     }
 
     this.activeUserId = currentId;
@@ -290,11 +305,12 @@ const ProLingoState = {
   },
 
   // Create brand new account starting from zero
-  createNewAccount(name = 'New Coder', isGoogle = false, email = '', avatarImage = null) {
+  createNewAccount(name = 'مستخدم جديد', isGoogle = false, email = '', avatarImage = null) {
     this.save();
     const freshUser = createFreshUserState({
       name: name,
       isGoogle: isGoogle,
+      isRegistered: true,
       email: email,
       avatarImage: avatarImage
     });
@@ -322,11 +338,11 @@ const ProLingoState = {
     if (existing) {
       // Load existing account with all preserved progress!
       this.switchAccount(existing.id);
-      // Update avatar if provided
       if (avatarImage) {
         this.data.profile.avatarImage = avatarImage;
       }
       this.data.profile.isGoogle = true;
+      this.data.profile.isRegistered = true;
       this.save();
     } else {
       // Brand new Google user starts from zero!
@@ -338,12 +354,16 @@ const ProLingoState = {
 
   // Update Profile fields (name, bio, avatar, custom avatar image)
   updateProfile({ name, bio, avatar, avatarImage }) {
-    if (name) this.data.profile.name = name.trim();
+    if (name) {
+      this.data.profile.name = name.trim();
+      this.data.profile.isRegistered = true;
+    }
     if (typeof bio === 'string') this.data.profile.bio = bio.trim();
     if (avatar) this.data.profile.avatar = avatar;
     if (avatarImage !== undefined) this.data.profile.avatarImage = avatarImage;
     
     this.save();
+    this.registerUserInIndex(this.data);
     this.updateUserInLeague();
     window.App.renderHeaderStats();
     window.App.renderCurrentView();
@@ -581,7 +601,7 @@ const ProLingoState = {
     }
 
     const mockNames = [
-      'Sarah_Dev', 'Alex_Py', 'Tariq_Cpp', 'Elena_R', 'Kenji_Go', 'Marcus_JS',
+      'Sarah_Dev', 'Python_Pro', 'Tariq_Cpp', 'Elena_R', 'Kenji_Go', 'Marcus_JS',
       'Fatima_Code', 'Lukas_Rust', 'Chloe_CSS', 'Dev_Ninja', 'PixelPioneer',
       'CodeValkyrie', 'Zack_Async', 'Mia_Query', 'Liam_Stack', 'Nora_Byte',
       'Kareem_Algo', 'Aya_FullStack', 'Hassan_Tech', 'Jordan_Code', 'Sven_Cpp',
@@ -630,7 +650,7 @@ const ProLingoState = {
   resetAll() {
     try {
       localStorage.removeItem(STATE_PREFIX + this.activeUserId);
-      const userName = (this.data && this.data.profile && this.data.profile.name) || 'Learner';
+      const userName = (this.data && this.data.profile && this.data.profile.name) || 'مستخدم جديد';
       this.data = createFreshUserState({ id: this.activeUserId, name: userName });
       this.save();
     } catch (e) {
