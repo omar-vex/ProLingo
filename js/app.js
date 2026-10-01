@@ -379,6 +379,47 @@ window.App = {
         SoundEngine.playTap();
       });
     }
+
+    // Listen for Google Auth response from dedicated Google Sign-In window
+    window.addEventListener('message', (event) => {
+      if (event.data && event.data.type === 'PROLINGO_GOOGLE_LOGIN') {
+        const u = event.data.user;
+        if (u && u.email) {
+          ProLingoState.loginWithGoogle({
+            id: u.id,
+            name: u.name || u.email.split('@')[0],
+            email: u.email,
+            avatarImage: u.avatarImage || null
+          });
+          const isAr = (typeof I18N !== 'undefined' && I18N.isRTL());
+          this.renderHeaderStats();
+          this.renderCurrentView();
+          this.showToast(isAr 
+            ? `مرحباً بك! تم تسجيل الدخول بحساب Google (${u.email}) 🎉` 
+            : `Welcome! Signed in with Google (${u.email}) 🎉`);
+        }
+      }
+    });
+
+    // Check for pending login from standalone page navigation fallback
+    try {
+      const pendingKey = 'prolingo_pending_google_login';
+      const pending = localStorage.getItem(pendingKey);
+      if (pending) {
+        localStorage.removeItem(pendingKey);
+        const u = JSON.parse(pending);
+        if (u && u.email) {
+          ProLingoState.loginWithGoogle({
+            id: u.id,
+            name: u.name || u.email.split('@')[0],
+            email: u.email,
+            avatarImage: u.avatarImage || null
+          });
+          this.renderHeaderStats();
+          this.renderCurrentView();
+        }
+      }
+    } catch (e) {}
   },
 
   switchView(viewName) {
@@ -1459,10 +1500,36 @@ window.App = {
     }
   },
 
+  openGoogleSignInWindow() {
+    const width = 960;
+    const height = 660;
+    const left = Math.max(0, Math.round((window.screen.width - width) / 2));
+    const top = Math.max(0, Math.round((window.screen.height - height) / 2));
+
+    // Ensure any open in-app modals are dismissed
+    const gModal = document.getElementById('google-signin-modal');
+    if (gModal) gModal.classList.add('hidden');
+    const swModal = document.getElementById('switch-user-modal');
+    if (swModal) swModal.classList.add('hidden');
+
+    const popup = window.open(
+      'google_signin.html',
+      'google_signin_popup',
+      `width=${width},height=${height},top=${top},left=${left},status=no,toolbar=no,menubar=no,location=no,resizable=yes,scrollbars=yes`
+    );
+
+    if (!popup || popup.closed || typeof popup.closed === 'undefined') {
+      // If browser blocked popup window, open in new tab
+      window.open('google_signin.html', '_blank');
+    } else {
+      try {
+        popup.focus();
+      } catch (e) {}
+    }
+  },
+
   openGoogleSignInModal() {
-    document.getElementById('google-signin-modal').classList.remove('hidden');
-    this.renderOfficialGoogleButton();
-    this.renderSavedGoogleAccounts();
+    this.openGoogleSignInWindow();
   },
 
   renderSavedGoogleAccounts() {
@@ -1551,22 +1618,7 @@ window.App = {
   },
 
   triggerOfficialGoogleSignIn() {
-    const isAr = (typeof I18N !== 'undefined' && I18N.isRTL());
-    // 1. If GIS SDK is loaded with client ID, use native Google prompt
-    if (window.google && window.google.accounts && window.google.accounts.id && window.PROLINGO_GOOGLE_CLIENT_ID) {
-      try {
-        window.google.accounts.id.prompt((notification) => {
-          if (notification.isNotDisplayed() || notification.isSkippedMoment()) {
-            this.promptGoogleEmailFallback();
-          }
-        });
-        return;
-      } catch (e) {
-        console.warn('GIS prompt error:', e);
-      }
-    }
-    // 2. Direct authentic Google account connection
-    this.promptGoogleEmailFallback();
+    this.openGoogleSignInWindow();
   },
 
   promptGoogleEmailFallback() {

@@ -145,7 +145,135 @@ const LessonRunner = {
     const quitModal = document.getElementById('lesson-quit-modal');
     if (quitModal) quitModal.classList.add('hidden');
 
-    this.loadQuestion();
+    this.showLessonLoadingScreen(lesson, () => {
+      this.loadQuestion();
+    });
+  },
+
+  loadingTipsAr: [
+    '💡 نصيحة: فكر في منطق الكود خطوة بخطوة قبل اختيار الإجابة!',
+    '⚡ السرعة ممتازة، لكن الدقة وفهم التفاصيل هما أساس الاحتراف.',
+    '🦉 الأخطاء البرمجية ليست عائقاً، بل أفضل وسيلة لترسيخ المفاهيم البرمجية.',
+    '🚀 المتغيرات في بايثون تشبه الصناديق التي تحفظ قيمك وبياناتك المهمة.',
+    '🎯 حل 15 سؤالاً بتركيز يبني ذاكرة برمجية قوية وتفكيراً هندسياً سليماً.',
+    '✨ المسافات البادئة (Indentation) هي عنوان النظام والجمال في لغة بايثون!',
+    '🧠 كل مبرمج كبير بدأ بحل مشاكل برمجية صغيرة خطوة بخطوة.. واصل إبداعك!'
+  ],
+
+  loadingTipsEn: [
+    '💡 Pro Tip: Think through the code logic step-by-step before answering!',
+    '⚡ Accuracy and deep understanding matter much more than raw speed.',
+    '🦉 Coding mistakes are not roadblocks—they are your best learning opportunities.',
+    '🚀 Variables in Python are labeled containers for your vital data.',
+    '🎯 Practicing 15 targeted questions builds strong muscle memory and syntax mastery.',
+    '✨ Mind the indentation; clean formatting makes Python powerful and readable!',
+    '🧠 Every senior engineer started right where you are now. Keep going!'
+  ],
+
+  _loadingInterval: null,
+
+  showLessonLoadingScreen(lesson, onComplete) {
+    const overlay = document.getElementById('lesson-loading-overlay');
+    if (!overlay) {
+      if (onComplete) onComplete();
+      return;
+    }
+
+    // Bypass 3s delay in test environments to keep automated tests blazing fast
+    const isTest = (typeof window !== 'undefined' && (
+      window.PROLINGO_FAST_TEST ||
+      (window.location && (window.location.href.includes('test') || window.location.href.includes('headless')))
+    ));
+
+    if (isTest) {
+      overlay.classList.add('hidden');
+      if (onComplete) onComplete();
+      return;
+    }
+
+    const isAr = (typeof I18N !== 'undefined' && I18N.isRTL) ? I18N.isRTL() : true;
+    const titleEl = document.getElementById('lesson-loading-title');
+    const subEl = document.getElementById('lesson-loading-sub');
+    const tipEl = document.getElementById('lesson-loading-tip');
+    const percentEl = document.getElementById('lesson-loading-percent');
+    const statusEl = document.getElementById('lesson-loading-status');
+    const fillEl = document.getElementById('lesson-loading-progress-fill');
+    const mascotEl = document.getElementById('loading-mascot-icon');
+
+    if (mascotEl && typeof Icons !== 'undefined' && Icons.get) {
+      mascotEl.innerHTML = Icons.get('owl', 72);
+    }
+
+    if (titleEl) {
+      titleEl.textContent = isAr ? 'جاري تجهيز الدرس...' : 'Preparing Lesson...';
+    }
+
+    if (subEl) {
+      const lessonTitle = isAr ? (lesson.title_ar || lesson.title) : (lesson.title || lesson.title_ar);
+      subEl.textContent = lesson.isPractice
+        ? (isAr ? 'جلسة تدريب سريعة واستعادة القلوب ❤️' : 'Practice Session & Heart Recovery ❤️')
+        : (lessonTitle || (isAr ? 'الدرس التفاعلي' : 'Interactive Lesson'));
+    }
+
+    const tips = isAr ? this.loadingTipsAr : this.loadingTipsEn;
+    const randomTip = tips[Math.floor(Math.random() * tips.length)];
+    if (tipEl) tipEl.textContent = randomTip;
+
+    overlay.classList.remove('fade-out');
+    overlay.classList.remove('hidden');
+    overlay.style.opacity = '1';
+    overlay.style.pointerEvents = 'auto';
+
+    if (fillEl) fillEl.style.width = '0%';
+    if (percentEl) percentEl.textContent = '0%';
+    if (statusEl) statusEl.textContent = isAr ? 'تحضير الأسئلة البرمجية...' : 'Preparing challenges...';
+
+    const duration = 3000; // Exactly 3 seconds
+    const startTime = Date.now();
+
+    if (this._loadingInterval) {
+      clearInterval(this._loadingInterval);
+      this._loadingInterval = null;
+    }
+
+    this._loadingInterval = setInterval(() => {
+      const elapsed = Date.now() - startTime;
+      const progress = Math.min(1, elapsed / duration);
+      const percent = Math.round(progress * 100);
+
+      if (fillEl) fillEl.style.width = `${percent}%`;
+      if (percentEl) percentEl.textContent = `${percent}%`;
+
+      if (statusEl) {
+        if (progress < 0.35) {
+          statusEl.textContent = isAr ? 'تحضير الأسئلة البرمجية...' : 'Preparing challenges...';
+        } else if (progress < 0.70) {
+          statusEl.textContent = isAr ? 'تجهيز بيئة الكود التفاعلية...' : 'Configuring code environment...';
+        } else if (progress < 0.95) {
+          statusEl.textContent = isAr ? 'اللمسات الأخيرة...' : 'Finalizing touches...';
+        } else {
+          statusEl.textContent = isAr ? 'جاهز للانطلاق! 🚀' : 'Ready to start! 🚀';
+        }
+      }
+
+      if (progress >= 1) {
+        clearInterval(this._loadingInterval);
+        this._loadingInterval = null;
+
+        if (window.SoundEngine && SoundEngine.playTap) {
+          SoundEngine.playTap();
+        }
+
+        setTimeout(() => {
+          overlay.classList.add('fade-out');
+          setTimeout(() => {
+            overlay.classList.add('hidden');
+            overlay.classList.remove('fade-out');
+            if (onComplete) onComplete();
+          }, 350);
+        }, 120);
+      }
+    }, 25);
   },
 
   // Start heart recovery practice mode
@@ -983,6 +1111,16 @@ const LessonRunner = {
   },
 
   close() {
+    if (this._loadingInterval) {
+      clearInterval(this._loadingInterval);
+      this._loadingInterval = null;
+    }
+    const overlay = document.getElementById('lesson-loading-overlay');
+    if (overlay) {
+      overlay.classList.add('hidden');
+      overlay.classList.remove('fade-out');
+    }
+
     const lessonView = document.getElementById('view-lesson');
     if (lessonView) lessonView.classList.add('hidden');
     document.body.classList.remove('in-lesson');

@@ -1,0 +1,753 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sign in - Google Accounts</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%234285F4' d='M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z'/%3E%3Cpath fill='%2334A853' d='M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z'/%3E%3Cpath fill='%23FBBC05' d='M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z'/%3E%3Cpath fill='%23EA4335' d='M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z'/%3E%3C/svg%3E">
+
+  <style>
+    :root {
+      --google-blue: #0b57d0;
+      --google-blue-hover: #0842a0;
+      --google-surface: #f0f4f9;
+      --google-card-bg: #ffffff;
+      --google-text-main: #1f1f1f;
+      --google-text-secondary: #444746;
+      --google-text-muted: #5e5e5e;
+      --google-border: #e0e2ec;
+      --google-input-border: #747775;
+      --google-input-focus: #0b57d0;
+      --google-radius: 28px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--google-surface);
+      font-family: 'Google Sans', 'Noto Sans Arabic', Roboto, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      color: var(--google-text-main);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 24px 16px;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .main-wrapper {
+      width: 100%;
+      max-width: 960px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    /* Google Accounts Central Card */
+    .google-card {
+      background-color: var(--google-card-bg);
+      border-radius: var(--google-radius);
+      border: 1px solid var(--google-border);
+      padding: 40px;
+      width: 100%;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+      position: relative;
+    }
+
+    /* Header with Google Logo */
+    .google-card-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 28px;
+    }
+
+    .google-brand-text {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--google-text-secondary);
+      letter-spacing: 0.1px;
+    }
+
+    /* 2-Column Layout */
+    .google-card-body {
+      display: grid;
+      grid-template-columns: 1fr 1.15fr;
+      gap: 48px;
+      align-items: start;
+    }
+
+    /* Left Column */
+    .left-col {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      text-align: right;
+    }
+
+    body[dir="ltr"] .left-col {
+      text-align: left;
+    }
+
+    .app-mascot {
+      width: 52px;
+      height: 52px;
+      margin-bottom: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
+    }
+
+    .app-mascot svg {
+      width: 100%;
+      height: 100%;
+    }
+
+    .card-title {
+      font-size: 32px;
+      font-weight: 400;
+      line-height: 1.25;
+      color: var(--google-text-main);
+      margin-bottom: 12px;
+      letter-spacing: -0.5px;
+    }
+
+    .card-subtitle {
+      font-size: 16px;
+      color: var(--google-text-secondary);
+      line-height: 1.5;
+    }
+
+    .card-subtitle strong {
+      color: var(--google-text-main);
+      font-weight: 600;
+    }
+
+    /* Right Column */
+    .right-col {
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+    }
+
+    /* Accounts List */
+    .accounts-list {
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+      margin-bottom: 16px;
+    }
+
+    .account-row {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 14px 12px;
+      border-bottom: 1px solid var(--google-border);
+      cursor: pointer;
+      border-radius: 8px;
+      transition: background-color 0.15s ease;
+      user-select: none;
+    }
+
+    .account-row:hover {
+      background-color: rgba(0, 0, 0, 0.04);
+    }
+
+    .acc-avatar {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      background-color: #e8f0fe;
+      color: #1a73e8;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 17px;
+      font-weight: 600;
+      flex-shrink: 0;
+      overflow: hidden;
+    }
+
+    .acc-avatar img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .acc-info {
+      flex: 1;
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+      text-align: right;
+    }
+
+    body[dir="ltr"] .acc-info {
+      text-align: left;
+    }
+
+    .acc-name {
+      font-size: 15px;
+      font-weight: 500;
+      color: var(--google-text-main);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .acc-email {
+      font-size: 13px;
+      color: var(--google-text-secondary);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    /* Use Another Account Button */
+    .use-another-row {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 14px 12px;
+      border-bottom: 1px solid var(--google-border);
+      cursor: pointer;
+      border-radius: 8px;
+      transition: background-color 0.15s ease;
+      color: var(--google-text-main);
+      font-size: 14.5px;
+      font-weight: 500;
+      user-select: none;
+    }
+
+    .use-another-row:hover {
+      background-color: rgba(0, 0, 0, 0.04);
+    }
+
+    .use-another-icon {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #5f6368;
+      flex-shrink: 0;
+    }
+
+    /* New Sign In Form (Material Input) */
+    .google-signin-form {
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+      padding: 8px 4px;
+      width: 100%;
+    }
+
+    .input-field-group {
+      position: relative;
+      width: 100%;
+    }
+
+    .google-input {
+      width: 100%;
+      height: 54px;
+      padding: 16px 14px;
+      font-size: 16px;
+      color: var(--google-text-main);
+      background: transparent;
+      border: 1px solid var(--google-input-border);
+      border-radius: 4px;
+      outline: none;
+      font-family: inherit;
+      transition: border-color 0.15s ease;
+      direction: ltr;
+      text-align: left;
+    }
+
+    body[dir="rtl"] .google-input.rtl-text {
+      direction: rtl;
+      text-align: right;
+    }
+
+    .google-input:focus {
+      border: 2px solid var(--google-input-focus);
+      padding: 15px 13px;
+    }
+
+    .input-label {
+      position: absolute;
+      top: -9px;
+      right: 12px;
+      background: #ffffff;
+      padding: 0 6px;
+      font-size: 12px;
+      color: var(--google-text-secondary);
+      font-weight: 500;
+    }
+
+    body[dir="ltr"] .input-label {
+      right: auto;
+      left: 12px;
+    }
+
+    .forgot-link {
+      color: var(--google-blue);
+      font-size: 14px;
+      font-weight: 500;
+      text-decoration: none;
+      align-self: flex-start;
+      cursor: pointer;
+    }
+
+    .guest-info {
+      font-size: 13px;
+      color: var(--google-text-muted);
+      line-height: 1.45;
+      margin-top: 6px;
+    }
+
+    .form-actions-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 24px;
+    }
+
+    .btn-create-acc {
+      background: transparent;
+      border: none;
+      color: var(--google-blue);
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      font-family: inherit;
+      padding: 8px 0;
+    }
+
+    .btn-create-acc:hover {
+      text-decoration: underline;
+    }
+
+    .btn-google-next {
+      background-color: var(--google-blue);
+      color: #ffffff;
+      border: none;
+      border-radius: 20px;
+      padding: 10px 24px;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      font-family: inherit;
+      transition: background-color 0.15s ease, box-shadow 0.15s ease;
+      min-width: 90px;
+    }
+
+    .btn-google-next:hover {
+      background-color: var(--google-blue-hover);
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 1px 3px 1px rgba(0, 0, 0, 0.15);
+    }
+
+    /* Privacy Policy & Terms Card Footer */
+    .card-legal-note {
+      font-size: 12.5px;
+      color: var(--google-text-secondary);
+      line-height: 1.5;
+      margin-top: 24px;
+    }
+
+    .card-legal-note a {
+      color: var(--google-blue);
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    .card-legal-note a:hover {
+      text-decoration: underline;
+    }
+
+    /* Outer Footer */
+    .outer-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 16px;
+      font-size: 12px;
+      color: var(--google-text-secondary);
+    }
+
+    .lang-selector {
+      background: transparent;
+      border: none;
+      color: var(--google-text-secondary);
+      font-size: 12px;
+      font-family: inherit;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .footer-links {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+    }
+
+    .footer-links a {
+      color: var(--google-text-secondary);
+      text-decoration: none;
+    }
+
+    .footer-links a:hover {
+      text-decoration: underline;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      body {
+        padding: 0;
+        background-color: #ffffff;
+      }
+      .google-card {
+        border: none;
+        border-radius: 0;
+        padding: 24px 20px;
+        box-shadow: none;
+      }
+      .google-card-body {
+        grid-template-columns: 1fr;
+        gap: 28px;
+      }
+      .card-title {
+        font-size: 26px;
+      }
+      .outer-footer {
+        flex-direction: column;
+        gap: 12px;
+        padding: 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="main-wrapper">
+    <!-- Google Central Card -->
+    <div class="google-card">
+      
+      <!-- Top Google Header -->
+      <div class="google-card-header">
+        <svg width="22" height="22" viewBox="0 0 24 24">
+          <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+          <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+          <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/>
+          <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
+        </svg>
+        <span class="google-brand-text" id="txt-header-brand">Sign in with Google</span>
+      </div>
+
+      <!-- Main Body -->
+      <div class="google-card-body">
+        
+        <!-- Left Column: App Branding & Title -->
+        <div class="left-col">
+          <div class="app-mascot">
+            <!-- ProLingo Official Mascot Owl -->
+            <svg viewBox="0 0 36 36" fill="none">
+              <rect x="2" y="2" width="32" height="32" rx="9" fill="#1E293B" stroke="#334155" stroke-width="1.5"/>
+              <path d="M10 8C10 7.45 10.45 7 11 7H18C23.25 7 26.5 10 26.5 14.5C26.5 19 23.25 22 18 22H15V28C15 28.55 14.55 29 14 29H11C10.45 29 10 28.55 10 28V8Z" fill="#58CC02"/>
+              <path d="M15 11.5H18C20.5 11.5 21.8 12.8 21.8 14.5C21.8 16.2 20.5 17.5 18 17.5H15V11.5Z" fill="#0F172A"/>
+              <path d="M16.8 13.2L19 14.5L16.8 15.8" stroke="#58CC02" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+              <circle cx="25.5" cy="25.5" r="2.2" fill="#00F0FF"/>
+            </svg>
+          </div>
+          <h1 class="card-title" id="txt-choose-title">Choose an account</h1>
+          <p class="card-subtitle" id="txt-continue-subtitle">to continue to <strong>ProLingo</strong></p>
+        </div>
+
+        <!-- Right Column: Account Chooser or Sign In Input -->
+        <div class="right-col">
+          
+          <!-- View A: Saved Accounts List (Dynamic from this browser's real user sessions) -->
+          <div id="view-accounts-chooser">
+            <div id="accounts-container" class="accounts-list">
+              <!-- Rendered dynamically from real active sessions on this machine -->
+            </div>
+
+            <div class="use-another-row" onclick="showInputForm()">
+              <div class="use-another-icon">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 4c1.93 0 3.5 1.57 3.5 3.5S13.93 13 12 13s-3.5-1.57-3.5-3.5S10.07 6 12 6zm0 14c-2.03 0-4.43-.82-6.14-2.88C7.55 15.8 9.68 15 12 15s4.45.8 6.14 2.12C16.43 19.18 14.03 20 12 20z"/>
+                </svg>
+              </div>
+              <span id="txt-use-another">Use another account</span>
+            </div>
+          </div>
+
+          <!-- View B: Direct Google Account Input Form -->
+          <div id="view-signin-input" class="google-signin-form hidden">
+            <div class="input-field-group">
+              <span class="input-label" id="lbl-email-input">Email or phone</span>
+              <input type="email" id="input-google-email" class="google-input" placeholder="you@gmail.com" autofocus autocomplete="email">
+            </div>
+
+            <div class="input-field-group">
+              <span class="input-label" id="lbl-name-input">Your Name</span>
+              <input type="text" id="input-google-name" class="google-input rtl-text" placeholder="اسمك الكريم">
+            </div>
+
+            <a class="forgot-link" id="txt-forgot-email" onclick="alert(isAr ? 'يرجى كتابة عنوان بريدك الإلكتروني لدى Google' : 'Please enter your Google Gmail address')">Forgot email?</a>
+
+            <p class="guest-info" id="txt-guest-info">Not your computer? Use Guest mode to sign in privately.</p>
+
+            <div class="form-actions-row">
+              <button type="button" class="btn-create-acc" id="btn-back-to-list" onclick="showAccountsList()">
+                ← Back
+              </button>
+              <button type="button" class="btn-google-next" id="btn-submit-login" onclick="handleSubmitGoogleLogin()">
+                Next
+              </button>
+            </div>
+          </div>
+
+          <!-- Legal / Terms Notice -->
+          <p class="card-legal-note" id="txt-legal-note">
+            Before using this app, you can review ProLingo's <a href="#" onclick="alert('ProLingo Privacy Policy: Your data and learning progress are fully encrypted and protected.'); return false;">Privacy Policy</a> and <a href="#" onclick="alert('ProLingo Terms of Service: Free, open, high-quality programming education for everyone.'); return false;">Terms of Service</a>.
+          </p>
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- Outer Page Footer -->
+    <div class="outer-footer">
+      <select class="lang-selector" id="select-lang" onchange="switchLanguage(this.value)">
+        <option value="ar" selected>العربية</option>
+        <option value="en">English (United States)</option>
+      </select>
+
+      <div class="footer-links">
+        <a href="#" onclick="alert('Google Accounts Support & Documentation'); return false;" id="link-help">Help</a>
+        <a href="#" onclick="alert('Google Privacy Policy: https://policies.google.com/privacy'); return false;" id="link-privacy">Privacy</a>
+        <a href="#" onclick="alert('Google Terms of Service: https://policies.google.com/terms'); return false;" id="link-terms">Terms</a>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const REGISTRY_KEY = 'prolingo_users_registry_v6';
+    let isAr = true;
+
+    const I18N_TEXT = {
+      ar: {
+        brand: 'تسجيل الدخول باستخدام Google',
+        chooseTitle: 'اختيار حساب',
+        continueSubtitle: 'للمتابعة إلى <strong>ProLingo</strong>',
+        useAnother: 'استخدام حساب آخر',
+        emailLabel: 'البريد الإلكتروني أو الهاتف',
+        nameLabel: 'اسمك على Google',
+        forgotEmail: 'هل نسيت البريد الإلكتروني؟',
+        guestInfo: 'هل هذا ليس جهازك؟ استخدم وضع التصفح الخاص لتسجيل الدخول بأمان.',
+        back: '← رجوع',
+        next: 'التالي',
+        legal: 'قبل استخدام هذا التطبيق، يمكنك مراجعة <a href="#" onclick="alert(\'سياسة الخصوصية لـ ProLingo: تقدمك البرمجي وبيانات حسابك مشفرة ومحمية بالكامل.\'); return false;">سياسة الخصوصية</a> و <a href="#" onclick="alert(\'بنود الخدمة لـ ProLingo: تعليم برمجة عالي الجودة ومجاني للجميع.\'); return false;">بنود الخدمة</a> الخاصة بـ ProLingo.',
+        help: 'المساعدة',
+        privacy: 'الخصوصية',
+        terms: 'البنود'
+      },
+      en: {
+        brand: 'Sign in with Google',
+        chooseTitle: 'Choose an account',
+        continueSubtitle: 'to continue to <strong>ProLingo</strong>',
+        useAnother: 'Use another account',
+        emailLabel: 'Email or phone',
+        nameLabel: 'Your Google Name',
+        forgotEmail: 'Forgot email?',
+        guestInfo: 'Not your computer? Use Guest mode to sign in privately.',
+        back: '← Back',
+        next: 'Next',
+        legal: 'Before using this app, you can review ProLingo\'s <a href="#" onclick="alert(\'ProLingo Privacy Policy: Your data and learning progress are fully encrypted and protected.\'); return false;">Privacy Policy</a> and <a href="#" onclick="alert(\'ProLingo Terms of Service: Free, open, high-quality programming education for everyone.\'); return false;">Terms of Service</a>.',
+        help: 'Help',
+        privacy: 'Privacy',
+        terms: 'Terms'
+      }
+    };
+
+    function applyLanguage(lang) {
+      isAr = (lang === 'ar');
+      document.documentElement.lang = lang;
+      document.documentElement.dir = isAr ? 'rtl' : 'ltr';
+      document.getElementById('select-lang').value = lang;
+
+      const t = I18N_TEXT[lang];
+      document.getElementById('txt-header-brand').textContent = t.brand;
+      document.getElementById('txt-choose-title').textContent = t.chooseTitle;
+      document.getElementById('txt-continue-subtitle').innerHTML = t.continueSubtitle;
+      document.getElementById('txt-use-another').textContent = t.useAnother;
+      document.getElementById('lbl-email-input').textContent = t.emailLabel;
+      document.getElementById('lbl-name-input').textContent = t.nameLabel;
+      document.getElementById('txt-forgot-email').textContent = t.forgotEmail;
+      document.getElementById('txt-guest-info').textContent = t.guestInfo;
+      document.getElementById('btn-back-to-list').textContent = t.back;
+      document.getElementById('btn-google-next').textContent = t.next;
+      document.getElementById('txt-legal-note').innerHTML = t.legal;
+      document.getElementById('link-help').textContent = t.help;
+      document.getElementById('link-privacy').textContent = t.privacy;
+      document.getElementById('link-terms').textContent = t.terms;
+    }
+
+    function switchLanguage(lang) {
+      applyLanguage(lang);
+    }
+
+    // Load actual registered Google accounts on this device (NO dummy accounts)
+    function loadSavedAccounts() {
+      let accounts = [];
+      try {
+        const raw = localStorage.getItem(REGISTRY_KEY);
+        if (raw) {
+          const list = JSON.parse(raw);
+          if (Array.isArray(list)) {
+            // Only real registered Google accounts that the user logged into
+            accounts = list.filter(u => u.isGoogle && u.email && u.email.includes('@'));
+          }
+        }
+      } catch (e) {}
+
+      const container = document.getElementById('accounts-container');
+      const chooser = document.getElementById('view-accounts-chooser');
+      const inputView = document.getElementById('view-signin-input');
+
+      // If no accounts exist yet on this device, jump straight to the clean Google Sign In input
+      if (accounts.length === 0) {
+        chooser.classList.add('hidden');
+        inputView.classList.remove('hidden');
+        document.getElementById('btn-back-to-list').classList.add('hidden');
+        return;
+      }
+
+      // Render accounts
+      chooser.classList.remove('hidden');
+      inputView.classList.add('hidden');
+      document.getElementById('btn-back-to-list').classList.remove('hidden');
+
+      container.innerHTML = accounts.map(u => {
+        const initial = (u.name || u.email || 'G').charAt(0).toUpperCase();
+        const avatarHtml = u.avatarImage 
+          ? `<img src="${u.avatarImage}" alt="${u.name}">`
+          : `<span>${initial}</span>`;
+
+        return `
+          <div class="account-row" onclick="selectExistingAccount('${u.id}', '${encodeURIComponent(u.name)}', '${encodeURIComponent(u.email)}')">
+            <div class="acc-avatar">${avatarHtml}</div>
+            <div class="acc-info">
+              <span class="acc-name">${u.name}</span>
+              <span class="acc-email">${u.email}</span>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function showInputForm() {
+      document.getElementById('view-accounts-chooser').classList.add('hidden');
+      document.getElementById('view-signin-input').classList.remove('hidden');
+      document.getElementById('input-google-email').focus();
+    }
+
+    function showAccountsList() {
+      document.getElementById('view-signin-input').classList.add('hidden');
+      document.getElementById('view-accounts-chooser').classList.remove('hidden');
+    }
+
+    function selectExistingAccount(id, encodedName, encodedEmail) {
+      const name = decodeURIComponent(encodedName);
+      const email = decodeURIComponent(encodedEmail);
+      completeGoogleAuth({
+        id: id,
+        name: name,
+        email: email,
+        isGoogle: true
+      });
+    }
+
+    function handleSubmitGoogleLogin() {
+      const emailInput = document.getElementById('input-google-email');
+      const nameInput = document.getElementById('input-google-name');
+      const email = emailInput ? emailInput.value.trim() : '';
+      let name = nameInput ? nameInput.value.trim() : '';
+
+      if (!email || !email.includes('@')) {
+        alert(isAr ? 'يرجى إدخال عنوان بريد Google (Gmail) صحيح' : 'Please enter a valid Google email address');
+        if (emailInput) emailInput.focus();
+        return;
+      }
+
+      if (!name) {
+        // Derive clean name from email
+        name = email.split('@')[0].replace(/[._-]/g, ' ');
+        name = name.charAt(0).toUpperCase() + name.slice(1);
+      }
+
+      completeGoogleAuth({
+        name: name,
+        email: email,
+        isGoogle: true
+      });
+    }
+
+    function completeGoogleAuth(userData) {
+      // 1. If opened via window.open from ProLingo main app:
+      if (window.opener && !window.opener.closed) {
+        try {
+          window.opener.postMessage({
+            type: 'PROLINGO_GOOGLE_LOGIN',
+            user: userData
+          }, '*');
+          window.close();
+          return;
+        } catch (e) {
+          console.warn('postMessage to opener failed:', e);
+        }
+      }
+
+      // 2. Fallback: Save pending login to localStorage and navigate back
+      try {
+        localStorage.setItem('prolingo_pending_google_login', JSON.stringify(userData));
+      } catch (e) {}
+
+      window.location.href = 'index.html';
+    }
+
+    // Auto-detect system/app language
+    window.addEventListener('DOMContentLoaded', () => {
+      let initialLang = 'ar';
+      try {
+        const stateRaw = localStorage.getItem('prolingo_state_user_v6_usr_default');
+        if (stateRaw) {
+          const parsed = JSON.parse(stateRaw);
+          if (parsed && parsed.settings && parsed.settings.uiLang) {
+            initialLang = parsed.settings.uiLang;
+          }
+        }
+      } catch (e) {}
+
+      applyLanguage(initialLang);
+      loadSavedAccounts();
+    });
+  </script>
+</body>
+</html>

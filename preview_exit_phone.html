@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<style>
+  body { margin:0; padding:20px; display:flex; justify-content:center; align-items:center; background:#0b141a; min-height:100vh; font-family:sans-serif; }
+  .phone-frame {
+    width: 390px;
+    height: 844px;
+    border: 8px solid #202f36;
+    border-radius: 40px;
+    overflow: hidden;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.6);
+    background: #131f24;
+    position: relative;
+  }
+  iframe { width: 100%; height: 100%; border: none; display: block; }
+</style>
+</head>
+<body>
+<div class="phone-frame">
+  <iframe id="app-frame" src="http://localhost:8089/index.html"></iframe>
+</div>
+<script>
+window.onload = () => {
+    setTimeout(() => {
+        const frame = document.getElementById('app-frame');
+        const win = frame.contentWindow;
+        win.PROLINGO_FAST_TEST = true;
+        const pyCourse = win.CURRICULUM.getCourse('python');
+        const lesson = pyCourse.units[0].lessons[0];
+        win.LessonRunner.start(lesson);
+        setTimeout(() => {
+            const exitBtn = win.document.getElementById('btn-lesson-exit');
+            if (exitBtn) exitBtn.click();
+        }, 600);
+    }, 800);
+};
+</script>
+</body>
+</html>
