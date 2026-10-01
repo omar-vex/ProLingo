@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Auth & Multi-Account Test Suite</title>
+</head>
+<body style="font-family: monospace; padding: 20px; background: #0f172a; color: #f8fafc;">
+  <h1>Auth & Multi-User Persistence Test Suite</h1>
+  <div id="test-results">Running tests...</div>
+
+  <script src="js/i18n.js"></script>
+  <script src="js/sound.js"></script>
+  <script src="js/state.js"></script>
+  <script src="js/curriculum.js"></script>
+
+  <script>
+    const logs = [];
+    function assert(cond, msg) {
+      if (!cond) {
+        const err = 'ASSERTION FAILED: ' + msg;
+        logs.push('<span style="color:#ef4444">❌ ' + err + '</span>');
+        throw new Error(err);
+      }
+      logs.push('<span style="color:#10b981">✔ ' + msg + '</span>');
+    }
+
+    async function runAuthTests() {
+      try {
+        logs.push('--- 1. Initializing ProLingo State ---');
+        ProLingoState.init();
+        assert(Boolean(ProLingoState.data), 'ProLingoState initialized successfully');
+
+        logs.push('--- 2. Testing Registration with Email & Password ---');
+        const testEmail = 'user_' + Date.now() + '@gmail.com';
+        const testPass = 'securePassword123';
+        const testName = 'عمر مجرب';
+
+        const regRes = await ProLingoState.createAccountWithPassword({
+          name: testName,
+          email: testEmail,
+          password: testPass
+        });
+
+        assert(regRes.success === true, 'Registration succeeded');
+        assert(Boolean(regRes.code), '6-digit verification code generated: ' + regRes.code);
+        assert(regRes.code.length === 6, 'Verification code has exactly 6 digits');
+        assert(regRes.email === testEmail, 'Email matches registration input');
+
+        logs.push('--- 3. Testing Incorrect Verification Code ---');
+        const failVerify = await ProLingoState.verifyAccountCode(testEmail, '000000');
+        assert(failVerify.success === false, 'Invalid code properly rejected');
+
+        logs.push('--- 4. Testing Correct Verification Code from Gmail ---');
+        const verifyRes = await ProLingoState.verifyAccountCode(testEmail, regRes.code);
+        assert(verifyRes.success === true, 'Verification code accepted');
+        assert(ProLingoState.data.profile.email === testEmail, 'Active user profile updated with email');
+        assert(ProLingoState.data.profile.name === testName, 'Active user profile updated with name');
+        assert(ProLingoState.data.profile.isVerified === true, 'Profile is verified flag set to true');
+        const currentUserId = ProLingoState.activeUserId;
+        assert(Boolean(currentUserId), 'User has a valid activeUserId: ' + currentUserId);
+
+        logs.push('--- 5. Simulating Lesson Completion & Progress under Account ---');
+        const initialXp = ProLingoState.data.stats.xp;
+        ProLingoState.completeLesson('py_intro_1', 35, 15, 100);
+        assert(ProLingoState.data.stats.xp === initialXp + 35, 'XP added to account: ' + ProLingoState.data.stats.xp);
+        assert(ProLingoState.data.completedLessons.python.includes('py_intro_1'), 'Lesson recorded in completed lessons');
+
+        logs.push('--- 6. Testing Account Logout ---');
+        ProLingoState.logoutUser();
+        assert(ProLingoState.activeUserId !== currentUserId, 'Active user ID switched away from logged out account');
+        assert(!ProLingoState.data.profile.isVerified, 'New guest session is not verified');
+
+        logs.push('--- 7. Testing Wrong Password on Login ---');
+        const badLogin = await ProLingoState.loginWithPassword({
+          email: testEmail,
+          password: 'wrong_password_999'
+        });
+        assert(badLogin.success === false, 'Invalid password properly rejected');
+
+        logs.push('--- 8. Testing Correct Login & Data Persistence Restore ---');
+        const goodLogin = await ProLingoState.loginWithPassword({
+          email: testEmail,
+          password: testPass
+        });
+        assert(goodLogin.success === true, 'Login succeeded with correct credentials');
+        assert(ProLingoState.activeUserId === currentUserId, 'Switched back to original user ID');
+        assert(ProLingoState.data.stats.xp >= initialXp + 35, 'XP persisted and restored: ' + ProLingoState.data.stats.xp);
+        assert(ProLingoState.data.completedLessons.python.includes('py_intro_1'), 'Completed lesson preserved on account');
+        assert(ProLingoState.data.profile.isVerified === true, 'Verified status preserved on account');
+
+        logs.push('<h2 style="color:#10b981; margin-top:20px;">ALL_AUTH_TESTS_PASSED_100%</h2>');
+        document.getElementById('test-results').innerHTML = logs.join('<br>');
+      } catch (e) {
+        logs.push('<h2 style="color:#ef4444; margin-top:20px;">TEST_RUN_FAILED: ' + e.message + '</h2>');
+        document.getElementById('test-results').innerHTML = logs.join('<br>');
+      }
+    }
+
+    window.addEventListener('DOMContentLoaded', runAuthTests);
+  </script>
+</body>
+</html>

@@ -1,13 +1,13 @@
 {
-  "id": "usr_mupswflr_omud8",
+  "id": "usr_1790874315_128",
   "profile": {
-    "id": "usr_mupswflr_omud8",
-    "name": "مستخدم جديد",
-    "email": "",
+    "id": "usr_1790874315_128",
+    "name": "عمر مجرب",
+    "email": "user_1790874315069@gmail.com",
     "avatar": "classic",
     "avatarImage": null,
     "isGoogle": false,
-    "isRegistered": false,
+    "isRegistered": true,
     "joinedDate": "October 2026",
     "bio": "Mastering Python on ProLingo! 🚀",
     "following": [
@@ -16,7 +16,8 @@
       "kareem_py",
       "byte_owl"
     ],
-    "followersCount": 0
+    "followersCount": 0,
+    "isVerified": true
   },
   "settings": {
     "uiLang": "ar",
@@ -28,7 +29,7 @@
   "currentCourse": "python",
   "activeSection": 1,
   "stats": {
-    "xp": 0,
+    "xp": 35,
     "streak": 0,
     "longestStreak": 0,
     "lastActiveDate": "2026-10-01",
@@ -41,75 +42,83 @@
       false,
       false
     ],
-    "gems": 50,
+    "gems": 65,
     "hearts": 5,
     "maxHearts": 5,
     "unlimitedHeartsUntil": null,
     "lastHeartLostTime": null,
     "questionsSolved": 0,
-    "totalLessonsCompleted": 0,
-    "accuracySum": 0,
-    "accuracyCount": 0,
+    "totalLessonsCompleted": 1,
+    "accuracySum": 100,
+    "accuracyCount": 1,
     "top3Finishes": 0
   },
   "league": {
     "tierIndex": 0,
-    "weeklyXp": 0,
-    "weekEndsTimestamp": 1791393677082,
+    "weeklyXp": 35,
+    "weekEndsTimestamp": 1791392715100,
     "competitors": [
-      {
-        "id": "comp_0",
-        "name": "Sarah_Dev",
-        "avatar": "classic",
-        "xp": 41,
-        "isUser": false
-      },
-      {
-        "id": "comp_1",
-        "name": "Python_Pro",
-        "avatar": "cyber",
-        "xp": 15,
-        "isUser": false
-      },
-      {
-        "id": "comp_2",
-        "name": "Tariq_Cpp",
-        "avatar": "wizard",
-        "xp": 13,
-        "isUser": false
-      },
       {
         "id": "comp_4",
         "name": "Kenji_Go",
         "avatar": "classic",
-        "xp": 13,
-        "isUser": false
-      },
-      {
-        "id": "comp_6",
-        "name": "Fatima_Code",
-        "avatar": "wizard",
-        "xp": 3,
-        "isUser": false
-      },
-      {
-        "id": "comp_3",
-        "name": "Elena_R",
-        "avatar": "hacker",
-        "xp": 0,
-        "isUser": false
-      },
-      {
-        "id": "comp_5",
-        "name": "Marcus_JS",
-        "avatar": "cyber",
-        "xp": 0,
+        "xp": 48,
         "isUser": false
       },
       {
         "id": "comp_7",
         "name": "Lukas_Rust",
         "avatar": "hacker",
+        "xp": 41,
+        "isUser": false
+      },
+      {
+        "id": "comp_6",
+        "name": "Fatima_Code",
+        "avatar": "wizard",
+        "xp": 35,
+        "isUser": false
+      },
+      {
+        "id": "current_user",
+        "name": "عمر مجرب",
+        "avatar": "classic",
+        "avatarImage": null,
+        "xp": 35,
+        "isUser": true
+      },
+      {
+        "id": "comp_1",
+        "name": "Python_Pro",
+        "avatar": "cyber",
+        "xp": 21,
+        "isUser": false
+      },
+      {
+        "id": "comp_2",
+        "name": "Tariq_Cpp",
+        "avatar": "wizard",
+        "xp": 18,
+        "isUser": false
+      },
+      {
+        "id": "comp_3",
+        "name": "Elena_R",
+        "avatar": "hacker",
+        "xp": 8,
+        "isUser": false
+      },
+      {
+        "id": "comp_0",
+        "name": "Sarah_Dev",
+        "avatar": "classic",
+        "xp": 7,
+        "isUser": false
+      },
+      {
+        "id": "comp_5",
+        "name": "Marcus_JS",
+        "avatar": "cyber",
         "xp": 0,
         "isUser": false
       },
@@ -266,14 +275,6 @@
         "avatar": "cyber",
         "xp": 0,
         "isUser": false
-      },
-      {
-        "id": "current_user",
-        "name": "مستخدم جديد",
-        "avatar": "classic",
-        "avatarImage": null,
-        "xp": 0,
-        "isUser": true
       }
     ]
   },
@@ -293,14 +294,16 @@
     "activeTheme": "default"
   },
   "completedLessons": {
-    "python": []
+    "python": [
+      "py_intro_1"
+    ]
   },
   "dailyQuests": [
     {
       "id": "q1",
       "titleKey": "Earn 20 XP today",
       "target": 20,
-      "current": 0,
+      "current": 20,
       "rewardGems": 15,
       "claimed": false
     },
@@ -308,7 +311,7 @@
       "id": "q2",
       "titleKey": "Complete your first lesson",
       "target": 1,
-      "current": 0,
+      "current": 1,
       "rewardGems": 20,
       "claimed": false
     },
@@ -316,7 +319,7 @@
       "id": "q3",
       "titleKey": "Score 90%+ in 1 lesson",
       "target": 1,
-      "current": 0,
+      "current": 1,
       "rewardGems": 25,
       "claimed": false
     }

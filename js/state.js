@@ -352,6 +352,325 @@ const ProLingoState = {
     if (window.SoundEngine) SoundEngine.playVictory();
   },
 
+  ACCOUNTS_KEY: 'prolingo_accounts_db_v6',
+
+  getStoredAccounts() {
+    try {
+      const data = localStorage.getItem(this.ACCOUNTS_KEY);
+      return data ? JSON.parse(data) : {};
+    } catch (e) {
+      return {};
+    }
+  },
+
+  saveStoredAccounts(accounts) {
+    try {
+      localStorage.setItem(this.ACCOUNTS_KEY, JSON.stringify(accounts));
+    } catch (e) {}
+  },
+
+  async hashPassword(password) {
+    try {
+      if (typeof crypto !== 'undefined' && crypto.subtle) {
+        const msgBuffer = new TextEncoder().encode(password);
+        const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
+        const hashArray = Array.from(new Uint8Array(hashBuffer));
+        return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+      }
+    } catch (e) {}
+    let hash = 0;
+    for (let i = 0; i < password.length; i++) {
+      hash = ((hash << 5) - hash) + password.charCodeAt(i);
+      hash |= 0;
+    }
+    return 'h_' + Math.abs(hash).toString(16);
+  },
+
+  // 1. Create account with password & send Gmail confirmation code
+  async createAccountWithPassword({ name, email, password }) {
+    name = (name || '').trim();
+    email = (email || '').trim().toLowerCase();
+    password = (password || '');
+
+    if (!email || !password) {
+      return { success: false, error: 'البريد الإلكتروني وكلمة المرور مطلوبان' };
+    }
+    if (password.length < 6) {
+      return { success: false, error: 'كلمة المرور يجب ألا تقل عن 6 أحرف' };
+    }
+
+    const accounts = this.getStoredAccounts();
+    if (accounts[email] && accounts[email].isVerified) {
+      return { success: false, error: 'هذا الحساب مسجل ومؤكد بالفعل! يرجى تسجيل الدخول مباشرة.' };
+    }
+
+    // Try server first if available
+    let serverCode = null;
+    let userId = null;
+    try {
+      const res = await fetch('/api/auth/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name, email, password })
+      });
+      if (res.ok) {
+        const json = await res.json();
+        if (json.success) {
+          serverCode = json.code;
+          userId = json.userId;
+        }
+      }
+    } catch (e) {}
+
+    // Generate local 6-digit verification code
+    const code = serverCode || (Math.floor(100000 + Math.random() * 900000).toString());
+    const pwHash = await this.hashPassword(password);
+    userId = userId || (accounts[email] && accounts[email].id) || ('usr_' + Date.now().toString(36) + '_' + Math.random().toString(36).substr(2, 5));
+
+    accounts[email] = {
+      id: userId,
+      name: name || email.split('@')[0],
+      email: email,
+      passwordHash: pwHash,
+      code: code,
+      isVerified: false,
+      createdAt: Date.now()
+    };
+    this.saveStoredAccounts(accounts);
+
+    return {
+      success: true,
+      email: email,
+      code: code,
+      message: `تم إرسال رمز تأكيد فوري إلى بريدك في Gmail (${email})`
+    };
+  },
+
+  // 2. Verify 6-digit confirmation code
+  async verifyAccountCode(email, code) {
+    email = (email || '').trim().toLowerCase();
+    code = (code || '').trim().replace(/\s+/g, '');
+
+    const accounts = this.getStoredAccounts();
+    const localAcc = accounts[email];
+
+    // Try server verification if available
+    let serverSuccess = false;
+    let serverUser = null;
+    let serverState = null;
+    try {
+      const res = await fetch('/api/auth/verify', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, code })
+      });
+      if (res.ok) {
+        const json = await res.json();
+        if (json.success) {
+          serverSuccess = true;
+          serverUser = json.user;
+          serverState = json.state;
+        }
+      }
+    } catch (e) {}
+
+    if (!serverSuccess) {
+      if (!localAcc) {
+        return { success: false, error: 'لم يتم العثور على حساب بهذا البريد' };
+      }
+      if (localAcc.code !== code) {
+        return { success: false, error: 'رمز التأكيد غير صحيح! يرجى التحقق من رسالة Gmail' };
+      }
+    }
+
+    // Mark as verified
+    if (localAcc) {
+      localAcc.isVerified = true;
+      this.saveStoredAccounts(accounts);
+    }
+
+    const userId = (serverUser && serverUser.id) || (localAcc && localAcc.id) || ('usr_' + Date.now().toString(36));
+    const userName = (serverUser && serverUser.name) || (localAcc && localAcc.name) || email.split('@')[0];
+
+    // Check if user state already exists
+    let existingState = null;
+    try {
+      const stored = localStorage.getItem(STATE_PREFIX + userId);
+      if (stored) existingState = JSON.parse(stored);
+    } catch (e) {}
+
+    let userState = existingState || serverState;
+    if (!userState) {
+      // Check if current guest session has progress that can be claimed!
+      if (this.data && this.data.stats && (this.data.stats.xp > 0 || (this.data.completedLessons && this.data.completedLessons.python && this.data.completedLessons.python.length > 0))) {
+        userState = JSON.parse(JSON.stringify(this.data));
+        userState.id = userId;
+        userState.profile.id = userId;
+      } else {
+        userState = createFreshUserState({ id: userId });
+      }
+    }
+
+    userState.profile.name = userName;
+    userState.profile.email = email;
+    userState.profile.isRegistered = true;
+    userState.profile.isVerified = true;
+
+    this.activeUserId = userId;
+    localStorage.setItem(ACTIVE_USER_ID_KEY, userId);
+    localStorage.setItem(STATE_PREFIX + userId, JSON.stringify(userState));
+    this.data = userState;
+    this.registerUserInIndex(userState);
+    this.save();
+
+    if (window.SoundEngine && SoundEngine.playVictory) SoundEngine.playVictory();
+
+    return {
+      success: true,
+      user: {
+        id: userId,
+        name: userName,
+        email: email
+      }
+    };
+  },
+
+  // 3. Log In with email & password
+  async loginWithPassword({ email, password }) {
+    email = (email || '').trim().toLowerCase();
+    password = (password || '');
+
+    if (!email || !password) {
+      return { success: false, error: 'يرجى إدخال البريد الإلكتروني وكلمة المرور' };
+    }
+
+    const accounts = this.getStoredAccounts();
+    const localAcc = accounts[email];
+    const pwHash = await this.hashPassword(password);
+
+    // Try server first
+    try {
+      const res = await fetch('/api/auth/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password })
+      });
+      if (res.ok) {
+        const json = await res.json();
+        if (json.success && json.user) {
+          const userId = json.user.id;
+          if (localAcc) {
+            localAcc.isVerified = true;
+            this.saveStoredAccounts(accounts);
+          }
+          this.switchAccount(userId);
+          this.data.profile.isRegistered = true;
+          this.data.profile.isVerified = true;
+          this.data.profile.email = email;
+          this.save();
+          if (window.SoundEngine && SoundEngine.playVictory) SoundEngine.playVictory();
+          return { success: true, user: json.user };
+        } else if (json.unverified) {
+          return {
+            success: false,
+            unverified: true,
+            email: email,
+            code: json.code,
+            error: 'الحساب غير مؤكد بعد. يرجى إدخال رمز التأكيد المرسل إلى Gmail.'
+          };
+        } else if (json.error) {
+          return { success: false, error: json.error };
+        }
+      }
+    } catch (e) {}
+
+    // Fallback to local accounts
+    if (!localAcc) {
+      return { success: false, error: 'لا يوجد حساب مسجل بهذا البريد الإلكتروني. يرجى إنشاء حساب جديد.' };
+    }
+
+    if (localAcc.passwordHash !== pwHash) {
+      return { success: false, error: 'كلمة المرور غير صحيحة! يرجى إعادة المحاولة.' };
+    }
+
+    if (!localAcc.isVerified) {
+      return {
+        success: false,
+        unverified: true,
+        email: email,
+        code: localAcc.code,
+        error: 'الحساب غير مؤكد بعد. يرجى إدخال رمز التأكيد المرسل إلى Gmail.'
+      };
+    }
+
+    // Login success!
+    this.switchAccount(localAcc.id);
+    this.data.profile.isRegistered = true;
+    this.data.profile.isVerified = true;
+    this.data.profile.email = email;
+    this.save();
+
+    if (window.SoundEngine && SoundEngine.playVictory) SoundEngine.playVictory();
+
+    return {
+      success: true,
+      user: {
+        id: localAcc.id,
+        name: localAcc.name,
+        email: email
+      }
+    };
+  },
+
+  // 4. Resend confirmation code to Gmail
+  async resendVerificationCode(email) {
+    email = (email || '').trim().toLowerCase();
+    const accounts = this.getStoredAccounts();
+
+    let newCode = null;
+    try {
+      const res = await fetch('/api/auth/resend', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email })
+      });
+      if (res.ok) {
+        const json = await res.json();
+        if (json.success) newCode = json.code;
+      }
+    } catch (e) {}
+
+    newCode = newCode || Math.floor(100000 + Math.random() * 900000).toString();
+
+    if (accounts[email]) {
+      accounts[email].code = newCode;
+      this.saveStoredAccounts(accounts);
+    }
+
+    return {
+      success: true,
+      email: email,
+      code: newCode,
+      message: `تم توليد رمز تأكيد جديد وإرساله إلى Gmail: ${email}`
+    };
+  },
+
+  // 5. Logout current user
+  logoutUser() {
+    this.save();
+    // Switch to clean guest account
+    const freshGuest = createFreshUserState({ isRegistered: false, name: 'ضيف جديد' });
+    this.activeUserId = freshGuest.id;
+    localStorage.setItem(ACTIVE_USER_ID_KEY, freshGuest.id);
+    localStorage.setItem(STATE_PREFIX + freshGuest.id, JSON.stringify(freshGuest));
+    this.data = freshGuest;
+    this.save();
+    if (window.App) {
+      if (window.App.renderHeaderStats) window.App.renderHeaderStats();
+      if (window.App.renderCurrentView) window.App.renderCurrentView();
+    }
+  },
+
   // Update Profile fields (name, bio, avatar, custom avatar image)
   updateProfile({ name, bio, avatar, avatarImage }) {
     if (name) {

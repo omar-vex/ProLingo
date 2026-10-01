@@ -1,7 +1,7 @@
 {
-  "id": "usr_mupswflr_omud8",
+  "id": "usr_mupshn1s_n1ufl",
   "profile": {
-    "id": "usr_mupswflr_omud8",
+    "id": "usr_mupshn1s_n1ufl",
     "name": "مستخدم جديد",
     "email": "",
     "avatar": "classic",
@@ -55,47 +55,47 @@
   "league": {
     "tierIndex": 0,
     "weeklyXp": 0,
-    "weekEndsTimestamp": 1791393677082,
+    "weekEndsTimestamp": 1791392986892,
     "competitors": [
-      {
-        "id": "comp_0",
-        "name": "Sarah_Dev",
-        "avatar": "classic",
-        "xp": 41,
-        "isUser": false
-      },
       {
         "id": "comp_1",
         "name": "Python_Pro",
         "avatar": "cyber",
-        "xp": 15,
+        "xp": 16,
+        "isUser": false
+      },
+      {
+        "id": "comp_0",
+        "name": "Sarah_Dev",
+        "avatar": "classic",
+        "xp": 4,
+        "isUser": false
+      },
+      {
+        "id": "comp_8",
+        "name": "Chloe_CSS",
+        "avatar": "classic",
+        "xp": 4,
         "isUser": false
       },
       {
         "id": "comp_2",
         "name": "Tariq_Cpp",
         "avatar": "wizard",
-        "xp": 13,
-        "isUser": false
-      },
-      {
-        "id": "comp_4",
-        "name": "Kenji_Go",
-        "avatar": "classic",
-        "xp": 13,
-        "isUser": false
-      },
-      {
-        "id": "comp_6",
-        "name": "Fatima_Code",
-        "avatar": "wizard",
-        "xp": 3,
+        "xp": 0,
         "isUser": false
       },
       {
         "id": "comp_3",
         "name": "Elena_R",
         "avatar": "hacker",
+        "xp": 0,
+        "isUser": false
+      },
+      {
+        "id": "comp_4",
+        "name": "Kenji_Go",
+        "avatar": "classic",
         "xp": 0,
         "isUser": false
       },
@@ -107,16 +107,16 @@
         "isUser": false
       },
       {
-        "id": "comp_7",
-        "name": "Lukas_Rust",
-        "avatar": "hacker",
+        "id": "comp_6",
+        "name": "Fatima_Code",
+        "avatar": "wizard",
         "xp": 0,
         "isUser": false
       },
       {
-        "id": "comp_8",
-        "name": "Chloe_CSS",
-        "avatar": "classic",
+        "id": "comp_7",
+        "name": "Lukas_Rust",
+        "avatar": "hacker",
         "xp": 0,
         "isUser": false
       },

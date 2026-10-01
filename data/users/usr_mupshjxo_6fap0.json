@@ -1,7 +1,7 @@
 {
-  "id": "usr_mupswflr_omud8",
+  "id": "usr_mupshjxo_6fap0",
   "profile": {
-    "id": "usr_mupswflr_omud8",
+    "id": "usr_mupshjxo_6fap0",
     "name": "مستخدم جديد",
     "email": "",
     "avatar": "classic",
@@ -19,7 +19,7 @@
     "followersCount": 0
   },
   "settings": {
-    "uiLang": "ar",
+    "uiLang": "en",
     "theme": "dark",
     "soundEnabled": true,
     "hapticsEnabled": true,
@@ -55,61 +55,68 @@
   "league": {
     "tierIndex": 0,
     "weeklyXp": 0,
-    "weekEndsTimestamp": 1791393677082,
+    "weekEndsTimestamp": 1791392982863,
     "competitors": [
-      {
-        "id": "comp_0",
-        "name": "Sarah_Dev",
-        "avatar": "classic",
-        "xp": 41,
-        "isUser": false
-      },
-      {
-        "id": "comp_1",
-        "name": "Python_Pro",
-        "avatar": "cyber",
-        "xp": 15,
-        "isUser": false
-      },
       {
         "id": "comp_2",
         "name": "Tariq_Cpp",
         "avatar": "wizard",
-        "xp": 13,
-        "isUser": false
-      },
-      {
-        "id": "comp_4",
-        "name": "Kenji_Go",
-        "avatar": "classic",
-        "xp": 13,
-        "isUser": false
-      },
-      {
-        "id": "comp_6",
-        "name": "Fatima_Code",
-        "avatar": "wizard",
-        "xp": 3,
-        "isUser": false
-      },
-      {
-        "id": "comp_3",
-        "name": "Elena_R",
-        "avatar": "hacker",
-        "xp": 0,
+        "xp": 21,
         "isUser": false
       },
       {
         "id": "comp_5",
         "name": "Marcus_JS",
         "avatar": "cyber",
-        "xp": 0,
+        "xp": 20,
+        "isUser": false
+      },
+      {
+        "id": "comp_6",
+        "name": "Fatima_Code",
+        "avatar": "wizard",
+        "xp": 18,
         "isUser": false
       },
       {
         "id": "comp_7",
         "name": "Lukas_Rust",
         "avatar": "hacker",
+        "xp": 12,
+        "isUser": false
+      },
+      {
+        "id": "comp_1",
+        "name": "Python_Pro",
+        "avatar": "cyber",
+        "xp": 8,
+        "isUser": false
+      },
+      {
+        "id": "comp_9",
+        "name": "Dev_Ninja",
+        "avatar": "cyber",
+        "xp": 6,
+        "isUser": false
+      },
+      {
+        "id": "comp_3",
+        "name": "Elena_R",
+        "avatar": "hacker",
+        "xp": 5,
+        "isUser": false
+      },
+      {
+        "id": "comp_0",
+        "name": "Sarah_Dev",
+        "avatar": "classic",
+        "xp": 0,
+        "isUser": false
+      },
+      {
+        "id": "comp_4",
+        "name": "Kenji_Go",
+        "avatar": "classic",
         "xp": 0,
         "isUser": false
       },
@@ -117,13 +124,6 @@
         "id": "comp_8",
         "name": "Chloe_CSS",
         "avatar": "classic",
-        "xp": 0,
-        "isUser": false
-      },
-      {
-        "id": "comp_9",
-        "name": "Dev_Ninja",
-        "avatar": "cyber",
         "xp": 0,
         "isUser": false
       },

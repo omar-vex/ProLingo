@@ -1,7 +1,7 @@
 {
-  "id": "usr_mupswflr_omud8",
+  "id": "usr_mupshfnf_wpjq1",
   "profile": {
-    "id": "usr_mupswflr_omud8",
+    "id": "usr_mupshfnf_wpjq1",
     "name": "مستخدم جديد",
     "email": "",
     "avatar": "classic",
@@ -19,7 +19,7 @@
     "followersCount": 0
   },
   "settings": {
-    "uiLang": "ar",
+    "uiLang": "en",
     "theme": "dark",
     "soundEnabled": true,
     "hapticsEnabled": true,
@@ -55,54 +55,54 @@
   "league": {
     "tierIndex": 0,
     "weeklyXp": 0,
-    "weekEndsTimestamp": 1791393677082,
+    "weekEndsTimestamp": 1791392977310,
     "competitors": [
       {
         "id": "comp_0",
         "name": "Sarah_Dev",
         "avatar": "classic",
-        "xp": 41,
-        "isUser": false
-      },
-      {
-        "id": "comp_1",
-        "name": "Python_Pro",
-        "avatar": "cyber",
-        "xp": 15,
-        "isUser": false
-      },
-      {
-        "id": "comp_2",
-        "name": "Tariq_Cpp",
-        "avatar": "wizard",
-        "xp": 13,
-        "isUser": false
-      },
-      {
-        "id": "comp_4",
-        "name": "Kenji_Go",
-        "avatar": "classic",
-        "xp": 13,
-        "isUser": false
-      },
-      {
-        "id": "comp_6",
-        "name": "Fatima_Code",
-        "avatar": "wizard",
-        "xp": 3,
+        "xp": 37,
         "isUser": false
       },
       {
         "id": "comp_3",
         "name": "Elena_R",
         "avatar": "hacker",
-        "xp": 0,
+        "xp": 28,
         "isUser": false
       },
       {
         "id": "comp_5",
         "name": "Marcus_JS",
         "avatar": "cyber",
+        "xp": 21,
+        "isUser": false
+      },
+      {
+        "id": "comp_1",
+        "name": "Python_Pro",
+        "avatar": "cyber",
+        "xp": 10,
+        "isUser": false
+      },
+      {
+        "id": "comp_2",
+        "name": "Tariq_Cpp",
+        "avatar": "wizard",
+        "xp": 8,
+        "isUser": false
+      },
+      {
+        "id": "comp_4",
+        "name": "Kenji_Go",
+        "avatar": "classic",
+        "xp": 0,
+        "isUser": false
+      },
+      {
+        "id": "comp_6",
+        "name": "Fatima_Code",
+        "avatar": "wizard",
         "xp": 0,
         "isUser": false
       },

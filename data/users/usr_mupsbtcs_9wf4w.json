@@ -1,0 +1,111 @@
+{
+  "id": "usr_mupsbtcs_9wf4w",
+  "profile": {
+    "id": "usr_mupsbtcs_9wf4w",
+    "name": "ضيف جديد",
+    "email": "",
+    "avatar": "classic",
+    "avatarImage": null,
+    "isGoogle": false,
+    "isRegistered": false,
+    "joinedDate": "October 2026",
+    "bio": "Mastering Python on ProLingo! 🚀",
+    "following": [
+      "sarah_cpp",
+      "tariq_js",
+      "kareem_py",
+      "byte_owl"
+    ],
+    "followersCount": 0
+  },
+  "settings": {
+    "uiLang": "ar",
+    "theme": "dark",
+    "soundEnabled": true,
+    "hapticsEnabled": true,
+    "codeEditorTheme": "dracula"
+  },
+  "currentCourse": "python",
+  "activeSection": 1,
+  "stats": {
+    "xp": 0,
+    "streak": 0,
+    "longestStreak": 0,
+    "lastActiveDate": "2026-10-01",
+    "streakDays": [
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false
+    ],
+    "gems": 50,
+    "hearts": 5,
+    "maxHearts": 5,
+    "unlimitedHeartsUntil": null,
+    "lastHeartLostTime": null,
+    "questionsSolved": 0,
+    "totalLessonsCompleted": 0,
+    "accuracySum": 0,
+    "accuracyCount": 0,
+    "top3Finishes": 0
+  },
+  "league": {
+    "tierIndex": 0,
+    "weeklyXp": 0,
+    "weekEndsTimestamp": 1791392715100,
+    "competitors": []
+  },
+  "inventory": {
+    "streakFreeze": 0,
+    "streakFreezeActive": false,
+    "doubleOrNothing": false,
+    "doubleOrNothingDays": 0,
+    "unlimitedHearts": false,
+    "skins": [
+      "classic"
+    ],
+    "activeSkin": "classic",
+    "themes": [
+      "default"
+    ],
+    "activeTheme": "default"
+  },
+  "completedLessons": {
+    "python": []
+  },
+  "dailyQuests": [
+    {
+      "id": "q1",
+      "titleKey": "Earn 20 XP today",
+      "target": 20,
+      "current": 0,
+      "rewardGems": 15,
+      "claimed": false
+    },
+    {
+      "id": "q2",
+      "titleKey": "Complete your first lesson",
+      "target": 1,
+      "current": 0,
+      "rewardGems": 20,
+      "claimed": false
+    },
+    {
+      "id": "q3",
+      "titleKey": "Score 90%+ in 1 lesson",
+      "target": 1,
+      "current": 0,
+      "rewardGems": 25,
+      "claimed": false
+    }
+  ],
+  "monthlyQuest": {
+    "target": 30,
+    "current": 0,
+    "badgeName": "Python Master"
+  },
+  "mistakeQuestions": []
+}
