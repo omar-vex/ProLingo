@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+<head>
+<link rel="stylesheet" href="file:///C:/Users/Omar/.gemini/antigravity/scratch/prolingo-web/css/prolingo.css">
+</head>
+<body>
+<div id="view-lesson" class="app-view hidden">Lesson Content</div>
+<div id="app-main-content">Main Content Here</div>
+<script>
+window.onload = () => {
+    const el = document.getElementById('view-lesson');
+    const comp = window.getComputedStyle(el);
+    document.body.innerHTML = '<h1>Lesson Display: ' + comp.display + ' | Z-Index: ' + comp.zIndex + ' | Pos: ' + comp.position + '</h1>';
+};
+</script>
+</body>
+</html>

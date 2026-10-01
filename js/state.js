@@ -4,14 +4,14 @@
  * 100-unit progression, hearts, streak, gems, leagues, and server synchronization.
  */
 
-const REGISTRY_KEY = 'prolingo_users_registry_v4';
-const ACTIVE_USER_ID_KEY = 'prolingo_active_user_id_v4';
-const STATE_PREFIX = 'prolingo_state_user_';
+const REGISTRY_KEY = 'prolingo_users_registry_v6';
+const ACTIVE_USER_ID_KEY = 'prolingo_active_user_id_v6';
+const STATE_PREFIX = 'prolingo_state_user_v6_';
 
 function createFreshUserState(options = {}) {
   const userId = options.id || ('usr_' + Date.now().toString(36) + '_' + Math.random().toString(36).substr(2, 5));
   const isGoogle = Boolean(options.isGoogle);
-  const name = options.name || (isGoogle ? 'Google Coder' : 'New Pythonista');
+  const name = options.name || (isGoogle ? 'Google Coder' : 'Learner');
   const email = options.email || (isGoogle ? 'coder@gmail.com' : '');
   const avatar = options.avatar || 'classic';
   const avatarImage = options.avatarImage || null;
@@ -27,11 +27,11 @@ function createFreshUserState(options = {}) {
       isGoogle: isGoogle,
       joinedDate: new Date().toLocaleDateString('en-US', { month: 'long', year: 'numeric' }),
       bio: options.bio || 'Mastering Python on ProLingo! 🚀',
-      following: ['alex_py', 'sarah_cpp', 'tariq_js', 'byte_owl'],
+      following: ['sarah_cpp', 'tariq_js', 'kareem_py', 'byte_owl'],
       followersCount: 0
     },
     settings: {
-      uiLang: 'en', // English by default
+      uiLang: 'ar', // Arabic by default as requested
       theme: 'dark', // 'dark' | 'light'
       soundEnabled: true,
       hapticsEnabled: true,
@@ -95,12 +95,29 @@ const ProLingoState = {
   activeUserId: null,
 
   init() {
+    this.cleanLegacyStorage();
     this.ensureActiveUser();
     this.load();
     this.ensureCompetitors();
     this.checkHeartRegen();
     this.checkStreak();
     this.save();
+  },
+
+  cleanLegacyStorage() {
+    try {
+      const legacyKeys = [
+        'prolingo_users_registry_v4', 'prolingo_active_user_id_v4',
+        'prolingo_users_registry_v5', 'prolingo_active_user_id_v5',
+        'prolingo_state', 'prolingo_user'
+      ];
+      legacyKeys.forEach(k => localStorage.removeItem(k));
+      Object.keys(localStorage).forEach(k => {
+        if (k.startsWith('prolingo_state_user_') && !k.startsWith(STATE_PREFIX)) {
+          localStorage.removeItem(k);
+        }
+      });
+    } catch (e) {}
   },
 
   // Multi-user registry management
@@ -142,6 +159,45 @@ const ProLingoState = {
       registry.push(summary);
     }
     this.saveUsersRegistry(registry);
+  },
+
+  removeUserFromRegistry(userId) {
+    let registry = this.getUsersRegistry();
+    registry = registry.filter(u => u.id !== userId);
+    this.saveUsersRegistry(registry);
+    try {
+      localStorage.removeItem(STATE_PREFIX + userId);
+    } catch (e) {}
+
+    if (this.activeUserId === userId) {
+      if (registry.length > 0) {
+        this.switchAccount(registry[0].id);
+      } else {
+        const fresh = createFreshUserState({ name: 'Learner', isGoogle: false });
+        this.activeUserId = fresh.id;
+        localStorage.setItem(ACTIVE_USER_ID_KEY, fresh.id);
+        localStorage.setItem(STATE_PREFIX + fresh.id, JSON.stringify(fresh));
+        this.registerUserInIndex(fresh);
+        this.data = fresh;
+        this.save();
+        window.location.reload();
+      }
+    }
+  },
+
+  clearAllSavedAccounts() {
+    try {
+      Object.keys(localStorage).forEach(k => {
+        if (k.startsWith('prolingo_')) {
+          localStorage.removeItem(k);
+        }
+      });
+    } catch (e) {
+      console.warn('Clear accounts error:', e);
+    }
+    this.ensureActiveUser();
+    this.load();
+    window.location.reload();
   },
 
   ensureActiveUser() {
@@ -528,7 +584,7 @@ const ProLingoState = {
       'Sarah_Dev', 'Alex_Py', 'Tariq_Cpp', 'Elena_R', 'Kenji_Go', 'Marcus_JS',
       'Fatima_Code', 'Lukas_Rust', 'Chloe_CSS', 'Dev_Ninja', 'PixelPioneer',
       'CodeValkyrie', 'Zack_Async', 'Mia_Query', 'Liam_Stack', 'Nora_Byte',
-      'Omar_Algo', 'Aya_FullStack', 'Hassan_Tech', 'Jordan_Code', 'Sven_Cpp',
+      'Kareem_Algo', 'Aya_FullStack', 'Hassan_Tech', 'Jordan_Code', 'Sven_Cpp',
       'Linus_Penguin', 'Grace_Compiler', 'Alan_Turing', 'Ada_Lovelace', 'Guido_Snake',
       'Brendan_Mocha', 'Dennis_R', 'Bjarne_Class', 'James_Java'
     ];
@@ -570,11 +626,30 @@ const ProLingoState = {
     this.data.league.competitors = comps;
   },
 
-  // Reset Progress for current account
+  // Reset Progress for current account to completely fresh zero state
   resetAll() {
-    localStorage.removeItem(STATE_PREFIX + this.activeUserId);
-    this.data = createFreshUserState({ id: this.activeUserId, name: this.data.profile.name });
-    this.save();
+    try {
+      localStorage.removeItem(STATE_PREFIX + this.activeUserId);
+      const userName = (this.data && this.data.profile && this.data.profile.name) || 'Learner';
+      this.data = createFreshUserState({ id: this.activeUserId, name: userName });
+      this.save();
+    } catch (e) {
+      console.warn('Reset error:', e);
+    }
+    window.location.reload();
+  },
+
+  // Factory reset: wipes all local storage and restarts completely from scratch
+  factoryReset() {
+    try {
+      Object.keys(localStorage).forEach(k => {
+        if (k.startsWith('prolingo_')) {
+          localStorage.removeItem(k);
+        }
+      });
+    } catch (e) {
+      console.warn('Factory reset error:', e);
+    }
     window.location.reload();
   }
 };

@@ -160,7 +160,13 @@ const I18N = {
         cropModalTitle: 'Crop Profile Picture',
         cropInstructions: 'Drag the image to position. Use the slider to zoom:',
         cropPreview: 'Avatar Preview:',
-        cropAndSave: '✂️ Crop & Save'
+        cropAndSave: '✂️ Crop & Save',
+        editTitle: 'Edit Profile',
+        uploadPhoto: '📷 Upload & Crop Photo',
+        pickMascot: 'Or Pick Mascot Avatar:',
+        displayName: 'Display Name:',
+        bio: 'Bio:',
+        saveProfile: 'Save Profile'
       },
       achievements: {
         wildfire: { title: 'Wildfire', desc: 'Reach a {n} day streak' },
@@ -199,6 +205,19 @@ const I18N = {
         resetConfirm: 'Are you sure you want to reset all your progress, XP, and streak? This cannot be undone!',
         exportData: 'Export Progress JSON',
         importData: 'Import Progress JSON'
+      },
+      auth: {
+        switchTitle: 'Manage & Switch Accounts',
+        switchSubtitle: 'Registered accounts on this device:',
+        googleTitle: 'Sign in with Google',
+        googleTarget: 'to continue to ProLingo',
+        googleEnterAccount: 'ENTER YOUR GOOGLE ACCOUNT',
+        googleName: 'Your Name:',
+        googleEmail: 'Google Email:',
+        googlePhoto: 'Profile Picture (Optional):',
+        choosePhoto: '📁 Choose Photo',
+        googleSubmit: 'Continue with Google Account',
+        googleDisclaimer: 'To continue, Google will securely share your name, email address, and profile picture with ProLingo. Your coding progress and account remain encrypted and private.'
       }
     },
 
@@ -210,7 +229,7 @@ const I18N = {
         leagues: 'المتصدرين',
         quests: 'المهام',
         shop: 'المتجر',
-        profile: 'الملف الشخصي',
+        profile: 'حسابي',
         practice: 'تدريب',
         settings: 'الإعدادات'
       },
@@ -355,7 +374,13 @@ const I18N = {
         cropModalTitle: 'اقتصاص صورة الملف الشخصي',
         cropInstructions: 'اسحب الصورة لتحديد الموضع، واستخدم شريط التكبير لضبط الحجم:',
         cropPreview: 'معاينة الصورة:',
-        cropAndSave: '✂️ قص وتطبيق الصورة'
+        cropAndSave: '✂️ قص وتطبيق الصورة',
+        editTitle: 'تعديل الملف الشخصي',
+        uploadPhoto: '📷 رفع واقتصاص الصورة',
+        pickMascot: 'أو اختر شخصية رمزية:',
+        displayName: 'الاسم المعروض:',
+        bio: 'نبذة شخصية:',
+        saveProfile: 'حفظ الملف الشخصي'
       },
       achievements: {
         wildfire: { title: 'شعلة النار', desc: 'حافظ على حماستك لمدة {n} أيام' },
@@ -394,6 +419,19 @@ const I18N = {
         resetConfirm: 'هل أنت متأكد من تصفير تقدمك وسلسلة حماستك ونقاطك؟ لا يمكن التراجع عن هذا الإجراء!',
         exportData: 'تصدير البيانات بصيغة JSON',
         importData: 'استيراد البيانات'
+      },
+      auth: {
+        switchTitle: 'إدارة وتبديل الحسابات',
+        switchSubtitle: 'الحسابات المسجلة على هذا الجهاز:',
+        googleTitle: 'تسجيل الدخول باستخدام Google',
+        googleTarget: 'للمتابعة إلى برو لينجو',
+        googleEnterAccount: 'أدخل بيانات حساب Google',
+        googleName: 'اسمك الكامل:',
+        googleEmail: 'البريد الإلكتروني (Gmail):',
+        googlePhoto: 'صورة الحساب (اختياري):',
+        choosePhoto: '📁 اختيار صورة',
+        googleSubmit: 'المتابعة بحساب Google',
+        googleDisclaimer: 'للمتابعة، ستشارك Google اسمك وعنوان بريدك الإلكتروني وصورة ملفك الشخصي بأمان مع ProLingo. تقدمك البرمجي وبيانات حسابك مشفرة ومحمية.'
       }
     }
   },

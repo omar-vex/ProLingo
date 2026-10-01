@@ -1436,8 +1436,12 @@ window.App = {
   },
 
   confirmResetAll() {
-    if (confirm('Are you sure you want to reset all progress for this user? You will start fresh at 0 XP.')) {
-      ProLingoState.resetAll();
+    const isAr = (ProLingoState.data && ProLingoState.data.settings && ProLingoState.data.settings.uiLang === 'ar');
+    const msg = isAr
+      ? 'هل أنت متأكد من رغبتك في تصفير جميع البيانات والتقدم؟ ستبدأ الحساب من الصفر تماماً (0 XP) وكأنك تستخدم الموقع لأول مرة.'
+      : 'Are you sure you want to reset all progress? You will start completely from scratch at 0 XP as a brand-new user.';
+    if (confirm(msg)) {
+      ProLingoState.factoryReset();
     }
   },
 
@@ -1458,14 +1462,54 @@ window.App = {
   openGoogleSignInModal() {
     document.getElementById('google-signin-modal').classList.remove('hidden');
     this.renderOfficialGoogleButton();
+    this.renderSavedGoogleAccounts();
+  },
+
+  renderSavedGoogleAccounts() {
+    const section = document.getElementById('saved-google-accounts-section');
+    const list = document.getElementById('saved-google-accounts-list');
+    if (!section || !list) return;
+
+    const registry = ProLingoState.getUsersRegistry();
+    const googleAccounts = registry.filter(u => u.isGoogle && u.email);
+
+    if (googleAccounts.length === 0) {
+      section.classList.add('hidden');
+      list.innerHTML = '';
+      return;
+    }
+
+    section.classList.remove('hidden');
+    list.innerHTML = googleAccounts.map(u => `
+      <div class="google-account-card official-style" onclick="App.selectSavedGoogleAccount('${u.id}')">
+        <div class="google-acc-avatar">
+          ${u.avatarImage ? `<img src="${u.avatarImage}" style="width:100%;height:100%;border-radius:50%;object-fit:cover;">` : `<span>👨‍💻</span>`}
+        </div>
+        <div class="google-acc-meta">
+          <strong>${u.name}</strong>
+          <span>${u.email}</span>
+        </div>
+        <span class="google-acc-badge">✓ Google Account</span>
+      </div>
+    `).join('');
+  },
+
+  selectSavedGoogleAccount(userId) {
+    ProLingoState.switchUser(userId);
+    document.getElementById('google-signin-modal').classList.add('hidden');
+    this.showToast(`Switched account: Welcome back! 🚀`);
   },
 
   initGoogleIdentityServices() {
+    // Only initialize GIS if a valid client_id is configured
+    const clientId = window.PROLINGO_GOOGLE_CLIENT_ID || null;
+    if (!clientId) return;
+
     const setupGIS = () => {
       if (window.google && window.google.accounts && window.google.accounts.id) {
         try {
           window.google.accounts.id.initialize({
-            client_id: '1064297072044-prolingo.apps.googleusercontent.com',
+            client_id: clientId,
             callback: (res) => this.handleGoogleCredentialResponse(res),
             auto_select: false,
             cancel_on_tap_outside: true
@@ -1487,6 +1531,8 @@ window.App = {
   renderOfficialGoogleButton() {
     const slot = document.getElementById('official-google-btn-slot');
     if (!slot || slot.children.length > 0) return;
+    const clientId = window.PROLINGO_GOOGLE_CLIENT_ID || null;
+    if (!clientId) return;
     if (window.google && window.google.accounts && window.google.accounts.id) {
       try {
         window.google.accounts.id.renderButton(slot, {
@@ -1527,16 +1573,6 @@ window.App = {
       console.error('Error parsing Google credential JWT:', e);
       this.showToast('Signed in with Google Account.');
     }
-  },
-
-  loginWithPreset(name, email) {
-    ProLingoState.loginWithGoogle({
-      name: name,
-      email: email,
-      avatarImage: null
-    });
-    document.getElementById('google-signin-modal').classList.add('hidden');
-    this.showToast(`Welcome, ${name}! Signed in with Google. 🚀`);
   },
 
   handleAvatarFileSelect(input, previewElementId) {
@@ -1634,6 +1670,17 @@ window.App = {
 
     const registry = ProLingoState.getUsersRegistry();
     const activeId = ProLingoState.activeUserId;
+    const isAr = (typeof I18N !== 'undefined' && I18N.isRTL());
+
+    if (!registry || registry.length === 0) {
+      container.innerHTML = `
+        <div style="text-align:center; padding: 24px 10px; color: var(--text-secondary);">
+          <p style="font-size:14px; margin:0;">${isAr ? 'لا توجد أي حسابات محفوظة حالياً.' : 'No saved accounts found on this device.'}</p>
+        </div>
+      `;
+      document.getElementById('switch-user-modal').classList.remove('hidden');
+      return;
+    }
 
     let html = '';
     registry.forEach(user => {
@@ -1643,13 +1690,18 @@ window.App = {
         : `<span class="avatar-emoji">${this.getAvatarIcon(user.avatar)}</span>`;
 
       html += `
-        <div class="account-switch-card ${isCurrent ? 'active' : ''}" onclick="App.handleSwitchUser('${user.id}')">
-          <div class="switch-card-avatar">${avatarHtml}</div>
-          <div class="switch-card-meta">
-            <strong>${user.name}</strong>
-            <span>${user.email || 'Local User'} • ${user.xp} XP</span>
+        <div class="account-switch-card ${isCurrent ? 'active' : ''}" onclick="App.handleSwitchUser('${user.id}')" style="display:flex; align-items:center; justify-content:space-between; gap:10px; padding:10px 14px; border-radius:14px; margin-bottom:8px; cursor:pointer;">
+          <div style="display:flex; align-items:center; gap:12px; min-width:0; flex:1;">
+            <div class="switch-card-avatar" style="flex-shrink:0;">${avatarHtml}</div>
+            <div class="switch-card-meta" style="min-width:0; flex:1;">
+              <strong style="display:block; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${user.name}</strong>
+              <span style="font-size:12px; color:var(--text-secondary); display:block; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${user.email || (isAr ? 'حساب محلي' : 'Local User')} • ${user.xp} XP</span>
+            </div>
           </div>
-          ${isCurrent ? '<span class="active-acc-pill">ACTIVE</span>' : ''}
+          <div style="display:flex; align-items:center; gap:8px; flex-shrink:0;">
+            ${isCurrent ? `<span class="active-acc-pill" style="font-size:11px; font-weight:800; padding:2px 8px; border-radius:10px; background:rgba(88,204,2,0.18); color:var(--green);">${isAr ? 'نشط' : 'ACTIVE'}</span>` : ''}
+            <button type="button" class="btn-remove-acc" title="${isAr ? 'حذف هذا الحساب' : 'Delete Account'}" onclick="event.stopPropagation(); App.handleRemoveUser('${user.id}')" style="background:none; border:none; cursor:pointer; font-size:16px; padding:4px 6px; border-radius:8px; opacity:0.75; transition:opacity 0.15s;">🗑️</button>
+          </div>
         </div>
       `;
     });
@@ -1664,9 +1716,28 @@ window.App = {
     this.showToast(`Switched account to ${ProLingoState.data.profile.name}! 🔄`);
   },
 
+  handleRemoveUser(userId) {
+    const isAr = (typeof I18N !== 'undefined' && I18N.isRTL());
+    const msg = isAr ? 'هل أنت متأكد من رغبتك في حذف هذا الحساب نهائياً؟' : 'Are you sure you want to delete this account?';
+    if (confirm(msg)) {
+      ProLingoState.removeUserFromRegistry(userId);
+      this.openSwitchAccountModal();
+      this.showToast(isAr ? 'تم حذف الحساب بنجاح 🗑️' : 'Account deleted successfully! 🗑️');
+    }
+  },
+
+  handleClearAllAccounts() {
+    const isAr = (typeof I18N !== 'undefined' && I18N.isRTL());
+    const msg = isAr ? 'هل أنت متأكد من مسح جميع الحسابات المسجلة والبدء بحساب نظيف جديد من الصفر؟' : 'Are you sure you want to clear all accounts and start fresh from zero?';
+    if (confirm(msg)) {
+      ProLingoState.clearAllSavedAccounts();
+    }
+  },
+
   handleCreateNewUser() {
-    const fresh = ProLingoState.createNewAccount('New Pythonista', false, '', null);
-    this.showToast(`Started fresh as ${fresh.profile.name}! All 100 units reset to zero.`);
+    const fresh = ProLingoState.createNewAccount('Learner', false, '', null);
+    const isAr = (typeof I18N !== 'undefined' && I18N.isRTL());
+    this.showToast(isAr ? `تم بدء حساب جديد من الصفر! 🚀` : `Started fresh as ${fresh.profile.name}! All 100 units reset to zero.`);
   },
 
   showToast(message, duration = 3000) {

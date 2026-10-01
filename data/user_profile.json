@@ -1,294 +1,78 @@
 {
+  "id": "usr_default_clean",
   "profile": {
-    "name": "ByteCoder",
+    "id": "usr_default_clean",
+    "name": "Learner",
+    "email": "",
     "avatar": "classic",
+    "avatarImage": null,
+    "isGoogle": false,
     "joinedDate": "September 2026",
-    "bio": "Coding my way through algorithms and daily challenges! 🚀",
+    "bio": "Learning Python on ProLingo! 🚀",
     "following": [
-      "dev_py",
       "sarah_cpp",
       "tariq_js",
-      "duo_bot"
+      "kareem_py"
     ],
-    "followersCount": 14
+    "followersCount": 0
   },
   "settings": {
-    "uiLang": "en",
+    "uiLang": "ar",
     "theme": "dark",
     "soundEnabled": true,
     "hapticsEnabled": true,
     "codeEditorTheme": "dracula"
   },
-  "currentCourse": "cpp",
+  "currentCourse": "python",
+  "activeSection": 1,
   "stats": {
-    "xp": 300,
-    "streak": 6,
-    "longestStreak": 14,
-    "lastActiveDate": "2026-09-25",
+    "xp": 0,
+    "streak": 0,
+    "longestStreak": 0,
+    "lastActiveDate": "2026-09-26",
     "streakDays": [
-      true,
-      true,
-      true,
-      true,
-      true,
-      true,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
       false
     ],
-    "gems": 510,
-    "hearts": 3,
+    "gems": 50,
+    "hearts": 5,
     "maxHearts": 5,
     "unlimitedHeartsUntil": null,
-    "lastHeartLostTime": 1790343555571,
-    "questionsSolved": 38,
-    "totalLessonsCompleted": 8,
-    "accuracySum": 470,
-    "accuracyCount": 8,
-    "top3Finishes": 3
+    "lastHeartLostTime": null,
+    "questionsSolved": 0,
+    "totalLessonsCompleted": 0,
+    "accuracySum": 0,
+    "accuracyCount": 0,
+    "top3Finishes": 0
   },
   "league": {
-    "tierIndex": 2,
-    "weeklyXp": 300,
+    "tierIndex": 0,
+    "weeklyXp": 0,
     "weekEndsTimestamp": 1790652973764,
-    "competitors": [
-      {
-        "id": "comp_3",
-        "name": "Elena_R",
-        "avatar": "hacker",
-        "xp": 311,
-        "isUser": false
-      },
-      {
-        "id": "comp_0",
-        "name": "Sarah_Dev",
-        "avatar": "classic",
-        "xp": 303,
-        "isUser": false
-      },
-      {
-        "id": "current_user",
-        "name": "ByteCoder",
-        "avatar": "classic",
-        "xp": 300,
-        "isUser": true
-      },
-      {
-        "id": "comp_1",
-        "name": "Samir_Py",
-        "avatar": "cyber",
-        "xp": 240,
-        "isUser": false
-      },
-      {
-        "id": "comp_10",
-        "name": "PixelPioneer",
-        "avatar": "wizard",
-        "xp": 234,
-        "isUser": false
-      },
-      {
-        "id": "comp_5",
-        "name": "Marcus_JS",
-        "avatar": "cyber",
-        "xp": 233,
-        "isUser": false
-      },
-      {
-        "id": "comp_8",
-        "name": "Chloe_CSS",
-        "avatar": "classic",
-        "xp": 233,
-        "isUser": false
-      },
-      {
-        "id": "comp_7",
-        "name": "Lukas_Rust",
-        "avatar": "hacker",
-        "xp": 230,
-        "isUser": false
-      },
-      {
-        "id": "comp_6",
-        "name": "Fatima_Code",
-        "avatar": "wizard",
-        "xp": 210,
-        "isUser": false
-      },
-      {
-        "id": "comp_12",
-        "name": "Zack_Async",
-        "avatar": "classic",
-        "xp": 180,
-        "isUser": false
-      },
-      {
-        "id": "comp_2",
-        "name": "Tariq_Cpp",
-        "avatar": "wizard",
-        "xp": 177,
-        "isUser": false
-      },
-      {
-        "id": "comp_14",
-        "name": "Liam_Stack",
-        "avatar": "wizard",
-        "xp": 136,
-        "isUser": false
-      },
-      {
-        "id": "comp_4",
-        "name": "Kenji_Go",
-        "avatar": "classic",
-        "xp": 120,
-        "isUser": false
-      },
-      {
-        "id": "comp_11",
-        "name": "CodeValkyrie",
-        "avatar": "hacker",
-        "xp": 98,
-        "isUser": false
-      },
-      {
-        "id": "comp_13",
-        "name": "Mia_Query",
-        "avatar": "cyber",
-        "xp": 94,
-        "isUser": false
-      },
-      {
-        "id": "comp_20",
-        "name": "Sven_Cpp",
-        "avatar": "classic",
-        "xp": 84,
-        "isUser": false
-      },
-      {
-        "id": "comp_19",
-        "name": "Jordan_Code",
-        "avatar": "hacker",
-        "xp": 81,
-        "isUser": false
-      },
-      {
-        "id": "comp_17",
-        "name": "Aya_FullStack",
-        "avatar": "cyber",
-        "xp": 53,
-        "isUser": false
-      },
-      {
-        "id": "comp_9",
-        "name": "Dev_Ninja",
-        "avatar": "cyber",
-        "xp": 51,
-        "isUser": false
-      },
-      {
-        "id": "comp_15",
-        "name": "Nora_Byte",
-        "avatar": "hacker",
-        "xp": 43,
-        "isUser": false
-      },
-      {
-        "id": "comp_16",
-        "name": "Sami_Algo",
-        "avatar": "classic",
-        "xp": 20,
-        "isUser": false
-      },
-      {
-        "id": "comp_18",
-        "name": "Hassan_Tech",
-        "avatar": "wizard",
-        "xp": 20,
-        "isUser": false
-      },
-      {
-        "id": "comp_21",
-        "name": "Linus_Penguin",
-        "avatar": "cyber",
-        "xp": 20,
-        "isUser": false
-      },
-      {
-        "id": "comp_22",
-        "name": "Grace_Compiler",
-        "avatar": "wizard",
-        "xp": 20,
-        "isUser": false
-      },
-      {
-        "id": "comp_23",
-        "name": "Alan_Turing",
-        "avatar": "hacker",
-        "xp": 20,
-        "isUser": false
-      },
-      {
-        "id": "comp_24",
-        "name": "Ada_Lovelace",
-        "avatar": "classic",
-        "xp": 20,
-        "isUser": false
-      },
-      {
-        "id": "comp_25",
-        "name": "Guido_Snake",
-        "avatar": "cyber",
-        "xp": 20,
-        "isUser": false
-      },
-      {
-        "id": "comp_26",
-        "name": "Brendan_Mocha",
-        "avatar": "wizard",
-        "xp": 20,
-        "isUser": false
-      },
-      {
-        "id": "comp_27",
-        "name": "Dennis_R",
-        "avatar": "hacker",
-        "xp": 20,
-        "isUser": false
-      },
-      {
-        "id": "comp_28",
-        "name": "Bjarne_Class",
-        "avatar": "classic",
-        "xp": 20,
-        "isUser": false
-      },
-      {
-        "id": "comp_29",
-        "name": "James_Java",
-        "avatar": "cyber",
-        "xp": 20,
-        "isUser": false
-      }
-    ]
+    "competitors": []
   },
   "inventory": {
-    "streakFreeze": 1,
-    "streakFreezeActive": true,
+    "streakFreeze": 0,
+    "streakFreezeActive": false,
     "doubleOrNothing": false,
     "doubleOrNothingDays": 0,
-    "unlimitedHearts": true,
+    "unlimitedHearts": false,
     "skins": [
       "classic"
     ],
     "activeSkin": "classic",
     "themes": [
-      "default",
-      "dracula"
+      "default"
     ],
-    "activeTheme": "dracula"
+    "activeTheme": "default"
   },
   "completedLessons": {
-    "python": [
-      "py_u1_l1"
-    ],
+    "python": [],
     "javascript": [],
     "cpp": [],
     "typescript": [],
@@ -296,167 +80,39 @@
     "rust": [],
     "java": [],
     "sql": [],
-    "htmlcss": [
-      "hc_u1_l1"
-    ],
+    "htmlcss": [],
     "csharp": []
   },
   "dailyQuests": [
     {
       "id": "q1",
-      "titleKey": "Earn 30 XP today",
-      "target": 30,
-      "current": 30,
+      "titleKey": "Earn 20 XP today",
+      "target": 20,
+      "current": 0,
       "rewardGems": 15,
-      "claimed": true
+      "claimed": false
     },
     {
       "id": "q2",
-      "titleKey": "Complete 2 lessons",
-      "target": 2,
-      "current": 2,
+      "titleKey": "Complete your first lesson",
+      "target": 1,
+      "current": 0,
       "rewardGems": 20,
-      "claimed": true
+      "claimed": false
     },
     {
       "id": "q3",
       "titleKey": "Score 90%+ in 1 lesson",
       "target": 1,
-      "current": 1,
+      "current": 0,
       "rewardGems": 25,
-      "claimed": true
+      "claimed": false
     }
   ],
   "monthlyQuest": {
     "target": 30,
-    "current": 15,
-    "badgeName": "Diamond Coder"
+    "current": 0,
+    "badgeName": "Python Master"
   },
-  "mistakeQuestions": [
-    {
-      "id": "py_q1",
-      "type": "mcq",
-      "title": "Valid Variable Name",
-      "title_ar": "تسمية المتغيرات الصحيحة",
-      "prompt": "Which of the following is a valid variable identifier in Python?",
-      "prompt_ar": "أي مما يلي يعتبر اسماً صالحاً لمتغير في بايثون؟",
-      "options": [
-        "2fast_coder",
-        "user_score",
-        "user-name",
-        "class"
-      ],
-      "correctIndex": 1,
-      "explanation": "Variable names cannot start with numbers, cannot have hyphens (-), and cannot use reserved keywords like \"class\". \"user_score\" is valid.",
-      "explanation_ar": "أسماء المتغيرات لا تبدأ بأرقام، ولا تحتوي على شرطات (-)، ولا تستخدم كلمات محجوزة مثل \"class\". الاسم \"user_score\" صالح."
-    },
-    {
-      "id": "py_q2",
-      "type": "output",
-      "title": "Type Coercion & Addition",
-      "title_ar": "دمج النصوص والأنواع",
-      "prompt": "What does this code print?",
-      "prompt_ar": "ماذا سيطبع هذا الكود؟",
-      "code": "x = 5\ny = \"10\"\nprint(str(x) + y)",
-      "options": [
-        "15",
-        "510",
-        "TypeError",
-        "5 10"
-      ],
-      "correctIndex": 1,
-      "explanation": "str(5) produces \"5\". Concatenating string \"5\" with string \"10\" produces \"510\".",
-      "explanation_ar": "str(5) يحول الرقم 5 إلى نص \"5\". دمج النصين \"5\" + \"10\" ينتج \"510\"."
-    },
-    {
-      "id": "py_q3",
-      "type": "fill_blank",
-      "title": "Formatted Strings (F-String)",
-      "title_ar": "تنسيق النصوص بـ F-String",
-      "prompt": "Select the missing prefix token to interpolate the variable inside the string:",
-      "prompt_ar": "اختر الرمز المفقود لتضمين المتغير داخل النص:",
-      "code": "hero = \"Batman\"\nmsg = __\"Welcome back, {hero}!\"\nprint(msg)",
-      "tokens": [
-        "f",
-        "r",
-        "b",
-        "str"
-      ],
-      "correctValue": "f",
-      "explanation": "Prefixing a string with \"f\" enables f-strings in Python 3.6+, evaluating expressions in curly brackets {}.",
-      "explanation_ar": "وضع البادئة \"f\" قبل النص ينشئ f-string مما يتيح حساب المتغيرات بين القوسين {}."
-    },
-    {
-      "id": "py_q4",
-      "type": "bug_hunter",
-      "title": "Spot the TypeError",
-      "title_ar": "اكتشف خطأ TypeError",
-      "prompt": "Which line throws an unhandled TypeError when executed?",
-      "prompt_ar": "أي سطر سيتسبب في خطأ TypeError أثناء التشغيل؟",
-      "code": "1: age = 25\n2: label = \"Age: \"\n3: result = label + age\n4: print(result)",
-      "options": [
-        "Line 1",
-        "Line 2",
-        "Line 3",
-        "Line 4"
-      ],
-      "correctIndex": 2,
-      "explanation": "In Python, strings cannot be concatenated with integers using the + operator directly. Line 3 requires str(age).",
-      "explanation_ar": "في بايثون لا يمكن جمع نص مع رقم صحيح مباشرة بمعامل الجمع +. السطر 3 يتطلب str(age)."
-    },
-    {
-      "id": "py_q5",
-      "type": "reorder",
-      "title": "Greeting Flow",
-      "title_ar": "ترتيب خطوات الترحيب",
-      "prompt": "Arrange the code blocks in logical execution order:",
-      "prompt_ar": "رتب أجزاء الكود بالترتيب المنطقي للتشغيل:",
-      "blocks": [
-        "username = \"Player\"",
-        "greeting = f\"Hello {username}!\"",
-        "print(greeting)"
-      ],
-      "correctOrder": [
-        0,
-        1,
-        2
-      ],
-      "explanation": "First initialize username, then format the greeting, then output with print().",
-      "explanation_ar": "أولاً نعرف المتغير، ثم ننسق رسالة الترحيب، ثم نطبعها على الشاشة."
-    },
-    {
-      "id": "hc_q1",
-      "type": "mcq",
-      "title": "Flex Main Axis Alignment",
-      "title_ar": "محاذاة المحور الرئيسي",
-      "prompt": "Which CSS property aligns flex items along the main axis?",
-      "prompt_ar": "أي خاصية CSS تحاذي العناصر المرنة على طول المحور الرئيسي؟",
-      "options": [
-        "justify-content",
-        "align-items",
-        "align-content",
-        "text-align"
-      ],
-      "correctIndex": 0,
-      "explanation": "justify-content distributes space along the primary flex axis.",
-      "explanation_ar": "خاصية justify-content تتحكم في توزيع العناصر على المحور الرئيسي."
-    },
-    {
-      "id": "hc_q1",
-      "type": "mcq",
-      "title": "Flex Main Axis Alignment",
-      "title_ar": "محاذاة المحور الرئيسي",
-      "prompt": "Which CSS property aligns flex items along the main axis?",
-      "prompt_ar": "أي خاصية CSS تحاذي العناصر المرنة على طول المحور الرئيسي؟",
-      "options": [
-        "justify-content",
-        "align-items",
-        "align-content",
-        "text-align"
-      ],
-      "correctIndex": 0,
-      "explanation": "justify-content distributes space along the primary flex axis.",
-      "explanation_ar": "خاصية justify-content تتحكم في توزيع العناصر على المحور الرئيسي."
-    }
-  ]
+  "mistakeQuestions": []
 }

@@ -26,7 +26,7 @@ class ProLingoHandler(http.server.SimpleHTTPRequestHandler):
             self.send_error(404, "API endpoint not found")
 
     def do_GET(self):
-        if self.path == '/api/user':
+        if self.path == '/api/user' or self.path.startswith('/api/user?'):
             self.handle_get_user()
         else:
             super().do_GET()
@@ -88,10 +88,22 @@ class ProLingoHandler(http.server.SimpleHTTPRequestHandler):
 
 def run():
     os.chdir(DIRECTORY)
+    import socket
+    try:
+        s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        s.connect(("8.8.8.8", 80))
+        local_ip = s.getsockname()[0]
+        s.close()
+    except Exception:
+        local_ip = "127.0.0.1"
+
     with socketserver.TCPServer(("", PORT), ProLingoHandler) as httpd:
         url = f"http://localhost:{PORT}"
+        phone_url = f"http://{local_ip}:{PORT}"
         print("=" * 60)
-        print(f"  ProLingo Platform active at: {url}")
+        print("  ProLingo Web Platform is Active:")
+        print(f"  • Computer (Local):  {url}")
+        print(f"  • Phone / Mobile:    {phone_url}")
         print("  Press Ctrl+C to terminate the server.")
         print("=" * 60)
         try:
