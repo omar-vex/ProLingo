@@ -1,9 +1,54 @@
 <!DOCTYPE html>
 <html lang="en" dir="ltr" data-theme="dark">
 <head>
+  <script defer src="/_vercel/insights/script.js"></script>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
   <title>ProLingo: 100-Unit Python Mastery Platform</title>
+  
+  <!-- Anti-Loop Early Auth Guard: requires authenticated login with anti-bounce protection -->
+  <script>
+    (function() {
+      try {
+        // Prevent infinite bounce loops between index.html and auth.html
+        var lastAuthRedirect = sessionStorage.getItem('prolingo_last_auth_redirect');
+        if (lastAuthRedirect && (Date.now() - parseInt(lastAuthRedirect, 10)) < 3500) {
+          return; // Allow page scripts to fully load and sync state
+        }
+
+        // Require sign-in on every new site visit
+        var sessionActive = sessionStorage.getItem('prolingo_session_active');
+        if (sessionActive !== 'true') {
+          sessionStorage.setItem('prolingo_last_auth_redirect', Date.now().toString());
+          window.location.replace('auth.html');
+          return;
+        }
+
+        var activeId = localStorage.getItem('prolingo_active_user_id_v6');
+        if (!activeId) {
+          sessionStorage.setItem('prolingo_last_auth_redirect', Date.now().toString());
+          window.location.replace('auth.html');
+          return;
+        }
+        var raw = localStorage.getItem('prolingo_state_user_v6_' + activeId);
+        if (!raw) {
+          sessionStorage.setItem('prolingo_last_auth_redirect', Date.now().toString());
+          window.location.replace('auth.html');
+          return;
+        }
+        var parsed = JSON.parse(raw);
+        if (!parsed || !parsed.profile || !parsed.profile.isRegistered || !parsed.profile.email) {
+          sessionStorage.setItem('prolingo_last_auth_redirect', Date.now().toString());
+          window.location.replace('auth.html');
+          return;
+        }
+      } catch (e) {
+        // Non-blocking fallback for restricted browser storage
+        console.warn('Auth guard notice:', e);
+      }
+    })();
+  </script>
+
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@600;700;800;900&family=Fredoka:wght@500;600;700&family=Nunito:wght@600;700;800;900&family=Readex+Pro:wght@500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/prolingo.css">
@@ -13,6 +58,56 @@
 </head>
 <body class="theme-dark">
 
+  <!-- Ambient Aurora & Neon Lighting Mesh -->
+  <div class="ambient-glow-mesh" aria-hidden="true">
+    <div class="glow-orb glow-orb-1"></div>
+    <div class="glow-orb glow-orb-2"></div>
+    <div class="glow-orb glow-orb-3"></div>
+  </div>
+
+  <!-- ==============================================
+       3-SECOND APP SPLASH / LOADING SCREEN
+       ============================================== -->
+  <div id="app-splash-screen" class="splash-screen-overlay">
+    <div class="splash-content">
+      <div class="splash-mascot-wrap">
+        <div class="splash-glow"></div>
+        <!-- Official ProLingo Brand Site Icon -->
+        <svg class="splash-mascot-svg" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="splashLogoBg" x1="0" y1="0" x2="36" y2="36" gradientUnits="userSpaceOnUse">
+              <stop offset="0%" stop-color="#1E293B"/>
+              <stop offset="100%" stop-color="#0F172A"/>
+            </linearGradient>
+            <linearGradient id="splashLogoGrad" x1="4" y1="4" x2="32" y2="32" gradientUnits="userSpaceOnUse">
+              <stop offset="0%" stop-color="#58CC02"/>
+              <stop offset="50%" stop-color="#10B981"/>
+              <stop offset="100%" stop-color="#00F0FF"/>
+            </linearGradient>
+            <linearGradient id="splashLogoBevel" x1="0" y1="0" x2="0" y2="36" gradientUnits="userSpaceOnUse">
+              <stop offset="0%" stop-color="#475569" stop-opacity="0.8"/>
+              <stop offset="100%" stop-color="#0F172A" stop-opacity="0.9"/>
+            </linearGradient>
+          </defs>
+          <circle cx="18" cy="18" r="15.5" fill="url(#splashLogoBg)" stroke="url(#splashLogoBevel)" stroke-width="1.5"/>
+          <circle cx="18" cy="18" r="14" stroke="url(#splashLogoGrad)" stroke-width="1.2" stroke-opacity="0.45"/>
+          <path d="M10 8C10 7.45 10.45 7 11 7H18C23.25 7 26.5 10 26.5 14.5C26.5 19 23.25 22 18 22H15V28C15 28.55 14.55 29 14 29H11C10.45 29 10 28.55 10 28V8Z" fill="url(#splashLogoGrad)"/>
+          <path d="M15 11.5H18C20.5 11.5 21.8 12.8 21.8 14.5C21.8 16.2 20.5 17.5 18 17.5H15V11.5Z" fill="#0F172A"/>
+          <path d="M16.8 13.2L19 14.5L16.8 15.8" stroke="#58CC02" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+          <circle cx="25.5" cy="25.5" r="2.2" fill="#00F0FF"/>
+          <circle cx="25.5" cy="25.5" r="3.5" stroke="#00F0FF" stroke-width="0.8" stroke-opacity="0.6"/>
+        </svg>
+      </div>
+      <h1 class="splash-app-title">ProLingo</h1>
+      <p class="splash-app-subtitle" id="splash-sub-text">The AI-Powered Python Mastery Platform</p>
+      
+      <div class="splash-progress-track">
+        <div class="splash-progress-bar" id="splash-progress-bar"></div>
+      </div>
+      <div class="splash-status-text" id="splash-status-text">⚡ Loading courses and cloud data...</div>
+    </div>
+  </div>
+
   <!-- ==============================================
        APP SIDEBAR (Duolingo Navigation)
        ============================================== -->
@@ -20,6 +115,15 @@
     <div class="sidebar-logo" onclick="App.switchView('learn')">
       <span class="logo-owl" data-icon="logo" data-icon-size="34"></span>
       <span class="logo-text">ProLingo</span>
+    </div>
+
+    <!-- Official Developer Attribution Chip -->
+    <div class="sidebar-creator-chip" title="Lead Architect & Developer">
+      <span class="creator-crown">👑</span>
+      <div class="creator-info">
+        <span class="creator-title" data-i18n="auth.leadDev">Lead Developer</span>
+        <span class="creator-name">Omar_Vex</span>
+      </div>
     </div>
 
     <ul class="nav-links">
@@ -67,6 +171,21 @@
       </li>
     </ul>
 
+    <!-- Official WhatsApp Channel Sidebar Card -->
+    <div class="sidebar-whatsapp-card">
+      <div class="whatsapp-card-head">
+        <span class="whatsapp-card-badge">💬 <span data-i18n="common.officialChannel">Official Channel</span></span>
+        <span class="whatsapp-card-sub" data-i18n="auth.whatsappNotice">For more info & updates:</span>
+      </div>
+      <a href="https://whatsapp.com/channel/0029VbDXZIyF1YlacRyCC726" target="_blank" rel="noopener noreferrer" class="btn-whatsapp-sidebar" title="Official WhatsApp Channel">
+        <svg class="whatsapp-svg-icon" viewBox="0 0 24 24" width="16" height="16" fill="#ffffff">
+          <path d="M17.472 14.382c-.301-.15-1.78-.877-2.056-.977-.276-.101-.477-.15-.678.15-.2.301-.778.977-.953 1.178-.175.201-.351.226-.652.075-.301-.15-1.272-.469-2.423-1.496-.896-.799-1.501-1.786-1.677-2.087-.175-.301-.019-.464.132-.614.136-.135.301-.351.451-.527.15-.175.201-.301.301-.501.101-.201.05-.376-.025-.526-.075-.15-.678-1.631-.929-2.233-.244-.587-.492-.507-.677-.516l-.577-.01c-.2 0-.527.075-.803.376s-1.054 1.029-1.054 2.509c0 1.48 1.079 2.909 1.229 3.11.15.201 2.124 3.243 5.145 4.549.719.311 1.28.497 1.718.636.723.23 1.381.197 1.902.12.58-.087 1.78-.727 2.031-1.429.251-.702.251-1.304.175-1.429-.075-.125-.276-.201-.577-.351z"/>
+          <path fill-rule="evenodd" clip-rule="evenodd" d="M12 2C6.477 2 2 6.477 2 12c0 1.891.524 3.661 1.434 5.176L2.146 21.46a.75.75 0 00.916.916l4.354-1.284A9.957 9.957 0 0012 22c5.523 0 10-4.477 10-10S17.523 2 12 2zm-8.5 10c0-4.694 3.806-8.5 8.5-8.5s8.5 3.806 8.5 8.5-3.806 8.5-8.5 8.5c-1.657 0-3.2-.474-4.508-1.295a.75.75 0 00-.543-.099l-3.324.981.981-3.324a.75.75 0 00-.099-.543A8.46 8.46 0 013.5 12z"/>
+        </svg>
+        <span data-i18n="common.forMoreInfo">For More Information</span>
+      </a>
+    </div>
+
     <!-- Quick Sign In Pill in Sidebar Footer -->
     <div class="sidebar-footer-user" id="sidebar-footer-user" onclick="App.openAuthPage()">
       <div class="sidebar-user-avatar" id="sidebar-user-avatar" data-icon="owl" data-icon-size="28"></div>
@@ -94,6 +213,15 @@
       </div>
 
       <div class="header-right">
+        <!-- Official WhatsApp Channel Button -->
+        <a href="https://whatsapp.com/channel/0029VbDXZIyF1YlacRyCC726" target="_blank" rel="noopener noreferrer" class="btn-whatsapp-header" title="Official WhatsApp Channel • For More Information">
+          <svg class="whatsapp-header-icon" viewBox="0 0 24 24" width="18" height="18" fill="#ffffff">
+            <path d="M17.472 14.382c-.301-.15-1.78-.877-2.056-.977-.276-.101-.477-.15-.678.15-.2.301-.778.977-.953 1.178-.175.201-.351.226-.652.075-.301-.15-1.272-.469-2.423-1.496-.896-.799-1.501-1.786-1.677-2.087-.175-.301-.019-.464.132-.614.136-.135.301-.351.451-.527.15-.175.201-.301.301-.501.101-.201.05-.376-.025-.526-.075-.15-.678-1.631-.929-2.233-.244-.587-.492-.507-.677-.516l-.577-.01c-.2 0-.527.075-.803.376s-1.054 1.029-1.054 2.509c0 1.48 1.079 2.909 1.229 3.11.15.201 2.124 3.243 5.145 4.549.719.311 1.28.497 1.718.636.723.23 1.381.197 1.902.12.58-.087 1.78-.727 2.031-1.429.251-.702.251-1.304.175-1.429-.075-.125-.276-.201-.577-.351z"/>
+            <path fill-rule="evenodd" clip-rule="evenodd" d="M12 2C6.477 2 2 6.477 2 12c0 1.891.524 3.661 1.434 5.176L2.146 21.46a.75.75 0 00.916.916l4.354-1.284A9.957 9.957 0 0012 22c5.523 0 10-4.477 10-10S17.523 2 12 2zm-8.5 10c0-4.694 3.806-8.5 8.5-8.5s8.5 3.806 8.5 8.5-3.806 8.5-8.5 8.5c-1.657 0-3.2-.474-4.508-1.295a.75.75 0 00-.543-.099l-3.324.981.981-3.324a.75.75 0 00-.099-.543A8.46 8.46 0 013.5 12z"/>
+          </svg>
+          <span class="btn-whatsapp-text" data-i18n="common.forMoreInfo">For More Information</span>
+        </a>
+
         <!-- Streak -->
         <div id="stat-streak-badge" class="stat-pill streak" title="Day Streak">
           <span class="stat-icon-wrap" data-icon="fire" data-icon-size="20"></span>
@@ -125,8 +253,8 @@
             <div class="user-dropdown-header">
               <div id="dropdown-user-avatar" class="dropdown-avatar">🦉</div>
               <div class="dropdown-user-meta">
-                <strong id="dropdown-user-name">مستخدم جديد</strong>
-                <span id="dropdown-user-email">حساب محلي</span>
+                <strong id="dropdown-user-name" data-i18n="auth.newUser">مستخدم جديد</strong>
+                <span id="dropdown-user-email" data-i18n="auth.localGuest">حساب محلي</span>
               </div>
             </div>
             <div class="dropdown-divider"></div>
@@ -134,20 +262,20 @@
               <span>👤</span> <span data-i18n="nav.profile">View Profile</span>
             </button>
             <button class="dropdown-item" onclick="App.openEditProfileModal(); App.toggleUserDropdown(false);">
-              <span>✏️</span> <span>Edit Name & Photo</span>
+              <span>✏️</span> <span data-i18n="auth.editNameAndPhoto">Edit Name & Photo</span>
             </button>
             <button class="dropdown-item auth-btn-item" onclick="App.openAuthPage(); App.toggleUserDropdown(false);">
-              <span>🔐</span> <span id="dropdown-auth-btn-label">تسجيل الدخول / إنشاء حساب</span>
+              <span>🔐</span> <span id="dropdown-auth-btn-label" data-i18n="auth.loginOrRegister">تسجيل الدخول / إنشاء حساب</span>
             </button>
             <button class="dropdown-item google-item" onclick="App.openGoogleSignInWindow(); App.toggleUserDropdown(false);">
               <svg width="18" height="18" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/></svg>
-              <span>Sign in with Google</span>
+              <span data-i18n="auth.continueWithGoogle">Sign in with Google</span>
             </button>
             <button class="dropdown-item" onclick="App.openSwitchAccountModal(); App.toggleUserDropdown(false);">
-              <span>🔄</span> <span>Switch Account</span>
+              <span>🔄</span> <span data-i18n="auth.switchAccount">Switch Account</span>
             </button>
             <button class="dropdown-item" id="dropdown-logout-btn" onclick="App.handleLogout(); App.toggleUserDropdown(false);">
-              <span>🚪</span> <span>تسجيل الخروج (Log Out)</span>
+              <span>🚪</span> <span data-i18n="auth.logout">تسجيل الخروج (Log Out)</span>
             </button>
           </div>
         </div>
@@ -221,6 +349,20 @@
               </div>
             </div>
           </div>
+
+          <!-- Official Channel & Lead Developer Widget -->
+          <div class="widget-official-channel">
+            <div class="channel-card-badge">👑 <span data-i18n="auth.leadDev">Official Creator & Lead Developer</span></div>
+            <div class="channel-card-author">Omar_Vex</div>
+            <p class="channel-card-desc" data-i18n="auth.devStatement">The official interactive Python mastery platform engineered by Omar_Vex.</p>
+            <a href="https://whatsapp.com/channel/0029VbDXZIyF1YlacRyCC726" target="_blank" rel="noopener noreferrer" class="btn-whatsapp-card" title="Official WhatsApp Channel">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="#ffffff">
+                <path d="M17.472 14.382c-.301-.15-1.78-.877-2.056-.977-.276-.101-.477-.15-.678.15-.2.301-.778.977-.953 1.178-.175.201-.351.226-.652.075-.301-.15-1.272-.469-2.423-1.496-.896-.799-1.501-1.786-1.677-2.087-.175-.301-.019-.464.132-.614.136-.135.301-.351.451-.527.15-.175.201-.301.301-.501.101-.201.05-.376-.025-.526-.075-.15-.678-1.631-.929-2.233-.244-.587-.492-.507-.677-.516l-.577-.01c-.2 0-.527.075-.803.376s-1.054 1.029-1.054 2.509c0 1.48 1.079 2.909 1.229 3.11.15.201 2.124 3.243 5.145 4.549.719.311 1.28.497 1.718.636.723.23 1.381.197 1.902.12.58-.087 1.78-.727 2.031-1.429.251-.702.251-1.304.175-1.429-.075-.125-.276-.201-.577-.351z"/>
+                <path fill-rule="evenodd" clip-rule="evenodd" d="M12 2C6.477 2 2 6.477 2 12c0 1.891.524 3.661 1.434 5.176L2.146 21.46a.75.75 0 00.916.916l4.354-1.284A9.957 9.957 0 0012 22c5.523 0 10-4.477 10-10S17.523 2 12 2zm-8.5 10c0-4.694 3.806-8.5 8.5-8.5s8.5 3.806 8.5 8.5-3.806 8.5-8.5 8.5c-1.657 0-3.2-.474-4.508-1.295a.75.75 0 00-.543-.099l-3.324.981.981-3.324a.75.75 0 00-.099-.543A8.46 8.46 0 013.5 12z"/>
+              </svg>
+              <span data-i18n="common.forMoreInfo">For More Information</span>
+            </a>
+          </div>
         </aside>
       </div>
     </main>
@@ -292,8 +434,8 @@
         </div>
 
         <!-- Title & Subtitle -->
-        <h2 id="lesson-loading-title" class="lesson-loading-title">جاري تجهيز الدرس...</h2>
-        <div id="lesson-loading-sub" class="lesson-loading-sub">المتغيرات وأنواع البيانات</div>
+        <h2 id="lesson-loading-title" class="lesson-loading-title" data-i18n="lesson.loadingTitle">جاري تجهيز الدرس...</h2>
+        <div id="lesson-loading-sub" class="lesson-loading-sub" data-i18n="lesson.loadingSub">المتغيرات وأنواع البيانات</div>
 
         <!-- 3-Second Smooth Progress Track -->
         <div class="lesson-loading-progress-container">
@@ -303,7 +445,7 @@
             </div>
           </div>
           <div class="lesson-loading-percent-row">
-            <span id="lesson-loading-status" class="lesson-loading-status">تحضير الأسئلة البرمجية...</span>
+            <span id="lesson-loading-status" class="lesson-loading-status" data-i18n="lesson.loadingStatus">تحضير الأسئلة البرمجية...</span>
             <span id="lesson-loading-percent" class="lesson-loading-percent">0%</span>
           </div>
         </div>
@@ -311,7 +453,7 @@
         <!-- Inspiring Tip Box -->
         <div class="lesson-loading-tip-card">
           <div class="tip-icon">💡</div>
-          <div id="lesson-loading-tip" class="tip-text">نصيحة: فكر في منطق الكود خطوة بخطوة قبل كتابة الحل!</div>
+          <div id="lesson-loading-tip" class="tip-text" data-i18n="lesson.loadingTip">نصيحة: فكر في منطق الكود خطوة بخطوة قبل كتابة الحل!</div>
         </div>
       </div>
     </div>
@@ -438,40 +580,7 @@
           <div id="saved-google-accounts-list" class="google-quick-accounts"></div>
         </div>
 
-        <!-- 4. Direct Connect Form (Collapsible alternative option) -->
-        <div id="google-manual-link-section" class="mt-3">
-          <div style="text-align: center; margin: 12px 0 6px;">
-            <button type="button" class="btn-text-muted" onclick="const f = document.getElementById('google-manual-link-fields'); f.classList.toggle('hidden');" style="background:none; border:none; color:var(--text-muted); font-size:12px; cursor:pointer; text-decoration:underline;">
-              <span>خيارات بديلة (إدخال البريد يدوياً) ▾</span>
-            </button>
-          </div>
-          <div id="google-manual-link-fields" class="hidden">
-            <div class="modal-form-group">
-              <label data-i18n="auth.googleEmail">البريد الإلكتروني (Gmail):</label>
-              <input type="email" id="google-input-email" class="modal-input" placeholder="youremail@gmail.com" value="">
-            </div>
-            <div class="modal-form-group">
-              <label data-i18n="auth.googleName">اسمك على حساب Google:</label>
-              <input type="text" id="google-input-name" class="modal-input" placeholder="اسمك الكامل" value="">
-            </div>
-            <div class="modal-form-group">
-              <label data-i18n="auth.googlePhoto">صورة الحساب (اختياري):</label>
-              <div class="avatar-upload-row">
-                <div id="google-avatar-preview" class="avatar-preview-box">🦉</div>
-                <div class="avatar-upload-actions">
-                  <input type="file" id="google-file-upload" accept="image/*" style="display: none;" onchange="App.handleAvatarFileSelect(this, 'google-avatar-preview')">
-                  <button type="button" class="btn-3d btn-secondary btn-sm" onclick="document.getElementById('google-file-upload').click()">
-                    <span data-i18n="auth.choosePhoto">📁 اختيار صورة</span>
-                  </button>
-                  <span class="upload-note">PNG, JPG</span>
-                </div>
-              </div>
-            </div>
-            <button class="btn-3d btn-primary btn-block mt-3" onclick="App.submitGoogleSignIn()">
-              <span data-i18n="auth.googleSubmit">تأكيد وتسجيل الدخول بحساب Google</span>
-            </button>
-          </div>
-        </div>
+
 
         <!-- 5. Official Google Security & Privacy Disclaimer -->
         <div class="google-privacy-footer mt-4">
@@ -515,12 +624,12 @@
 
         <div class="modal-form-group mt-3">
           <label data-i18n="profile.displayName">Display Name:</label>
-          <input type="text" id="edit-profile-name" class="modal-input" placeholder="Your Name">
+          <input type="text" id="edit-profile-name" class="modal-input" data-i18n-placeholder="profile.namePlaceholder" placeholder="Your Name">
         </div>
 
         <div class="modal-form-group">
           <label data-i18n="profile.bio">Bio:</label>
-          <textarea id="edit-profile-bio" class="modal-textarea" rows="3" placeholder="Tell the world about your coding journey..."></textarea>
+          <textarea id="edit-profile-bio" class="modal-textarea" rows="3" data-i18n-placeholder="profile.bioPlaceholder" placeholder="Tell the world about your coding journey..."></textarea>
         </div>
 
         <div class="modal-footer-actions mt-4">
@@ -546,7 +655,7 @@
           <!-- Rendered via JS -->
         </div>
 
-        <div class="modal-or-divider"><span>إجراءات الحسابات</span></div>
+        <div class="modal-or-divider"><span data-i18n="auth.accountActions">إجراءات الحسابات</span></div>
         <button type="button" class="btn-official-google mb-3" onclick="document.getElementById('switch-user-modal').classList.add('hidden'); App.triggerOfficialGoogleSignIn();">
           <svg class="google-btn-icon" width="22" height="22" viewBox="0 0 24 24">
             <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
@@ -557,11 +666,14 @@
           <span data-i18n="auth.googleSubmit">تسجيل الدخول بحساب Google الرسمي</span>
         </button>
         <button class="btn-3d btn-secondary btn-block mt-2" onclick="App.handleCreateNewUser(); document.getElementById('switch-user-modal').classList.add('hidden');">
-          ✨ إنشاء حساب جديد باسمك
+          <span data-i18n="auth.createNewWithName">✨ إنشاء حساب جديد باسمك</span>
         </button>
         <button class="btn-3d btn-danger btn-block mt-2" onclick="App.handleClearAllAccounts()">
-          🗑️ مسح كل الحسابات المسجلة
+          <span data-i18n="auth.clearAllAccounts">🗑️ مسح كل الحسابات المسجلة</span>
         </button>
+        <div class="mt-3 text-center" style="font-size: 11px; color: var(--text-muted); line-height: 1.4;">
+          <span data-i18n="auth.footerDisclaimer">ProLingo Platform • Created & Developed by Omar_Vex. For more information, join our Official WhatsApp Channel.</span>
+        </div>
       </div>
     </div>
   </div>
@@ -612,10 +724,17 @@
   <!-- Toast Notification -->
   <div id="app-toast" class="app-toast hidden"></div>
 
-  <!-- Scripts -->
+  <!-- Firebase SDK (Compat v10 for Vanilla Browser Compatibility) -->
+  <script src="https://www.gstatic.com/firebasejs/10.13.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.13.2/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.13.2/firebase-firestore-compat.js"></script>
+  <script src="js/firebase-config.js"></script>
+
+  <!-- Core App Scripts -->
   <script src="js/i18n.js"></script>
   <script src="js/sound.js"></script>
   <script src="js/state.js"></script>
+  <script src="js/question_bank.js"></script>
   <script src="js/curriculum.js"></script>
   <script src="js/icons.js"></script>
   <script src="js/lesson.js"></script>

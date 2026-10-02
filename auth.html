@@ -1,15 +1,15 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl" data-theme="dark">
+<html lang="en" dir="ltr" data-theme="dark">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-  <title>تسجيل الدخول وإنشاء حساب | ProLingo</title>
+  <title>Sign In - ProLingo</title>
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 36 36'><rect width='36' height='36' rx='9' fill='%23131f24'/><path d='M10 8C10 7.45 10.45 7 11 7H18C23.25 7 26.5 10 26.5 14.5C26.5 19 23.25 22 18 22H15V28C15 28.55 14.55 29 14 29H11C10.45 29 10 28.55 10 28V8Z' fill='%2358CC02'/></svg>">
 
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&family=Nunito:wght@400;600;700;800;900&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@500;600;700;800;900&family=Nunito:wght@600;700;800;900&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
 
   <style>
     :root {
@@ -18,9 +18,7 @@
       --blue: #1cb0f6;
       --blue-shadow: #1899d6;
       --red: #ff4b4b;
-      --red-shadow: #ea2b2b;
       --yellow: #ffc800;
-      --yellow-shadow: #d9aa00;
 
       --bg-primary: #131f24;
       --bg-secondary: #18272e;
@@ -31,18 +29,47 @@
       --border-color: #2b3e48;
       --border-shadow: #19262c;
       --font-family: 'Cairo', 'Nunito', -apple-system, BlinkMacSystemFont, sans-serif;
-      --font-code: 'JetBrains Mono', monospace;
     }
 
     [data-theme="light"] {
-      --bg-primary: #f7f9fa;
+      --bg-primary: #f8fafc;
       --bg-secondary: #ffffff;
       --bg-card: #ffffff;
-      --bg-hover: #e5e5e5;
-      --text-main: #3c3c3c;
-      --text-muted: #777777;
-      --border-color: #e5e5e5;
-      --border-shadow: #cecece;
+      --bg-hover: #f1f5f9;
+      --text-main: #1e293b;
+      --text-muted: #64748b;
+      --border-color: #e2e8f0;
+      --border-shadow: #cbd5e1;
+    }
+
+    [data-theme="light"] .auth-card {
+      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.08), 0 2px 6px rgba(0, 0, 0, 0.04) !important;
+      border-color: #e2e8f0 !important;
+    }
+
+    [data-theme="light"] .auth-card:hover {
+      box-shadow: 0 20px 48px rgba(0, 0, 0, 0.12), 0 0 25px rgba(88, 204, 2, 0.12) !important;
+    }
+
+    [data-theme="light"] .ambient-glow-mesh {
+      opacity: 0.35;
+    }
+
+    [data-theme="light"] .brand-badge {
+      background: #ffffff;
+      border-color: #e2e8f0;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+    }
+
+    [data-theme="light"] .icon-btn {
+      background: #ffffff;
+      border-color: #e2e8f0;
+      box-shadow: 0 2px 0 #e2e8f0;
+    }
+
+    [data-theme="light"] .feature-icon-badge {
+      background: #f1f5f9;
+      border-color: #e2e8f0;
     }
 
     * {
@@ -54,23 +81,20 @@
 
     html, body {
       width: 100%;
-      max-width: 100vw;
+      min-height: 100vh;
+      min-height: 100dvh;
       overflow-x: hidden;
-      box-sizing: border-box;
     }
 
     body {
       font-family: var(--font-family);
       background-color: var(--bg-primary);
       color: var(--text-main);
-      min-height: 100vh;
-      min-height: 100dvh;
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: center;
-      padding: 16px;
-      overflow-x: hidden;
+      justify-content: space-between;
+      padding: max(16px, env(safe-area-inset-top, 16px)) 16px max(20px, env(safe-area-inset-bottom, 20px));
       transition: background-color 0.25s, color 0.25s;
     }
 
@@ -81,12 +105,11 @@
     /* Top Navigation bar */
     .auth-top-nav {
       width: 100%;
-      max-width: 460px;
+      max-width: 440px;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      margin: 0 auto 16px auto;
-      box-sizing: border-box;
+      margin-bottom: 12px;
     }
 
     .brand-link {
@@ -95,14 +118,36 @@
       gap: 10px;
       text-decoration: none;
       color: var(--text-main);
+      font-weight: 900;
+      font-size: 21px;
+      letter-spacing: -0.5px;
+    }
+
+    .brand-text-wrap {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      line-height: 1.15;
+    }
+    body.rtl .brand-text-wrap {
+      align-items: flex-start;
+    }
+
+    .brand-creator-badge {
+      font-size: 10.5px;
       font-weight: 800;
-      font-size: 20px;
+      color: var(--green);
+      letter-spacing: 0.2px;
+      margin-top: 2px;
+    }
+    [data-theme="light"] .brand-creator-badge {
+      color: #15803d;
     }
 
     .brand-badge {
-      width: 36px;
-      height: 36px;
-      border-radius: 10px;
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
       background: linear-gradient(135deg, #1E293B, #0F172A);
       border: 1.5px solid #475569;
       display: flex;
@@ -122,864 +167,673 @@
       border: 2px solid var(--border-color);
       color: var(--text-main);
       border-radius: 12px;
-      width: 40px;
+      padding: 0 12px;
       height: 40px;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 16px;
+      font-size: 14px;
+      font-weight: 700;
       cursor: pointer;
       transition: transform 0.15s, background-color 0.15s;
+      user-select: none;
     }
 
-    .icon-btn:hover {
-      background-color: var(--bg-hover);
-      transform: scale(1.05);
+    .icon-btn:active {
+      transform: scale(0.95);
     }
 
     /* Main Auth Container */
-    .auth-card { min-width: 0; 
+    .auth-card-container {
+      width: 100%;
+      max-width: 440px;
+      margin: auto 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .auth-card {
       background-color: var(--bg-card);
       border: 2px solid var(--border-color);
       border-radius: 28px;
       width: 100%;
-      max-width: 460px;
-      padding: 32px 28px;
-      box-shadow: 0 20px 48px rgba(0, 0, 0, 0.4);
+      padding: 36px 26px 30px;
+      box-shadow: 0 18px 48px rgba(0, 0, 0, 0.4), 0 0 35px rgba(88, 204, 2, 0.12);
       position: relative;
-      margin: 0 auto 24px auto;
-      box-sizing: border-box;
-      transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      text-align: center;
+      transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s ease;
+      z-index: 1;
     }
 
-    /* Segmented Tab Switcher */
-    .auth-tab-row { min-width: 0; 
-      display: flex;
-      background-color: var(--bg-primary);
-      border: 2px solid var(--border-color);
-      border-radius: 18px;
-      padding: 4px;
-      margin-bottom: 24px;
-      gap: 4px;
+    .auth-card:hover {
+      box-shadow: 0 20px 52px rgba(0, 0, 0, 0.45), 0 0 45px rgba(88, 204, 2, 0.18);
     }
 
-    .auth-tab-btn { min-width: 0; flex: 1 1 0; 
-      flex: 1;
-      border: none;
-      background: none;
-      padding: 10px 14px;
-      font-family: var(--font-family);
-      font-size: 15px;
-      font-weight: 800;
-      color: var(--text-muted);
-      border-radius: 14px;
-      cursor: pointer;
+    /* Ambient Lighting Mesh */
+    .ambient-glow-mesh {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+      overflow: hidden;
+      opacity: 0.65;
+    }
+    .glow-orb {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(80px);
+      animation: orb-float 18s ease-in-out infinite alternate;
+    }
+    .glow-orb-1 {
+      width: 450px; height: 450px;
+      top: -80px; right: -60px;
+      background: radial-gradient(circle, rgba(88, 204, 2, 0.25) 0%, rgba(16, 185, 129, 0.1) 50%, transparent 70%);
+      animation-duration: 20s;
+    }
+    .glow-orb-2 {
+      width: 480px; height: 480px;
+      bottom: -60px; left: -80px;
+      background: radial-gradient(circle, rgba(0, 240, 255, 0.2) 0%, rgba(28, 176, 246, 0.08) 50%, transparent 70%);
+      animation-duration: 24s;
+    }
+    @keyframes orb-float {
+      0% { transform: translate(0, 0) scale(1); opacity: 0.7; }
+      50% { transform: translate(35px, 25px) scale(1.1); opacity: 1; }
+      100% { transform: translate(-25px, 40px) scale(0.95); opacity: 0.75; }
+    }
+
+    /* Mascot Owl with Aura */
+    .mascot-wrapper {
+      position: relative;
+      width: 104px;
+      height: 104px;
+      margin: 0 auto 20px auto;
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 8px;
-      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
-    .auth-tab-btn.active {
-      background-color: var(--bg-card);
-      color: var(--text-main);
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
-    }
-
-    .auth-tab-btn.active.tab-login {
-      color: var(--blue);
-    }
-
-    .auth-tab-btn.active.tab-signup {
-      color: var(--green);
-    }
-
-    /* Header text */
-    .auth-header {
-      text-align: center;
-      margin-bottom: 22px;
-    }
-
-    .auth-title {
-      font-size: 24px;
-      font-weight: 900;
-      margin-bottom: 6px;
-      letter-spacing: -0.3px;
-    }
-
-    .auth-sub {
-      font-size: 14px;
-      color: var(--text-muted);
-      line-height: 1.5;
-    }
-
-    /* Form Fields */
-    .form-group {
-      margin-bottom: 16px;
-      text-align: right;
-    }
-
-    body.ltr .form-group {
-      text-align: left;
-    }
-
-    .form-label {
-      display: block;
-      font-size: 13px;
-      font-weight: 700;
-      color: var(--text-main);
-      margin-bottom: 6px;
-    }
-
-    .input-wrapper {
-      position: relative;
-      display: flex;
-      align-items: center;
-    }
-
-    .input-icon {
+    .mascot-aura {
       position: absolute;
-      right: 14px;
-      font-size: 18px;
-      color: var(--text-muted);
+      inset: -6px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(88, 204, 2, 0.32) 0%, rgba(28, 176, 246, 0.16) 55%, transparent 72%);
+      animation: pulse-aura 3s ease-in-out infinite;
+      z-index: 0;
       pointer-events: none;
     }
 
-    body.ltr .input-icon {
-      right: auto;
-      left: 14px;
+    @keyframes pulse-aura {
+      0%, 100% { transform: scale(1); opacity: 0.85; }
+      50% { transform: scale(1.15); opacity: 1; }
     }
 
-    .auth-input {
-      width: 100%;
-      height: 48px;
-      background-color: var(--bg-primary);
-      border: 2px solid var(--border-color);
-      border-radius: 16px;
-      padding: 0 44px 0 16px;
-      font-family: var(--font-family);
-      font-size: 15px;
+    .mascot-svg {
+      width: 96px;
+      height: 96px;
+      position: relative;
+      z-index: 1;
+      border-radius: 50%;
+      overflow: visible;
+      filter: drop-shadow(0 8px 20px rgba(0, 0, 0, 0.4)) drop-shadow(0 0 22px rgba(88, 204, 2, 0.35));
+      animation: gentle-bob 3.2s ease-in-out infinite;
+    }
+
+    @keyframes gentle-bob {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-6px); }
+    }
+
+    .platform-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 5px 14px;
+      border-radius: 99px;
+      background: rgba(88, 204, 2, 0.12);
+      border: 1.5px solid rgba(88, 204, 2, 0.3);
+      color: var(--green);
+      font-size: 13px;
+      font-weight: 800;
+      margin-bottom: 14px;
+    }
+
+    .auth-title {
+      font-size: 26px;
+      font-weight: 900;
       color: var(--text-main);
-      outline: none;
-      transition: border-color 0.2s, box-shadow 0.2s;
+      margin-bottom: 8px;
+      letter-spacing: -0.4px;
+      line-height: 1.25;
     }
 
-    body.ltr .auth-input {
-      padding: 0 16px 0 44px;
-    }
-
-    .auth-input:focus {
-      border-color: var(--green);
-      box-shadow: 0 0 0 3px rgba(88, 204, 2, 0.2);
-    }
-
-    .toggle-pw-btn {
-      position: absolute;
-      left: 12px;
-      background: none;
-      border: none;
+    .auth-sub {
+      font-size: 14.5px;
       color: var(--text-muted);
-      cursor: pointer;
-      font-size: 16px;
-      padding: 4px;
+      line-height: 1.55;
+      margin-bottom: 26px;
+      padding: 0 4px;
     }
 
-    body.ltr .toggle-pw-btn {
-      left: auto;
-      right: 12px;
-    }
-
-    /* Password strength */
-    .pw-strength-track {
-      height: 4px;
-      background-color: var(--border-color);
-      border-radius: 2px;
-      margin-top: 6px;
-      overflow: hidden;
-      display: none;
-    }
-
-    .pw-strength-fill {
-      height: 100%;
-      width: 0%;
-      transition: width 0.3s, background-color 0.3s;
-    }
-
-    /* Buttons */
-    .btn-3d {
+    /* Google Sign-in Button (Duolingo 3D style) */
+    .btn-google-primary {
       width: 100%;
-      height: 50px;
-      border: none;
-      border-radius: 16px;
+      height: 54px;
+      min-height: 54px;
+      background: #ffffff;
+      color: #1f2937;
+      border: 2px solid #e5e7eb;
+      border-bottom: 4.5px solid #d1d5db;
+      border-radius: 18px;
       font-family: var(--font-family);
       font-size: 16px;
       font-weight: 800;
-      color: #fff;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 10px;
-      transition: transform 0.1s, box-shadow 0.1s;
-      margin-top: 8px;
-    }
-
-    .btn-blue {
-      background-color: var(--blue);
-      box-shadow: 0 4px 0 var(--blue-shadow);
-    }
-
-    .btn-blue:active {
-      transform: translateY(4px);
-      box-shadow: 0 0 0 var(--blue-shadow);
-    }
-
-    .btn-green {
-      background-color: var(--green);
-      box-shadow: 0 4px 0 var(--green-shadow);
-    }
-
-    .btn-green:active {
-      transform: translateY(4px);
-      box-shadow: 0 0 0 var(--green-shadow);
-    }
-
-    .btn-secondary {
-      background-color: var(--bg-hover);
-      color: var(--text-main);
-      box-shadow: 0 4px 0 var(--border-color);
-    }
-
-    .btn-secondary:active {
-      transform: translateY(4px);
-      box-shadow: 0 0 0 var(--border-color);
-    }
-
-    /* Divider */
-    .auth-divider {
-      display: flex;
-      align-items: center;
-      text-align: center;
-      margin: 20px 0;
-      color: var(--text-muted);
-      font-size: 13px;
-      font-weight: 700;
-    }
-
-    .auth-divider::before,
-    .auth-divider::after {
-      content: '';
-      flex: 1;
-      border-bottom: 1.5px solid var(--border-color);
-    }
-
-    .auth-divider span {
-      padding: 0 12px;
-    }
-
-    /* Official Google Button */
-    .btn-google {
-      width: 100%;
-      height: 48px;
-      background-color: var(--bg-primary);
-      border: 2px solid var(--border-color);
-      border-radius: 16px;
-      font-family: var(--font-family);
-      font-size: 15px;
-      font-weight: 700;
-      color: var(--text-main);
-      cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
       gap: 12px;
-      transition: background-color 0.15s, border-color 0.15s, transform 0.1s;
+      cursor: pointer;
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
+      transition: all 0.15s ease;
+      touch-action: manipulation;
+      user-select: none;
+      text-decoration: none;
+      margin-bottom: 20px;
     }
 
-    .btn-google:hover {
-      background-color: var(--bg-hover);
-      border-color: #4285F4;
+    .btn-google-primary:hover {
+      background-color: #f9fafb;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.22);
     }
 
-    .btn-google:active {
-      transform: scale(0.98);
+    .btn-google-primary:active {
+      transform: translateY(3px);
+      border-bottom-width: 1.5px;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
     }
 
-    .google-g-icon {
-      width: 20px;
-      height: 20px;
+    .btn-google-primary:disabled {
+      opacity: 0.65;
+      cursor: not-allowed;
+      transform: none !important;
+    }
+
+    .google-svg-icon {
+      width: 24px;
+      height: 24px;
       flex-shrink: 0;
     }
 
-    /* Guest / Switch row */
-    .guest-link-row {
-      text-align: center;
-      margin-top: 18px;
+    /* Features List */
+    .features-list {
+      display: flex;
+      flex-direction: column;
+      gap: 11px;
+      margin-top: 10px;
+      text-align: right;
+      padding-top: 16px;
+      border-top: 1.5px dashed var(--border-color);
     }
 
-    .guest-link {
-      color: var(--text-muted);
-      text-decoration: none;
-      font-size: 13px;
-      font-weight: 700;
-      transition: color 0.15s;
+    body.ltr .features-list {
+      text-align: left;
     }
 
-    .guest-link:hover {
-      color: var(--blue);
-      text-decoration: underline;
-    }
-
-    /* Alert / Error Box */
-    .alert-box {
-      border-radius: 14px;
-      padding: 12px 16px;
-      font-size: 13px;
-      font-weight: 700;
-      margin-bottom: 16px;
-      line-height: 1.4;
+    .feature-item {
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 12px;
+      font-size: 13.5px;
+      color: var(--text-main);
+    }
+
+    .feature-icon-badge {
+      width: 32px;
+      height: 32px;
+      border-radius: 10px;
+      background: var(--bg-primary);
+      border: 1.5px solid var(--border-color);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      flex-shrink: 0;
+    }
+
+    .feature-text {
+      flex: 1;
+      line-height: 1.4;
+      font-weight: 600;
+    }
+
+    .feature-text b {
+      color: var(--text-main);
+      font-weight: 800;
+    }
+
+    /* Alert Box */
+    .alert-box {
+      border-radius: 14px;
+      padding: 12px 14px;
+      margin-top: 16px;
+      font-size: 13px;
+      font-weight: 700;
+      line-height: 1.4;
+      text-align: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
     }
 
     .alert-danger {
-      background-color: rgba(255, 75, 75, 0.15);
+      background-color: rgba(255, 75, 75, 0.12);
       border: 1.5px solid var(--red);
-      color: #ff6b6b;
+      color: var(--red);
     }
 
     .alert-success {
-      background-color: rgba(88, 204, 2, 0.15);
+      background-color: rgba(88, 204, 2, 0.12);
       border: 1.5px solid var(--green);
-      color: #58cc02;
+      color: var(--green);
+    }
+
+    .alert-warning {
+      background-color: rgba(255, 160, 0, 0.15);
+      border: 1.5px solid #FF9600;
+      color: #FFB300;
     }
 
     .hidden {
       display: none !important;
     }
 
-    /* ==============================================
-       GMAIL VERIFICATION VIEW STYLING
-       ============================================== */
-    .gmail-verification-card {
+    /* Success Celebration View */
+    .success-celebrate-card {
       text-align: center;
+      padding: 16px 8px;
     }
 
-    .mail-icon-envelope {
-      font-size: 48px;
-      margin-bottom: 12px;
-      animation: pulse 1.8s infinite;
-    }
-
-    @keyframes pulse {
-      0%, 100% { transform: scale(1); }
-      50% { transform: scale(1.08); }
-    }
-
-    .highlight-email {
-      color: var(--blue);
-      font-weight: 800;
-      direction: ltr;
-      display: inline-block;
-      margin: 4px 0 16px 0;
-      background: rgba(28, 176, 246, 0.12);
-      padding: 3px 10px;
-      border-radius: 8px;
-      border: 1px dashed var(--blue);
-    }
-
-    /* Simulated Gmail Inbox notification card */
-    .gmail-notification-card {
-      background: linear-gradient(145deg, #1A262E, #203139);
-      border: 1.5px solid #344955;
-      border-radius: 18px;
-      padding: 16px;
-      margin: 16px 0;
-      text-align: right;
-      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
-      position: relative;
+    .success-avatar-wrap {
+      width: 88px;
+      height: 88px;
+      border-radius: 50%;
+      border: 3px solid var(--green);
+      margin: 0 auto 16px auto;
       overflow: hidden;
+      box-shadow: 0 0 28px rgba(88, 204, 2, 0.35);
+      animation: pop-avatar 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
     }
 
-    body.ltr .gmail-notification-card {
-      text-align: left;
+    .success-avatar-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
     }
 
-    .gmail-card-header {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      border-bottom: 1px solid var(--border-color);
-      padding-bottom: 10px;
+    @keyframes pop-avatar {
+      0% { transform: scale(0.2); opacity: 0; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+
+    .success-title {
+      font-size: 24px;
+      font-weight: 900;
+      color: var(--green);
       margin-bottom: 8px;
     }
 
-    .gmail-logo-m {
-      width: 24px;
-      height: 24px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .gmail-app-badge {
-      font-size: 13px;
-      font-weight: 700;
-      color: #EA4335;
-    }
-
-    .gmail-time {
-      margin-right: auto;
-      font-size: 11px;
-      color: var(--text-muted);
-    }
-
-    body.ltr .gmail-time {
-      margin-right: 0;
-      margin-left: auto;
-    }
-
-    .gmail-subject {
+    .success-sub {
       font-size: 14px;
-      font-weight: 800;
-      color: var(--text-main);
-      display: block;
-      margin-bottom: 4px;
-    }
-
-    .gmail-snippet {
-      font-size: 13px;
       color: var(--text-muted);
       line-height: 1.5;
     }
 
-    .gmail-code-highlight {
-      font-family: var(--font-code);
-      font-size: 18px;
-      font-weight: 900;
-      color: var(--green);
-      background: rgba(88, 204, 2, 0.15);
-      padding: 2px 8px;
-      border-radius: 6px;
-      letter-spacing: 2px;
-      border: 1px dashed var(--green);
+    .spinner {
+      width: 20px;
+      height: 20px;
+      border: 3px solid rgba(0,0,0,0.15);
+      border-top-color: #1f2937;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
     }
 
-    .gmail-actions-row {
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    /* Official WhatsApp Channel Section */
+    .auth-whatsapp-section {
+      margin-top: 18px;
+      padding-top: 16px;
+      border-top: 1.5px dashed var(--border-color);
       display: flex;
+      flex-direction: column;
       gap: 8px;
-      margin-top: 12px;
+      width: 100%;
     }
-
-    .btn-gmail-action {
-      flex: 1;
-      padding: 8px 12px;
-      border-radius: 12px;
-      border: 1.5px solid var(--border-color);
-      background-color: var(--bg-card);
-      color: var(--text-main);
-      font-family: var(--font-family);
+    .whatsapp-helper-label {
       font-size: 12px;
       font-weight: 700;
-      cursor: pointer;
+      color: var(--text-muted);
+      text-align: center;
+    }
+    .btn-whatsapp-official {
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 6px;
-      text-decoration: none;
-      transition: background-color 0.2s, border-color 0.2s;
-    }
-
-    .btn-gmail-action:hover {
-      background-color: var(--bg-hover);
-      border-color: var(--blue);
-    }
-
-    /* 6-Digit OTP Row */
-    .otp-inputs-row {
-      display: flex;
-      justify-content: center;
-      gap: 8px;
-      margin: 18px 0;
-      direction: ltr; /* Always LTR so digits read 1..6 */
-    }
-
-    .otp-digit {
-      width: 48px;
-      height: 56px;
-      background-color: var(--bg-primary);
-      border: 2px solid var(--border-color);
+      gap: 10px;
+      width: 100%;
+      min-height: 48px;
+      padding: 10px 16px;
+      background: linear-gradient(135deg, #25D366, #128C7E);
+      color: #ffffff !important;
       border-radius: 16px;
-      font-family: var(--font-code);
-      font-size: 24px;
-      font-weight: 900;
-      text-align: center;
-      color: var(--text-main);
-      outline: none;
-      transition: border-color 0.2s, box-shadow 0.2s;
-    }
-
-    .otp-digit:focus {
-      border-color: var(--green);
-      box-shadow: 0 0 0 3px rgba(88, 204, 2, 0.25);
-    }
-
-    .resend-box {
-      margin: 14px 0;
-      font-size: 13px;
-      color: var(--text-muted);
-    }
-
-    .btn-text-link {
-      background: none;
-      border: none;
-      color: var(--blue);
-      font-family: var(--font-family);
-      font-size: 13px;
-      font-weight: 700;
-      cursor: pointer;
-      text-decoration: underline;
-    }
-
-    .btn-text-link:disabled {
-      color: var(--text-muted);
-      cursor: not-allowed;
       text-decoration: none;
-    }
-
-    /* Success Celebration View */
-    .success-celebrate-card {
+      font-weight: 800;
+      font-size: 13.5px;
+      box-shadow: 0 4px 0 #0e6b60, 0 8px 20px rgba(37, 211, 102, 0.25);
+      border: none;
+      cursor: pointer;
+      transition: transform 0.15s ease, filter 0.15s ease, box-shadow 0.15s ease;
+      user-select: none;
+      line-height: 1.3;
       text-align: center;
-      padding: 10px 0;
+    }
+    .btn-whatsapp-official:hover {
+      filter: brightness(1.08);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 0 #0e6b60, 0 10px 24px rgba(37, 211, 102, 0.35);
+    }
+    .btn-whatsapp-official:active {
+      transform: translateY(2px);
+      box-shadow: 0 2px 0 #0e6b60;
+    }
+    .whatsapp-svg-icon {
+      flex-shrink: 0;
     }
 
-    .success-icon-badge {
-      font-size: 64px;
-      margin-bottom: 12px;
-      animation: bounce 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+    /* Official Developer Card */
+    .auth-developer-card {
+      margin-top: 16px;
+      background: rgba(88, 204, 2, 0.08);
+      border: 1.5px solid rgba(88, 204, 2, 0.25);
+      border-radius: 18px;
+      padding: 14px 16px;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      width: 100%;
+    }
+    [data-theme="light"] .auth-developer-card {
+      background: #f0fdf4;
+      border-color: #bbf7d0;
+    }
+    .dev-card-badge {
+      font-size: 11px;
+      font-weight: 800;
+      color: var(--green);
+      letter-spacing: 0.5px;
+    }
+    [data-theme="light"] .dev-card-badge {
+      color: #16a34a;
+    }
+    .dev-card-name {
+      font-size: 18px;
+      font-weight: 900;
+      color: var(--text-main);
+      letter-spacing: -0.3px;
+    }
+    .dev-card-quote {
+      font-size: 12.5px;
+      color: var(--text-muted);
+      line-height: 1.45;
     }
 
-    @keyframes bounce {
-      0% { transform: scale(0.3); opacity: 0; }
-      100% { transform: scale(1); opacity: 1; }
+    /* Footer Note */
+    .auth-footer-note {
+      font-size: 12px;
+      color: var(--text-muted);
+      text-align: center;
+      margin-top: 14px;
+      line-height: 1.5;
     }
 
-    /* Mobile Responsive Adaptation */
-    @media (max-width: 540px) {
+    @media (max-width: 480px) {
       body {
-        padding: 12px 10px;
-        justify-content: flex-start;
+        padding: max(12px, env(safe-area-inset-top, 12px)) 12px max(14px, env(safe-area-inset-bottom, 14px));
       }
-      .auth-top-nav {
-        margin-bottom: 12px;
-        padding: 0 4px;
-        width: 100%;
-        max-width: 100%;
-        box-sizing: border-box;
-      }
-      .auth-card { min-width: 0; 
-        padding: 20px 14px;
-        border-radius: 20px;
-        margin-bottom: 16px;
-        width: 100%;
-        max-width: 100%;
-        box-sizing: border-box;
+      .auth-card {
+        padding: 28px 18px 24px;
+        border-radius: 24px;
       }
       .auth-title {
-        font-size: 21px;
+        font-size: 23px;
       }
-      .auth-sub {
-        font-size: 13px;
+      .btn-google-primary {
+        height: 50px;
+        font-size: 15px;
       }
-      .auth-tab-row { min-width: 0; 
-        padding: 3px;
-        gap: 3px;
-        margin-bottom: 16px;
-      }
-      .auth-tab-btn { min-width: 0; flex: 1 1 0; 
-        padding: 8px 6px;
-        font-size: 13px;
-        gap: 4px;
-        white-space: nowrap;
-      }
-      .otp-inputs-row {
-        gap: 5px;
-      }
-      .otp-digit {
-        width: 36px;
-        height: 48px;
-        font-size: 18px;
-        border-radius: 10px;
-      }
-      .gmail-notification-card {
-        padding: 12px 10px;
-      }
-      .gmail-actions-row {
-        flex-direction: column;
-        gap: 6px;
+      .feature-item {
+        font-size: 12.5px;
       }
     }
   </style>
 </head>
 <body>
 
+  <!-- Ambient Aurora & Neon Lighting Mesh -->
+  <div class="ambient-glow-mesh" aria-hidden="true">
+    <div class="glow-orb glow-orb-1"></div>
+    <div class="glow-orb glow-orb-2"></div>
+  </div>
+
   <!-- Top Bar -->
   <header class="auth-top-nav">
-    <a href="index.html" class="brand-link" title="العودة إلى ProLingo">
+    <a href="index.html" class="brand-link" title="ProLingo">
       <div class="brand-badge">
         <svg width="22" height="22" viewBox="0 0 36 36" fill="none">
           <path d="M10 8C10 7.45 10.45 7 11 7H18C23.25 7 26.5 10 26.5 14.5C26.5 19 23.25 22 18 22H15V28C15 28.55 14.55 29 14 29H11C10.45 29 10 28.55 10 28V8Z" fill="#58CC02"/>
           <circle cx="25.5" cy="25.5" r="2.5" fill="#00F0FF"/>
         </svg>
       </div>
-      <span>ProLingo</span>
+      <div class="brand-text-wrap">
+        <span>ProLingo</span>
+        <span class="brand-creator-badge" data-i18n="auth.creatorBadge">Created & Developed by Omar_Vex</span>
+      </div>
     </a>
 
     <div class="top-controls">
-      <button id="btn-toggle-lang" class="icon-btn" title="تغيير اللغة (EN / AR)">🌐</button>
-      <button id="btn-toggle-theme" class="icon-btn" title="تغيير المظهر (فاتح / داكن)">🌓</button>
+      <button id="btn-toggle-lang" class="icon-btn" title="Language (EN / AR)">🌐 <b>عربي</b></button>
+      <button id="btn-toggle-theme" class="icon-btn" title="Theme (Light / Dark)">🌓</button>
     </div>
   </header>
 
-  <!-- Main Auth Card -->
-  <main class="auth-card">
+  <!-- Main Auth Card Container -->
+  <div class="auth-card-container">
+    <main class="auth-card">
 
-    <!-- Segmented Tab Switcher (Visible in Auth Modes) -->
-    <div id="auth-tab-bar" class="auth-tab-row">
-      <button id="tab-login" class="auth-tab-btn tab-login active" onclick="Auth.setMode('login')">
-        <span>🔑</span>
-        <span data-i18n="auth.loginTab">تسجيل الدخول</span>
-      </button>
-      <button id="tab-signup" class="auth-tab-btn tab-signup" onclick="Auth.setMode('signup')">
-        <span>✨</span>
-        <span data-i18n="auth.signupTab">إنشاء حساب</span>
-      </button>
-    </div>
-
-    <!-- Alert Box for Errors or Info -->
-    <div id="auth-alert" class="alert-box alert-danger hidden"></div>
-
-    <!-- ==============================================
-         VIEW 1: LOG IN (تسجيل الدخول)
-         ============================================== -->
-    <section id="view-login" class="auth-section">
-      <div class="auth-header">
-        <h1 class="auth-title" data-i18n="auth.loginTitle">مرحباً بعودتك! 👋</h1>
-        <p class="auth-sub" data-i18n="auth.loginSub">سجل دخولك لمتابعة مستواك وحفظ تقدمك ونقاطك السحابية</p>
-      </div>
-
-      <form id="form-login" onsubmit="Auth.handleLoginSubmit(event)">
-        <div class="form-group">
-          <label class="form-label" data-i18n="auth.emailLabel">البريد الإلكتروني</label>
-          <div class="input-wrapper">
-            <input type="email" id="login-email" class="auth-input" placeholder="name@gmail.com" required autocomplete="email" />
-            <span class="input-icon">✉️</span>
-          </div>
+      <!-- ==============================================
+           HERO AUTH VIEW (Exclusive Google Login)
+           ============================================== -->
+      <section id="view-login" class="auth-section">
+        
+        <!-- Official ProLingo Brand Site Icon -->
+        <div class="mascot-wrapper">
+          <div class="mascot-aura"></div>
+          <svg class="mascot-svg" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <linearGradient id="authLogoBg" x1="0" y1="0" x2="36" y2="36" gradientUnits="userSpaceOnUse">
+                <stop offset="0%" stop-color="#1E293B"/>
+                <stop offset="100%" stop-color="#0F172A"/>
+              </linearGradient>
+              <linearGradient id="authLogoGrad" x1="4" y1="4" x2="32" y2="32" gradientUnits="userSpaceOnUse">
+                <stop offset="0%" stop-color="#58CC02"/>
+                <stop offset="50%" stop-color="#10B981"/>
+                <stop offset="100%" stop-color="#00F0FF"/>
+              </linearGradient>
+              <linearGradient id="authLogoBevel" x1="0" y1="0" x2="0" y2="36" gradientUnits="userSpaceOnUse">
+                <stop offset="0%" stop-color="#475569" stop-opacity="0.8"/>
+                <stop offset="100%" stop-color="#0F172A" stop-opacity="0.9"/>
+              </linearGradient>
+            </defs>
+            <!-- Circular Badge Background -->
+            <circle cx="18" cy="18" r="15.5" fill="url(#authLogoBg)" stroke="url(#authLogoBevel)" stroke-width="1.5"/>
+            <circle cx="18" cy="18" r="14" stroke="url(#authLogoGrad)" stroke-width="1.2" stroke-opacity="0.45"/>
+            <path d="M10 8C10 7.45 10.45 7 11 7H18C23.25 7 26.5 10 26.5 14.5C26.5 19 23.25 22 18 22H15V28C15 28.55 14.55 29 14 29H11C10.45 29 10 28.55 10 28V8Z" fill="url(#authLogoGrad)"/>
+            <path d="M15 11.5H18C20.5 11.5 21.8 12.8 21.8 14.5C21.8 16.2 20.5 17.5 18 17.5H15V11.5Z" fill="#0F172A"/>
+            <path d="M16.8 13.2L19 14.5L16.8 15.8" stroke="#58CC02" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+            <circle cx="25.5" cy="25.5" r="2.2" fill="#00F0FF"/>
+            <circle cx="25.5" cy="25.5" r="3.5" stroke="#00F0FF" stroke-width="0.8" stroke-opacity="0.6"/>
+          </svg>
         </div>
 
-        <div class="form-group">
-          <label class="form-label" data-i18n="auth.passwordLabel">كلمة المرور</label>
-          <div class="input-wrapper">
-            <input type="password" id="login-password" class="auth-input" placeholder="••••••••" required autocomplete="current-password" />
-            <span class="input-icon">🔒</span>
-            <button type="button" class="toggle-pw-btn" onclick="Auth.togglePassword('login-password', this)">👁️</button>
-          </div>
+        <div class="platform-tag">
+          <span>🐍</span>
+          <span data-i18n="auth.tagline">Interactive Python Learning Platform</span>
         </div>
 
-        <button type="submit" id="btn-submit-login" class="btn-3d btn-blue">
-          <span data-i18n="auth.loginSubmit">تسجيل الدخول ➔</span>
+        <h1 class="auth-title" data-i18n="auth.welcomeTitle">Welcome to ProLingo! 👋</h1>
+        <p class="auth-sub" data-i18n="auth.welcomeSub">Sign in with your Google account to save cloud progress, compete with peers, and master Python.</p>
+
+        <!-- The ONLY Sign-in Button: Google Sign-in -->
+        <button type="button" class="btn-google-primary" id="btn-google-login" onclick="Auth.handleGoogleLogin()">
+          <svg class="google-svg-icon" viewBox="0 0 24 24">
+            <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+            <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+            <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/>
+            <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
+          </svg>
+          <span id="btn-text" data-i18n="auth.googleLoginBtn">Continue with Google Account</span>
         </button>
-      </form>
 
-      <div class="auth-divider">
-        <span data-i18n="auth.orContinue">أو المتابعة عبر</span>
-      </div>
-
-      <button type="button" class="btn-google" onclick="Auth.handleGoogleLogin()">
-        <svg class="google-g-icon" viewBox="0 0 24 24">
-          <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
-          <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
-          <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/>
-          <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
-        </svg>
-        <span data-i18n="auth.googleLogin">المتابعة بحساب Google</span>
-      </button>
-
-      <div class="guest-link-row">
-        <a href="index.html" class="guest-link" data-i18n="auth.continueGuest">المتابعة كضيف مؤقتاً بدون حساب ➔</a>
-      </div>
-    </section>
-
-    <!-- ==============================================
-         VIEW 2: SIGN UP / SIGN IN (إنشاء حساب جديد)
-         ============================================== -->
-    <section id="view-signup" class="auth-section hidden">
-      <div class="auth-header">
-        <h1 class="auth-title" data-i18n="auth.signupTitle">إنشاء حساب جديد 🚀</h1>
-        <p class="auth-sub" data-i18n="auth.signupSub">سجل حسابك واحفظ تقدمك وشهاداتك ونقاطك للأبد</p>
-      </div>
-
-      <form id="form-signup" onsubmit="Auth.handleSignupSubmit(event)">
-        <div class="form-group">
-          <label class="form-label" data-i18n="auth.nameLabel">الاسم الكامل</label>
-          <div class="input-wrapper">
-            <input type="text" id="signup-name" class="auth-input" placeholder="مثال: عمر أحمد" required autocomplete="name" />
-            <span class="input-icon">👤</span>
+        <!-- Features & Trust List -->
+        <div class="features-list">
+          <div class="feature-item">
+            <div class="feature-icon-badge">⚡</div>
+            <div class="feature-text" data-i18n="auth.feat1"><b>One-click instant sign in</b> without password hassle</div>
+          </div>
+          <div class="feature-item">
+            <div class="feature-icon-badge">☁️</div>
+            <div class="feature-text" data-i18n="auth.feat2"><b>Permanent cloud sync</b> for all your XP, streak, and certificates</div>
+          </div>
+          <div class="feature-item">
+            <div class="feature-icon-badge">🔒</div>
+            <div class="feature-text" data-i18n="auth.feat3"><b>100% secure & protected</b> powered by Google & Firebase</div>
           </div>
         </div>
 
-        <div class="form-group">
-          <label class="form-label" data-i18n="auth.signupEmailLabel">(Gmail) البريد الإلكتروني</label>
-          <div class="input-wrapper">
-            <input type="email" id="signup-email" class="auth-input" placeholder="username@gmail.com" required autocomplete="email" />
-            <span class="input-icon">✉️</span>
-          </div>
-        </div>
-
-        <div class="form-group">
-          <label class="form-label" data-i18n="auth.signupPwLabel">كلمة المرور</label>
-          <div class="input-wrapper">
-            <input type="password" id="signup-password" class="auth-input" placeholder="أحرف على الأقل 6" required minlength="6" oninput="Auth.checkPwStrength(this.value)" />
-            <span class="input-icon">🔒</span>
-            <button type="button" class="toggle-pw-btn" onclick="Auth.togglePassword('signup-password', this)">👁️</button>
-          </div>
-          <div id="pw-strength-track" class="pw-strength-track">
-            <div id="pw-strength-fill" class="pw-strength-fill"></div>
-          </div>
-        </div>
-
-        <div class="form-group">
-          <label class="form-label" data-i18n="auth.confirmPwLabel">تأكيد كلمة المرور</label>
-          <div class="input-wrapper">
-            <input type="password" id="signup-password-confirm" class="auth-input" placeholder="أعد كتابة كلمة المرور" required minlength="6" />
-            <span class="input-icon">🛡️</span>
-            <button type="button" class="toggle-pw-btn" onclick="Auth.togglePassword('signup-password-confirm', this)">👁️</button>
-          </div>
-        </div>
-
-        <button type="submit" id="btn-submit-signup" class="btn-3d btn-green">
-          <span data-i18n="auth.signupSubmit">إنشاء الحساب ومتابعة التأكيد ➔</span>
-        </button>
-      </form>
-
-      <div class="auth-divider">
-        <span data-i18n="auth.orContinue">أو المتابعة عبر</span>
-      </div>
-
-      <button type="button" class="btn-google" onclick="Auth.handleGoogleLogin()">
-        <svg class="google-g-icon" viewBox="0 0 24 24">
-          <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
-          <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
-          <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/>
-          <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
-        </svg>
-        <span data-i18n="auth.googleLogin">المتابعة بحساب Google</span>
-      </button>
-    </section>
-
-    <!-- ==============================================
-         VIEW 3: GMAIL VERIFICATION CONFIRMATION
-         ============================================== -->
-    <section id="view-verify" class="auth-section gmail-verification-card hidden">
-      <div class="mail-icon-envelope">📩</div>
-      <h2 class="auth-title" data-i18n="auth.verifyTitle">تأكيد البريد الإلكتروني عبر Gmail</h2>
-      <p class="auth-sub" data-i18n="auth.verifySub">أرسلنا رسالة تأكيد فورية تضم رمز التحقق المكون من 6 أرقام إلى:</p>
-      <div>
-        <span id="verify-email-badge" class="highlight-email">user@gmail.com</span>
-      </div>
-
-      <!-- Simulated Gmail Live Notification Preview Card -->
-      <div class="gmail-notification-card">
-        <div class="gmail-card-header">
-          <div class="gmail-logo-m">
-            <svg width="20" height="20" viewBox="0 0 24 24">
-              <path fill="#EA4335" d="M24 5.457v13.909c0 .904-.732 1.636-1.636 1.636h-3.819V11.73L12 16.64l-6.545-4.91v9.272H1.636A1.636 1.636 0 0 1 0 19.366V5.457c0-2.023 2.309-3.178 3.927-1.964L12 9.545l8.073-6.052C21.69 2.279 24 3.434 24 5.457z"/>
+        <!-- Official WhatsApp Channel Section -->
+        <div class="auth-whatsapp-section">
+          <div class="whatsapp-helper-label" data-i18n="auth.whatsappNotice">For more information, updates, and direct support:</div>
+          <a href="https://whatsapp.com/channel/0029VbDXZIyF1YlacRyCC726" target="_blank" rel="noopener noreferrer" class="btn-whatsapp-official" id="btn-whatsapp-channel" title="Official WhatsApp Channel">
+            <svg class="whatsapp-svg-icon" viewBox="0 0 24 24" width="22" height="22" fill="#ffffff">
+              <path d="M17.472 14.382c-.301-.15-1.78-.877-2.056-.977-.276-.101-.477-.15-.678.15-.2.301-.778.977-.953 1.178-.175.201-.351.226-.652.075-.301-.15-1.272-.469-2.423-1.496-.896-.799-1.501-1.786-1.677-2.087-.175-.301-.019-.464.132-.614.136-.135.301-.351.451-.527.15-.175.201-.301.301-.501.101-.201.05-.376-.025-.526-.075-.15-.678-1.631-.929-2.233-.244-.587-.492-.507-.677-.516l-.577-.01c-.2 0-.527.075-.803.376s-1.054 1.029-1.054 2.509c0 1.48 1.079 2.909 1.229 3.11.15.201 2.124 3.243 5.145 4.549.719.311 1.28.497 1.718.636.723.23 1.381.197 1.902.12.58-.087 1.78-.727 2.031-1.429.251-.702.251-1.304.175-1.429-.075-.125-.276-.201-.577-.351z"/>
+              <path fill-rule="evenodd" clip-rule="evenodd" d="M12 2C6.477 2 2 6.477 2 12c0 1.891.524 3.661 1.434 5.176L2.146 21.46a.75.75 0 00.916.916l4.354-1.284A9.957 9.957 0 0012 22c5.523 0 10-4.477 10-10S17.523 2 12 2zm-8.5 10c0-4.694 3.806-8.5 8.5-8.5s8.5 3.806 8.5 8.5-3.806 8.5-8.5 8.5c-1.657 0-3.2-.474-4.508-1.295a.75.75 0 00-.543-.099l-3.324.981.981-3.324a.75.75 0 00-.099-.543A8.46 8.46 0 013.5 12z"/>
             </svg>
-          </div>
-          <span class="gmail-app-badge">Gmail • ProLingo Security</span>
-          <span class="gmail-time">الآن</span>
-        </div>
-        <strong class="gmail-subject">🔐 رمز تأكيد حسابك الجديد في ProLingo</strong>
-        <p class="gmail-snippet">
-          مرحباً بك! رمز التحقق لتأكيد وتفعيل حسابك هو:
-          <span id="gmail-code-preview" class="gmail-code-highlight">------</span>
-        </p>
-
-        <div class="gmail-actions-row">
-          <a href="https://mail.google.com" target="_blank" rel="noopener noreferrer" class="btn-gmail-action">
-            <span>🌐 فتح بريد Gmail ↗</span>
+            <span class="whatsapp-btn-label" data-i18n="auth.whatsappBtn">Official WhatsApp Channel • For More Information ➔</span>
           </a>
-          <button type="button" class="btn-gmail-action" onclick="Auth.copyAndFillCode()">
-            <span>📋 نسخ وتعبئة الرمز تلقائياً</span>
-          </button>
-        </div>
-      </div>
-
-      <!-- 6-Digit OTP Input Boxes -->
-      <form id="form-verify" onsubmit="Auth.handleVerifySubmit(event)">
-        <div class="otp-inputs-row">
-          <input type="text" maxlength="1" id="otp-1" class="otp-digit" inputmode="numeric" autocomplete="one-time-code" autofocus />
-          <input type="text" maxlength="1" id="otp-2" class="otp-digit" inputmode="numeric" />
-          <input type="text" maxlength="1" id="otp-3" class="otp-digit" inputmode="numeric" />
-          <input type="text" maxlength="1" id="otp-4" class="otp-digit" inputmode="numeric" />
-          <input type="text" maxlength="1" id="otp-5" class="otp-digit" inputmode="numeric" />
-          <input type="text" maxlength="1" id="otp-6" class="otp-digit" inputmode="numeric" />
         </div>
 
-        <div class="resend-box">
-          <span>لم يصلك الرمز؟ </span>
-          <button type="button" id="btn-resend" class="btn-text-link" onclick="Auth.handleResendCode()" disabled>
-            <span id="resend-timer-text">إعادة الإرسال (30s)</span>
-          </button>
+        <!-- Official Developer Showcase Card -->
+        <div class="auth-developer-card">
+          <div class="dev-card-badge">👑 <span data-i18n="auth.leadDev">Official Creator & Lead Developer</span></div>
+          <h3 class="dev-card-name">Omar_Vex</h3>
+          <p class="dev-card-quote" data-i18n="auth.devStatement">
+            The official interactive Python mastery platform engineered by Omar_Vex.
+          </p>
         </div>
 
-        <button type="submit" id="btn-submit-verify" class="btn-3d btn-green">
-          <span data-i18n="auth.verifySubmit">تأكيد الحساب والبدء الآن 🚀</span>
-        </button>
+        <!-- Alert Box for Errors or Info -->
+        <div id="auth-alert" class="alert-box alert-danger hidden"></div>
 
-        <div class="guest-link-row">
-          <a href="#" class="guest-link" onclick="Auth.setMode('signup'); return false;">← تعديل البريد الإلكتروني والرجوع</a>
+      </section>
+
+      <!-- ==============================================
+           SUCCESS VIEW
+           ============================================== -->
+      <section id="view-success" class="auth-section success-celebrate-card hidden">
+        <div class="success-avatar-wrap">
+          <img id="success-avatar" class="success-avatar-img" src="" alt="Profile" />
         </div>
-      </form>
-    </section>
+        <h2 class="success-title" id="success-title" data-i18n="auth.successTitle">Signed In Successfully! 🎉</h2>
+        <p class="success-sub" id="success-sub" data-i18n="auth.successSub">Setting up your learning path and interactive lessons...</p>
+      </section>
 
-    <!-- ==============================================
-         VIEW 4: SUCCESS CELEBRATION (نجاح التأكيد)
-         ============================================== -->
-    <section id="view-success" class="auth-section success-celebrate-card hidden">
-      <div class="success-icon-badge">🎉</div>
-      <h2 class="auth-title" id="success-title">تم تأكيد الحساب بنجاح!</h2>
-      <p class="auth-sub" id="success-sub">جاري تجهيز بيئة التعلم وحفظ تقدمك السحابي...</p>
-    </section>
+    </main>
 
-  </main>
+    <footer class="auth-footer-note" data-i18n="auth.footerDisclaimer">
+      ProLingo Platform • Created & Developed by Omar_Vex. For more information, join our Official WhatsApp Channel.
+    </footer>
+  </div>
+
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/10.13.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.13.2/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.13.2/firebase-firestore-compat.js"></script>
+  <script src="js/firebase-config.js"></script>
 
   <!-- Required scripts for state & multi-user syncing -->
   <script src="js/i18n.js"></script>
   <script src="js/state.js"></script>
   <script>
     const Auth = {
-      currentMode: 'login', // 'login' | 'signup' | 'verify' | 'success'
-      pendingEmail: '',
-      pendingCode: '',
-      resendCountdown: 30,
-      resendInterval: null,
+      isSigningIn: false,
 
       init() {
+        // Init Firebase
+        if (typeof FirebaseService !== 'undefined') {
+          FirebaseService.init();
+        }
+
         // Init state
         if (typeof ProLingoState !== 'undefined') {
           ProLingoState.init();
         }
 
-        // Apply theme & language
-        const currentTheme = (typeof ProLingoState !== 'undefined' && ProLingoState.data && ProLingoState.data.settings)
-          ? ProLingoState.data.settings.theme : 'dark';
+        // Loop / bounce prevention guard
+        const lastIndexRedirect = sessionStorage.getItem('prolingo_last_index_redirect');
+        const isRecentRedirect = lastIndexRedirect && (Date.now() - parseInt(lastIndexRedirect, 10)) < 3500;
+
+        // If user is already authenticated in THIS active browser session, redirect to index
+        const urlParams = new URLSearchParams(window.location.search);
+        const reason = urlParams.get('reason');
+        const forceAuth = urlParams.get('force') === 'true' || urlParams.get('switch') === 'true' || reason === 'concurrent_session';
+        const sessionActive = sessionStorage.getItem('prolingo_session_active') === 'true';
+        if (!forceAuth && sessionActive && !isRecentRedirect && typeof ProLingoState !== 'undefined' && ProLingoState.isUserAuthenticated && ProLingoState.isUserAuthenticated()) {
+          sessionStorage.setItem('prolingo_last_index_redirect', Date.now().toString());
+          window.location.replace('index.html');
+          return;
+        }
+
+        // Language & Theme setup
+        const queryLang = urlParams.get('lang');
+        const savedLang = (queryLang === 'en' || queryLang === 'ar') ? queryLang : (
+          localStorage.getItem('prolingo_ui_lang') 
+          || (ProLingoState.data && ProLingoState.data.settings && ProLingoState.data.settings.uiLang)
+          || 'en'
+        );
+        this.applyLanguage(savedLang);
+
+        const queryTheme = urlParams.get('theme');
+        const currentTheme = (queryTheme === 'light' || queryTheme === 'dark') ? queryTheme : (
+          (typeof ProLingoState !== 'undefined' && ProLingoState.data && ProLingoState.data.settings && ProLingoState.data.settings.theme)
+          || localStorage.getItem('prolingo_theme')
+          || 'dark'
+        );
         this.applyTheme(currentTheme);
 
-        const currentLang = (typeof I18N !== 'undefined' && I18N.currentLang) ? I18N.currentLang : 'ar';
-        this.applyLanguage(currentLang);
+        // Check if redirected due to concurrent session on another device
+        if (reason === 'concurrent_session') {
+          const isAr = (savedLang === 'ar');
+          const kickMsg = isAr
+            ? '⚠️ تم تسجيل الخروج تلقائياً لأنه تم تسجيل الدخول إلى هذا الحساب من جهاز أو متصفح آخر. (يُسمح بجهاز نشط واحد فقط في نفس الوقت).'
+            : '⚠️ You were logged out because this account was accessed from another device or browser. (Only 1 active session is permitted).';
+          this.showAlert(kickMsg, 'warning');
+        }
 
         // Bind theme button
         document.getElementById('btn-toggle-theme').onclick = () => {
@@ -989,77 +843,15 @@
 
         // Bind lang button
         document.getElementById('btn-toggle-lang').onclick = () => {
-          const next = document.documentElement.getAttribute('dir') === 'rtl' ? 'en' : 'ar';
+          const current = (typeof I18N !== 'undefined' && I18N.currentLang) || (document.documentElement.getAttribute('dir') === 'rtl' ? 'ar' : 'en');
+          const next = (current === 'ar') ? 'en' : 'ar';
           this.applyLanguage(next);
         };
-
-        // Setup OTP inputs navigation
-        this.setupOtpInputs();
-
-        // Check query params (?mode=signup, ?mode=verify, etc.)
-        const urlParams = new URLSearchParams(window.location.search);
-        if (urlParams.get('mode') === 'signup') {
-          this.setMode('signup');
-        } else if (urlParams.get('mode') === 'verify') {
-          const email = urlParams.get('email') || 'user@gmail.com';
-          const code = urlParams.get('code') || '842915';
-          this.showVerificationScreen(email, code);
-        } else {
-          this.setMode('login');
-        }
-      },
-
-      setMode(mode) {
-        this.currentMode = mode;
-        this.hideAlert();
-
-        const tabBar = document.getElementById('auth-tab-bar');
-        const tabLogin = document.getElementById('tab-login');
-        const tabSignup = document.getElementById('tab-signup');
-
-        const vLogin = document.getElementById('view-login');
-        const vSignup = document.getElementById('view-signup');
-        const vVerify = document.getElementById('view-verify');
-        const vSuccess = document.getElementById('view-success');
-
-        vLogin.classList.add('hidden');
-        vSignup.classList.add('hidden');
-        vVerify.classList.add('hidden');
-        vSuccess.classList.add('hidden');
-
-        if (mode === 'login') {
-          tabBar.classList.remove('hidden');
-          tabLogin.classList.add('active');
-          tabSignup.classList.remove('active');
-          vLogin.classList.remove('hidden');
-        } else if (mode === 'signup') {
-          tabBar.classList.remove('hidden');
-          tabLogin.classList.remove('active');
-          tabSignup.classList.add('active');
-          vSignup.classList.remove('hidden');
-        } else if (mode === 'verify') {
-          tabBar.classList.add('hidden');
-          vVerify.classList.remove('hidden');
-          this.startResendTimer();
-        } else if (mode === 'success') {
-          tabBar.classList.add('hidden');
-          vSuccess.classList.remove('hidden');
-        }
-      },
-
-      showVerificationScreen(email, code) {
-        this.pendingEmail = email;
-        this.pendingCode = code;
-        const b = document.getElementById('verify-email-badge');
-        if (b) b.textContent = email;
-        const p = document.getElementById('gmail-code-preview');
-        if (p) p.textContent = code;
-        this.setMode('verify');
-        this.clearOtpInputs();
       },
 
       showAlert(msg, type = 'danger') {
         const box = document.getElementById('auth-alert');
+        if (!box) return;
         box.textContent = msg;
         box.className = `alert-box alert-${type}`;
         box.classList.remove('hidden');
@@ -1067,325 +859,113 @@
 
       hideAlert() {
         const box = document.getElementById('auth-alert');
-        box.classList.add('hidden');
+        if (box) box.classList.add('hidden');
       },
 
-      togglePassword(inputId, btn) {
-        const input = document.getElementById(inputId);
-        if (!input) return;
-        if (input.type === 'password') {
-          input.type = 'text';
-          btn.textContent = '🙈';
-        } else {
-          input.type = 'password';
-          btn.textContent = '👁️';
-        }
-      },
-
-      checkPwStrength(val) {
-        const track = document.getElementById('pw-strength-track');
-        const fill = document.getElementById('pw-strength-fill');
-        if (!val) {
-          track.style.display = 'none';
-          return;
-        }
-        track.style.display = 'block';
-        let score = 0;
-        if (val.length >= 6) score += 25;
-        if (val.length >= 10) score += 25;
-        if (/[A-Z]/.test(val) || /[0-9]/.test(val)) score += 25;
-        if (/[^A-Za-z0-9]/.test(val)) score += 25;
-
-        fill.style.width = `${score}%`;
-        if (score <= 25) {
-          fill.style.backgroundColor = 'var(--red)';
-        } else if (score <= 50) {
-          fill.style.backgroundColor = 'var(--yellow)';
-        } else {
-          fill.style.backgroundColor = 'var(--green)';
-        }
-      },
-
-      async handleSignupSubmit(e) {
-        e.preventDefault();
+      async handleGoogleLogin() {
+        if (this.isSigningIn) return;
         this.hideAlert();
+        this.isSigningIn = true;
 
-        const name = document.getElementById('signup-name').value.trim();
-        const email = document.getElementById('signup-email').value.trim().toLowerCase();
-        const pw = document.getElementById('signup-password').value;
-        const confirmPw = document.getElementById('signup-password-confirm').value;
+        const btn = document.getElementById('btn-google-login');
+        const btnText = document.getElementById('btn-text');
+        const isAr = (typeof I18N !== 'undefined' && I18N.isRTL());
 
-        if (pw.length < 6) {
-          this.showAlert('كلمة المرور يجب أن تتكون من 6 أحرف أو أرقام على الأقل');
-          return;
-        }
-
-        if (pw !== confirmPw) {
-          this.showAlert('كلمتا المرور غير متطابقتين! يرجى التحقق وإعادة المحاولة.');
-          return;
-        }
-
-        const btn = document.getElementById('btn-submit-signup');
         btn.disabled = true;
-        btn.textContent = 'جاري إرسال رمز التأكيد إلى Gmail...';
+        btnText.innerHTML = `<span class="spinner"></span> <span>${isAr ? 'جاري الاتصال بـ Google...' : 'Connecting to Google...'}</span>`;
 
         try {
-          const res = await ProLingoState.createAccountWithPassword({
-            name: name,
-            email: email,
-            password: pw
-          });
+          if (typeof FirebaseService !== 'undefined') {
+            const res = await FirebaseService.signInWithGoogle();
+            if (res.success && res.user) {
+              await ProLingoState.loginWithGoogle({
+                uid: res.user.uid,
+                name: res.user.name,
+                email: res.user.email,
+                avatarImage: res.user.avatarImage,
+                isGoogle: true
+              });
 
-          btn.disabled = false;
-          btn.innerHTML = '<span>إنشاء الحساب ومتابعة التأكيد ➔</span>';
-
-          if (!res.success) {
-            this.showAlert(res.error || 'حدث خطأ أثناء إنشاء الحساب');
-            return;
-          }
-
-          this.showVerificationScreen(email, res.code);
-
-        } catch (err) {
-          btn.disabled = false;
-          btn.innerHTML = '<span>إنشاء الحساب ومتابعة التأكيد ➔</span>';
-          this.showAlert('تعذر الاتصال بالخادم. حاول مجدداً.');
-        }
-      },
-
-      async handleLoginSubmit(e) {
-        e.preventDefault();
-        this.hideAlert();
-
-        const email = document.getElementById('login-email').value.trim().toLowerCase();
-        const pw = document.getElementById('login-password').value;
-
-        const btn = document.getElementById('btn-submit-login');
-        btn.disabled = true;
-        btn.textContent = 'جاري تسجيل الدخول...';
-
-        try {
-          const res = await ProLingoState.loginWithPassword({
-            email: email,
-            password: pw
-          });
-
-          btn.disabled = false;
-          btn.innerHTML = '<span>تسجيل الدخول ➔</span>';
-
-          if (!res.success) {
-            if (res.unverified) {
-              this.showVerificationScreen(email, res.code || '');
-              this.showAlert(res.error, 'danger');
+              sessionStorage.setItem('prolingo_session_active', 'true');
+              this.showSuccessAndRedirect(res.user);
               return;
             }
-            this.showAlert(res.error || 'فشل تسجيل الدخول. تحقق من البريد وكلمة المرور.');
-            return;
+
+            if (res.error) {
+              this.showAlert(res.error);
+              this.resetButton();
+              return;
+            }
+          } else {
+            this.showAlert(isAr ? 'خدمة Google غير متوفرة حالياً. تأكد من اتصالك بالإنترنت.' : 'Google service unavailable. Check your internet connection.');
+            this.resetButton();
           }
-
-          // Login Success
-          this.showSuccessAndRedirect(res.user.name);
-
         } catch (err) {
-          btn.disabled = false;
-          btn.innerHTML = '<span>تسجيل الدخول ➔</span>';
-          this.showAlert('تعذر التحقق من بيانات الدخول.');
+          console.error('Google Auth Error:', err);
+          const errorMsg = err && err.message ? err.message : (isAr ? 'تعذر إكمال تسجيل الدخول عبر Google. حاول مرة أخرى.' : 'Could not complete Google sign-in. Please try again.');
+          this.showAlert(errorMsg);
+          this.resetButton();
         }
       },
 
-      setupOtpInputs() {
-        const inputs = [1, 2, 3, 4, 5, 6].map(i => document.getElementById(`otp-${i}`));
-        inputs.forEach((input, idx) => {
-          if (!input) return;
-
-          input.addEventListener('input', (e) => {
-            const val = e.target.value.replace(/[^0-9]/g, '');
-            e.target.value = val ? val[0] : '';
-            if (val && idx < 5) {
-              inputs[idx + 1].focus();
-            }
-            // Auto submit if all filled
-            const code = inputs.map(el => el.value).join('');
-            if (code.length === 6) {
-              this.submitVerification(code);
-            }
-          });
-
-          input.addEventListener('keydown', (e) => {
-            if (e.key === 'Backspace' && !input.value && idx > 0) {
-              inputs[idx - 1].focus();
-            }
-          });
-
-          input.addEventListener('paste', (e) => {
-            e.preventDefault();
-            const text = (e.clipboardData || window.clipboardData).getData('text');
-            const clean = text.replace(/[^0-9]/g, '').slice(0, 6);
-            if (clean) {
-              for (let i = 0; i < clean.length; i++) {
-                if (inputs[i]) inputs[i].value = clean[i];
-              }
-              if (clean.length === 6) {
-                this.submitVerification(clean);
-              } else if (inputs[clean.length]) {
-                inputs[clean.length].focus();
-              }
-            }
-          });
-        });
+      resetButton() {
+        this.isSigningIn = false;
+        const btn = document.getElementById('btn-google-login');
+        const btnText = document.getElementById('btn-text');
+        const isAr = (typeof I18N !== 'undefined' && I18N.isRTL());
+        if (btn) btn.disabled = false;
+        if (btnText) btnText.textContent = isAr ? 'المتابعة والتسجيل بحساب Google' : 'Continue with Google Account';
       },
 
-      clearOtpInputs() {
-        for (let i = 1; i <= 6; i++) {
-          const el = document.getElementById(`otp-${i}`);
-          if (el) el.value = '';
-        }
-        const first = document.getElementById('otp-1');
-        if (first) first.focus();
-      },
+      showSuccessAndRedirect(user) {
+        document.getElementById('view-login').classList.add('hidden');
+        const vSuccess = document.getElementById('view-success');
+        vSuccess.classList.remove('hidden');
 
-      copyAndFillCode() {
-        if (!this.pendingCode) return;
-        const code = this.pendingCode.toString();
-        for (let i = 0; i < 6; i++) {
-          const el = document.getElementById(`otp-${i + 1}`);
-          if (el) el.value = code[i] || '';
-        }
-        this.submitVerification(code);
-      },
-
-      async handleVerifySubmit(e) {
-        if (e && e.preventDefault) e.preventDefault();
-        const code = [1, 2, 3, 4, 5, 6].map(i => document.getElementById(`otp-${i}`).value).join('');
-        if (code.length < 6) {
-          this.showAlert('يرجى إدخال رمز التأكيد المكون من 6 أرقام كاملاً.');
-          return;
-        }
-        this.submitVerification(code);
-      },
-
-      async submitVerification(code) {
-        this.hideAlert();
-        const btn = document.getElementById('btn-submit-verify');
-        if (btn) {
-          btn.disabled = true;
-          btn.textContent = 'جاري التحقق من الرمز...';
-        }
-
-        try {
-          const res = await ProLingoState.verifyAccountCode(this.pendingEmail, code);
-          if (btn) {
-            btn.disabled = false;
-            btn.innerHTML = '<span>تأكيد الحساب والبدء الآن 🚀</span>';
-          }
-
-          if (!res.success) {
-            this.showAlert(res.error || 'رمز التأكيد غير صحيح. يرجى التحقق من رسالة Gmail.');
-            return;
-          }
-
-          // Verification Success!
-          this.showSuccessAndRedirect(res.user.name, true);
-
-        } catch (err) {
-          if (btn) {
-            btn.disabled = false;
-            btn.innerHTML = '<span>تأكيد الحساب والبدء الآن 🚀</span>';
-          }
-          this.showAlert('حدث خطأ أثناء تأكيد الحساب. حاول مجدداً.');
-        }
-      },
-
-      startResendTimer() {
-        this.resendCountdown = 30;
-        const btn = document.getElementById('btn-resend');
-        const text = document.getElementById('resend-timer-text');
-        if (btn) btn.disabled = true;
-
-        if (this.resendInterval) clearInterval(this.resendInterval);
-        this.resendInterval = setInterval(() => {
-          this.resendCountdown--;
-          if (text) text.textContent = `إعادة الإرسال (${this.resendCountdown}s)`;
-
-          if (this.resendCountdown <= 0) {
-            clearInterval(this.resendInterval);
-            this.resendInterval = null;
-            if (btn) btn.disabled = false;
-            if (text) text.textContent = 'إعادة إرسال الرمز الآن 🔄';
-          }
-        }, 1000);
-      },
-
-      async handleResendCode() {
-        if (!this.pendingEmail) return;
-        try {
-          const res = await ProLingoState.resendVerificationCode(this.pendingEmail);
-          if (res.success) {
-            this.pendingCode = res.code;
-            document.getElementById('gmail-code-preview').textContent = res.code;
-            this.showAlert(`تم إرسال رمز تأكيد جديد إلى ${this.pendingEmail} بنجاح!`, 'success');
-            this.startResendTimer();
-          }
-        } catch (e) {
-          this.showAlert('فشل إعادة إرسال الرمز.');
-        }
-      },
-
-      showSuccessAndRedirect(name, isNew = false) {
-        this.setMode('success');
         const title = document.getElementById('success-title');
         const sub = document.getElementById('success-sub');
+        const avatar = document.getElementById('success-avatar');
+        const isAr = (typeof I18N !== 'undefined' && I18N.isRTL());
 
-        if (isNew) {
-          title.textContent = `أهلاً بك يا ${name}! تم تأكيد الحساب 🎉`;
-          sub.textContent = 'تم حفظ حسابك وبياناتك السحابية بنجاح. جاري نقلك إلى الدروس...';
+        const userName = user.name || 'User';
+        title.textContent = isAr ? `أهلاً بك يا ${userName}! 🎉` : `Welcome, ${userName}! 🎉`;
+        sub.textContent = isAr ? 'تم تسجيل وتأكيد حسابك بنجاح. جاري فتح المنصة...' : 'Signed in successfully. Launching platform...';
+
+        if (user.avatarImage) {
+          avatar.src = user.avatarImage;
         } else {
-          title.textContent = `مرحباً بعودتك يا ${name}! 👋`;
-          sub.textContent = 'تم استرجاع نقاطك وتقدمك بالكامل. جاري توجيهك...';
+          avatar.src = 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="50" fill="%2358CC02"/><text x="50" y="65" font-size="45" font-weight="bold" fill="white" text-anchor="middle">' + encodeURIComponent(userName[0] || 'U') + '</text></svg>';
         }
 
         setTimeout(() => {
-          window.location.href = 'index.html';
+          window.location.replace('index.html');
         }, 1200);
-      },
-
-      handleGoogleLogin() {
-        const width = 960;
-        const height = 660;
-        const left = Math.max(0, Math.round((window.screen.width - width) / 2));
-        const top = Math.max(0, Math.round((window.screen.height - height) / 2));
-
-        const popup = window.open(
-          'google_signin.html',
-          'google_signin_popup',
-          `width=${width},height=${height},top=${top},left=${left},status=no,toolbar=no,menubar=no,location=no,resizable=yes,scrollbars=yes`
-        );
-
-        if (!popup || popup.closed || typeof popup.closed === 'undefined') {
-          window.location.href = 'google_signin.html';
-        }
       },
 
       applyTheme(theme) {
         document.documentElement.setAttribute('data-theme', theme);
+        try { localStorage.setItem('prolingo_theme', theme); } catch (e) {}
+        if (typeof ProLingoState !== 'undefined' && ProLingoState.data && ProLingoState.data.settings) {
+          ProLingoState.data.settings.theme = theme;
+        }
       },
 
       applyLanguage(lang) {
         if (typeof I18N !== 'undefined') {
-          I18N.currentLang = lang;
-        }
-        const isRtl = (lang === 'ar');
-        document.documentElement.setAttribute('dir', isRtl ? 'rtl' : 'ltr');
-        document.documentElement.setAttribute('lang', lang);
-        if (isRtl) {
-          document.body.classList.remove('ltr');
+          I18N.setLanguage(lang);
         } else {
-          document.body.classList.add('ltr');
+          document.documentElement.lang = lang;
+          document.documentElement.dir = (lang === 'ar') ? 'rtl' : 'ltr';
+          document.body.classList.toggle('rtl', lang === 'ar');
+          document.body.classList.toggle('ltr', lang !== 'ar');
         }
+
+        const isAr = (lang === 'ar');
+        document.title = isAr ? 'تسجيل الدخول إلى ProLingo' : 'Sign In to ProLingo';
 
         const langBtn = document.getElementById('btn-toggle-lang');
         if (langBtn) {
-          langBtn.textContent = isRtl ? '🌐 EN' : '🌐 عربي';
+          langBtn.innerHTML = isAr ? '🌐 <b>EN</b>' : '🌐 <b>عربي</b>';
         }
       }
     };

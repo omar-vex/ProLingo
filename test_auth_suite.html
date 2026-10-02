@@ -8,6 +8,7 @@
   <h1>Auth & Multi-User Persistence Test Suite</h1>
   <div id="test-results">Running tests...</div>
 
+  <script src="js/firebase-config.js"></script>
   <script src="js/i18n.js"></script>
   <script src="js/sound.js"></script>
   <script src="js/state.js"></script>
@@ -26,6 +27,14 @@
 
     async function runAuthTests() {
       try {
+        logs.push('--- 0. Testing FirebaseService Configuration ---');
+        assert(typeof FirebaseService !== 'undefined', 'FirebaseService is defined globally');
+        assert(FirebaseService.config.projectId === 'prolingo-45024', 'Firebase projectId matches prolingo-45024');
+        assert(FirebaseService.config.apiKey === 'AIzaSyB7VrRuOYxGtRcjnY6HN072r9uJgMAv8qk', 'Firebase apiKey configured correctly');
+        assert(typeof FirebaseService.getFriendlyErrorMessage === 'function', 'Firebase error translator available');
+        const friendlyMsg = FirebaseService.getFriendlyErrorMessage('auth/email-already-in-use');
+        assert(Boolean(friendlyMsg && friendlyMsg.length > 5), 'Friendly error message generated: ' + friendlyMsg);
+
         logs.push('--- 1. Initializing ProLingo State ---');
         ProLingoState.init();
         assert(Boolean(ProLingoState.data), 'ProLingoState initialized successfully');
@@ -33,7 +42,7 @@
         logs.push('--- 2. Testing Registration with Email & Password ---');
         const testEmail = 'user_' + Date.now() + '@gmail.com';
         const testPass = 'securePassword123';
-        const testName = 'عمر مجرب';
+        const testName = 'Test Learner';
 
         const regRes = await ProLingoState.createAccountWithPassword({
           name: testName,

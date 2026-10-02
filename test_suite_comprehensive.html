@@ -4,6 +4,21 @@
   <meta charset="UTF-8">
   <title>Comprehensive Suite</title>
   <link rel="stylesheet" href="css/prolingo.css">
+  <script>
+    sessionStorage.setItem('prolingo_session_active', 'true');
+    const testUser = {
+      id: 'usr_test',
+      profile: { id: 'usr_test', name: 'Tester', email: 'tester@gmail.com', isRegistered: true, isGoogle: true },
+      settings: { uiLang: 'en', theme: 'dark' },
+      stats: { xp: 100, streak: 3, gems: 50, hearts: 5, maxHearts: 5 },
+      league: { tierIndex: 0, weeklyXp: 100, competitors: [] },
+      inventory: { streakFreeze: 0, skins: ['classic'] },
+      completedLessons: { python: [] },
+      dailyQuests: []
+    };
+    localStorage.setItem('prolingo_active_user_id_v6', 'usr_test');
+    localStorage.setItem('prolingo_state_user_v6_usr_test', JSON.stringify(testUser));
+  </script>
 </head>
 <body class="theme-dark">
   <div id="test-results">Testing...</div>
@@ -80,8 +95,13 @@
       };
 
       try {
-        // Init state & app
+        // Mock active registered user session for test environment
+        sessionStorage.setItem('prolingo_session_active', 'true');
         ProLingoState.init();
+        if (ProLingoState.data && ProLingoState.data.profile) {
+          ProLingoState.data.profile.isRegistered = true;
+          ProLingoState.data.profile.email = 'test@example.com';
+        }
         App.init();
 
         // Check LessonRunner.init
